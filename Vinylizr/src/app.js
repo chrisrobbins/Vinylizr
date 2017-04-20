@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import firebase from 'firebase';
-import { Button, Spinner, DiscogsSearch } from './components/common';
+import { Button, Spinner } from './components/common';
 import LoginForm from './components/LoginForm';
+import DiscogsSearch from './components/DiscogsSearch';
 
 
 class App extends Component {
