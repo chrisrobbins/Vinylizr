@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import firebase from 'firebase';
-import { Button, Spinner } from './components/common';
+import { Spinner, AlbumList } from './components/common';
 import LoginForm from './components/LoginForm';
 import DiscogsSearch from './components/DiscogsSearch';
 
@@ -11,7 +11,7 @@ class App extends Component {
 
   componentWillMount() {
     firebase.initializeApp({
-      apiKey: 'AIzaSyAjlUS9NJoXLm_p-KU01lXcECpnI9AGM0U',
+    apiKey: 'AIzaSyAjlUS9NJoXLm_p-KU01lXcECpnI9AGM0U',
     authDomain: 'vinylizr-e5665.firebaseapp.com',
     databaseURL: 'https://vinylizr-e5665.firebaseio.com',
     projectId: 'vinylizr-e5665',
@@ -32,12 +32,7 @@ class App extends Component {
     switch (this.state.loggedIn) {
       case true:
         return (
-          <View>
-          <DiscogsSearch />
-            <Button style={styles.signOut} onPress={() => firebase.auth().signOut()}>
-              Log out
-            </Button>
-          </View>
+          <AlbumList />
         );
       case false:
         return <LoginForm />;
@@ -60,9 +55,6 @@ const styles = {
     flex: 1,
     justifyContent: 'flex-end',
     backgroundColor: '#1A1A1A'
-  },
-  signOut: {
-    alignSelf: 'stretch'
   }
 };
 

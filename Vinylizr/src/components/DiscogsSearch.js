@@ -1,15 +1,17 @@
-/* @flow */
+
 
 import React, { Component } from 'react';
 import axios from 'axios';
+import Button from './common';
+
 import {
   View,
   Text,
-  Input,
-  TouchableOpacity
+  TextInput
 } from 'react-native';
 
 class DiscogsSearch extends Component {
+
  BASE_URL = 'https://api.discogs.com';
 
 searchDiscogs() {
@@ -21,11 +23,14 @@ searchDiscogs() {
   render() {
     return (
       <View style={styles.container}>
-        <Input
+        <TextInput
           onSubmit={this.searchDiscogs.bind(this)}
           placeholder="Search Artist or Song"
           style={styles.search}
         />
+        <Button style={styles.signOut} onPress={() => firebase.auth().signOut()}>
+          Log out
+        </Button>
       </View>
     );
   }
@@ -34,9 +39,17 @@ searchDiscogs() {
 const styles = {
   container: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   search: {
-    width: 20
+    width: 20,
+    height: 50,
+    backgroundColor: 'white',
+    alignSelf: 'stretch'
+  },
+  signOut: {
+    alignSelf: 'stretch'
   }
 };
 
