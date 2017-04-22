@@ -11,26 +11,28 @@ import {
 } from 'react-native';
 
 class DiscogsSearch extends Component {
-
- BASE_URL = 'https://api.discogs.com';
-
+state = { text: '' };
 searchDiscogs() {
+  let apiSearch = this.setState{( text: '' )};
   axios.get(
-    'BASE_URL + /database/search?q={query}&{?title,release_title,artist,barcode}')
-    .then(console.log('it worked!'));
-}
+    `https://api.discogs.com/database/search?artist=${apiSearch}&key=jbUTpFhLTiyyHgLRoBgq&secret=LSQDaLpplgcCGlkzujkHyUkxImNlWVoI`
+  )
+    .then(response => console.log(response.data))
+    .catch(response => console.log('youre fucked'));
+ }
 
   render() {
     return (
       <View style={styles.container}>
         <TextInput
-          onSubmit={this.searchDiscogs.bind(this)}
-          placeholder="Search Artist or Song"
+          type="search"
+          ref="searchBar"
           style={styles.search}
+          value={this.state.text}
+          onChangeText={this.searchDiscogs.bind(this)}
+          placeholder="Search Artist or Song"
         />
-        <Button style={styles.signOut} onPress={() => firebase.auth().signOut()}>
-          Log out
-        </Button>
+
       </View>
     );
   }
@@ -43,7 +45,6 @@ const styles = {
     alignItems: 'center'
   },
   search: {
-    width: 20,
     height: 50,
     backgroundColor: 'white',
     alignSelf: 'stretch'

@@ -1,5 +1,4 @@
 export * from './Button';
-export * from './Card';
 export * from './CardSection';
 export * from './InputCardSection';
 export * from './Header';
@@ -8,3 +7,4 @@ export * from './Spinner';
 export * from './Logo';
 export * from './AlbumDetail';
 export * from './AlbumList';
+export * from './SearchResults';
