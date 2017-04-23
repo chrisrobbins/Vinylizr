@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import firebase from 'firebase';
-import { Spinner, SearchResults } from './components/common';
+import { Spinner } from './components/common';
 import LoginForm from './components/LoginForm';
+import DiscogsSearch from './components/DiscogsSearch';
+
 
 
 
@@ -31,7 +33,7 @@ class App extends Component {
   renderContent() {
     switch (this.state.loggedIn) {
       case true:
-        return <SearchResults />;
+        return <DiscogsSearch />;
       case false:
         return <LoginForm />;
       default:

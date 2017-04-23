@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Button, Input, SearchResults } from './common';
+import { Button, Input, AlbumDetail } from './common';
 
 import {
   View,
-  Text
+  Text,
+  ScrollView
 } from 'react-native';
 
 class DiscogsSearch extends Component {
-state = { text: '' };
+state = { text: '', albums: [] };
 
  searchDiscogs() {
    let apiSearch = this.state.newText;
@@ -17,6 +18,12 @@ state = { text: '' };
      &key=jbUTpFhLTiyyHgLRoBgq&secret=LSQDaLpplgcCGlkzujkHyUkxImNlWVoI`
    )
      .then(response => this.setState({ albums: response.data.results }));
+   }
+
+   renderAlbums() {
+     return this.state.albums.map(album =>
+       <AlbumDetail key={ album.id } album={ album } />
+     );
    }
 
   render() {
@@ -31,8 +38,9 @@ state = { text: '' };
           onChange={(event) => this.setState({ newText: event.nativeEvent.text })}
           placeholder="enter artist">
         </Input>
-        <SearchResults />
-
+        <ScrollView style={styles.renderAlbums}>
+        {this.renderAlbums()}
+      </ScrollView>
       </View>
     );
   }
@@ -43,9 +51,6 @@ const styles = {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
-  },
-  signOut: {
-    alignSelf: 'stretch'
   }
 };
 
