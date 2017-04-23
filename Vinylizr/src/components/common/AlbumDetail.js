@@ -9,7 +9,6 @@ const AlbumDetail = ({ album }) => {
     imageView,
     textView,
     imageStyle,
-    artistTextStyle,
     titleTextStyle
   } = styles;
 
@@ -24,7 +23,6 @@ const AlbumDetail = ({ album }) => {
 
       <View style={textView}>
           <Text style={titleTextStyle}>{title}</Text>
-          <Text style={artistTextStyle}>{artist}</Text>
         </View>
       </CardSection>
   );

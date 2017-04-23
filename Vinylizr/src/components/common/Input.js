@@ -28,11 +28,11 @@ const styles = {
     lineHeight: 23,
     flex: 1,
     backgroundColor: 'white',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
+    height: 40
   },
   containerStyle: {
-    height: 40,
-    flex: 3,
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 25

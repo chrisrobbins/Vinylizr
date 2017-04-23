@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import firebase from 'firebase';
-import { Spinner } from './components/common';
+import { Spinner, SearchResults } from './components/common';
 import LoginForm from './components/LoginForm';
-import DiscogsSearch from './components/DiscogsSearch';
+
 
 
 class App extends Component {
@@ -31,9 +31,7 @@ class App extends Component {
   renderContent() {
     switch (this.state.loggedIn) {
       case true:
-        return (
-          <DiscogsSearch />
-        );
+        return <SearchResults />;
       case false:
         return <LoginForm />;
       default:
@@ -42,6 +40,7 @@ class App extends Component {
   }
 
   render() {
+    console.log(this.state);
     return (
       <View style={styles.container}>
         {this.renderContent()}

@@ -44,11 +44,6 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center'
   },
-  search: {
-    height: 50,
-    backgroundColor: 'green',
-    alignSelf: 'stretch',
-  },
   signOut: {
     alignSelf: 'stretch'
   }
