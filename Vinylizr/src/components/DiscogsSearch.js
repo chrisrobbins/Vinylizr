@@ -30,17 +30,29 @@ state = { text: '', albums: [] };
     console.log(this.state);
     return (
       <View style={styles.container}>
+
         <Input
+
           type="search"
+
           style={styles.search}
+
           value={this.state.newText}
+
           onChangeText={this.searchDiscogs.bind(this)}
+
           onChange={(event) => this.setState({ newText: event.nativeEvent.text })}
+
           placeholder="enter artist">
+
         </Input>
+
         <ScrollView style={styles.renderAlbums}>
-        {this.renderAlbums()}
-      </ScrollView>
+
+          {this.renderAlbums()}
+          
+        </ScrollView>
+
       </View>
     );
   }

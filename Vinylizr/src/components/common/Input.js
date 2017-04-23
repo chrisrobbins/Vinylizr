@@ -35,7 +35,6 @@ const styles = {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 25
-
   }
 };
 
