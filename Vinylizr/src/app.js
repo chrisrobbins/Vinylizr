@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import firebase from 'firebase';
-import { Spinner, SearchResults } from './components/common';
+import { Spinner } from './components/common';
 import LoginForm from './components/LoginForm';
 import DiscogsSearch from './components/DiscogsSearch';
 
@@ -32,7 +32,7 @@ class App extends Component {
     switch (this.state.loggedIn) {
       case true:
         return (
-          <SearchResults />
+          <DiscogsSearch />
         );
       case false:
         return <LoginForm />;
@@ -44,7 +44,6 @@ class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <DiscogsSearch />
         {this.renderContent()}
       </View>
     );
@@ -54,7 +53,6 @@ class App extends Component {
 const styles = {
   container: {
     flex: 1,
-    justifyContent: 'flex-end',
     backgroundColor: '#000000'
   }
 };

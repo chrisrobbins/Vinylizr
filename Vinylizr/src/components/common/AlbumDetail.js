@@ -4,7 +4,7 @@ import { CardSection } from './CardSection';
 import { Button } from './Button';
 
 const AlbumDetail = ({ album }) => {
-  const { title, artist, thumbnail_image, image, url } = album;
+  const { title, thumb } = album.results;
   const {
     imageView,
     textView,
@@ -18,7 +18,7 @@ const AlbumDetail = ({ album }) => {
         <View style={imageView}>
           <Image
             style={imageStyle}
-            source={{ uri: image }}
+            source={{ uri: thumb }}
           />
       </View>
 
@@ -31,6 +31,10 @@ const AlbumDetail = ({ album }) => {
 };
 
 const styles = {
+  imageView: {
+    backgroundColor: 'green',
+    height: 50
+  },
   titleTextStyle: {
     fontSize: 16,
     color: "#DADADA"
