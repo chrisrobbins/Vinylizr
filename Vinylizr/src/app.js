@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, StatusBar } from 'react-native';
 import firebase from 'firebase';
 import { Spinner } from './components/common';
 import LoginForm from './components/LoginForm';
@@ -45,6 +45,10 @@ class App extends Component {
     console.log(this.state);
     return (
       <View style={styles.container}>
+        <StatusBar
+         backgroundColor="#fff"
+         barStyle="light-content"
+        />
         {this.renderContent()}
       </View>
     );

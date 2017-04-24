@@ -43,14 +43,17 @@ state = { text: '', albums: [] };
 
           onChange={(event) => this.setState({ newText: event.nativeEvent.text })}
 
-          placeholder="enter artist">
+          placeholder="Artist or Album"
+
+          placeholderTextColor="#D9D9D9">
+
 
         </Input>
 
         <ScrollView style={styles.renderAlbums}>
 
           {this.renderAlbums()}
-          
+
         </ScrollView>
 
       </View>
@@ -63,6 +66,9 @@ const styles = {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  renderAlbums: {
+    marginTop: 20
   }
 };
 
