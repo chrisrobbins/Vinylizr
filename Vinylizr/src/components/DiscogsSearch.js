@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Button, Input, AlbumDetail } from './common';
+import { Button, Input, AlbumDetail, Tabs, BarCode, ClearText } from './common';
+import { Debounce } from 'react-throttle';
 
 import {
   View,
@@ -26,10 +27,21 @@ state = { text: '', albums: [] };
      );
    }
 
+   renderInputButton() {
+     if (this.state.text == " ") {
+       return <BarCode />;
+   }
+     return <ClearText />;
+   }
+
   render() {
     console.log(this.state);
     return (
       <View style={styles.container}>
+
+        <Tabs onPress={pressed => this.setState({ pressStatus: true })} />
+
+        <Debounce time="400" handler="onChangeText">
 
         <Input
 
@@ -47,8 +59,13 @@ state = { text: '', albums: [] };
 
           placeholderTextColor="#D9D9D9">
 
-
         </Input>
+
+      </Debounce>
+
+      <View>
+        {this.renderInputButton()}
+      </View>
 
         <ScrollView style={styles.renderAlbums}>
 
@@ -68,7 +85,7 @@ const styles = {
     alignItems: 'center'
   },
   renderAlbums: {
-    marginTop: 20
+    marginTop: 20,
   }
 };
 

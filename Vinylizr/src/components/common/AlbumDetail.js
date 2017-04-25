@@ -29,9 +29,13 @@ const AlbumDetail = ({ album }) => {
 };
 
 const styles = {
+  textView: {
+    justifyContent: 'center'
+  },
   titleTextStyle: {
     fontSize: 16,
-    color: "#DADADA"
+    color: "#DADADA",
+    marginLeft: 10
   },
   artistTextStyle: {
     fontSize: 14,

@@ -8,7 +8,7 @@ const Input = ({ value, onChangeText, placeholder, secureTextEntry, onChange }) 
     <View style={containerStyle}>
       <TextInput
         placeholder={placeholder}
-        placeholderTextColor="#D9D9D9"
+        placeholderTextColor="rgba(217,217,217,.6)"
         autoCorrect={false}
         style={inputStyle}
         value={value}
@@ -30,14 +30,17 @@ const styles = {
     backgroundColor: '#000',
     justifyContent: 'flex-start',
     height: 40,
-
+    paddingLeft: 7,
+    paddingRight: 7
   },
   containerStyle: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 25,
     borderBottomWidth: 2,
-    borderBottomColor: "#F42E4A"
+    borderBottomColor: "#F42E4A",
+    marginLeft: 7,
+    marginRight: 7,
   }
 };
 

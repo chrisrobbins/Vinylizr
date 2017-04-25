@@ -45,11 +45,11 @@ class App extends Component {
     console.log(this.state);
     return (
       <View style={styles.container}>
-        <StatusBar
-         backgroundColor="#fff"
-         barStyle="light-content"
-        />
+      <StatusBar
+       barStyle="light-content"
+      />
         {this.renderContent()}
+
       </View>
     );
   }
@@ -59,6 +59,9 @@ const styles = {
   container: {
     flex: 1,
     backgroundColor: '#000000'
+  },
+  status: {
+    backgroundColor: '#1a1a1a'
   }
 };
 
