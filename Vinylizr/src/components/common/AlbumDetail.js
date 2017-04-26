@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View, Image, Linking, ListView } from 'react-native';
 import { CardSection } from './CardSection';
 import { Button } from './Button';
-import { SwipeListView } from 'react-native-swipe-list-view';
+import Swipeout from 'react-native-swipeout';
 
 
 const AlbumDetail = ({ album }) => {
@@ -15,24 +15,16 @@ const AlbumDetail = ({ album }) => {
     artistTextStyle
   } = styles;
 
+  var swipeoutBtns = [
+  {
+    text: 'Button'
+  }
+]
 
-  const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
   return (
-    <SwipeListView
-      dataSource={ds.cloneWithRows(dataSource)}
-			renderRow={ data => (
-				<View style={styles.rowFront}>
-					<Text>I am {data} in a SwipeListView</Text>
-				</View>
-			)}
-			renderHiddenRow={ data => (
-				<View style={styles.rowBack}>
-					<Text>Left</Text>
-					<Text>Right</Text>
-				</View>
-			)}
-			leftOpenValue={75}
-			rightOpenValue={-75}
+    <Swipeout
+      right={swipeoutBtns}
+      backgroundColor='rgba(0,0,0,.1)'
     >
       <CardSection>
         <View style={imageView}>
@@ -47,7 +39,7 @@ const AlbumDetail = ({ album }) => {
           <Text style={artistTextStyle}>{album.artist.name}</Text>
         </View>
       </CardSection>
-    </SwipeListView>
+    </Swipeout>
   );
 };
 

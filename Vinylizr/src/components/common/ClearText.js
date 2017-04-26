@@ -7,10 +7,11 @@ import {
 
 const inputClearText = require('../../img/clear_text.png');
 
-const ClearText = () => {
+const ClearText = ({ onPress }) => {
   const { containerStyle, clearText } = styles;
+
   return (
-    <TouchableOpacity style={containerStyle}>
+    <TouchableOpacity onPress={ onPress } style={containerStyle}>
       <Image style={clearText} source={inputClearText} />
     </TouchableOpacity>
   );
@@ -23,7 +24,7 @@ const styles = {
     alignItems: 'flex-end',
     height: 5,
     alignSelf: 'flex-end',
-    marginRight: 13
+    marginRight: 0
   },
   clearText: {
     alignSelf: 'flex-end',

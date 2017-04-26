@@ -30,8 +30,13 @@ state = { text: '', albums: [] };
      if (this.state.text == " ") {
        return <BarCode />;
    }
-     return <ClearText />;
+     return <ClearText onPress={this.clearTextInput.bind(this)} />;
    }
+   clearTextInput() {
+     this.setState({ newText: '', albums: [] });
+
+   }
+
 
   render() {
     console.log(this.state);
@@ -54,7 +59,9 @@ state = { text: '', albums: [] };
 
           placeholder="Artist or Album"
 
-          placeholderTextColor="#D9D9D9">
+          placeholderTextColor="#D9D9D9"
+
+          >
 
         </Input>
 
