@@ -3,7 +3,7 @@ import { View, StatusBar } from 'react-native';
 import firebase from 'firebase';
 import { Spinner } from './components/common';
 import LoginForm from './components/LoginForm';
-import DiscogsSearch from './components/DiscogsSearch';
+import DeezerSearch from './components/DeezerSearch';
 
 
 
@@ -33,7 +33,7 @@ class App extends Component {
   renderContent() {
     switch (this.state.loggedIn) {
       case true:
-        return <DiscogsSearch />;
+        return <DeezerSearch />;
       case false:
         return <LoginForm />;
       default:

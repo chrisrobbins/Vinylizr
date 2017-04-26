@@ -9,17 +9,16 @@ import {
   ScrollView
 } from 'react-native';
 
-class DiscogsSearch extends Component {
+class DeezerSearch extends Component {
 state = { text: '', albums: [] };
 
- searchDiscogs() {
+ searchDeezer() {
    let apiSearch = this.state.newText;
    axios.get(
-     `https://api.discogs.com/database/search?artist=${apiSearch}
-     &key=jbUTpFhLTiyyHgLRoBgq&secret=LSQDaLpplgcCGlkzujkHyUkxImNlWVoI`
+     `https://api.deezer.com/search/album/?q=${apiSearch}&index=0&limit=50&output=json`
    )
-     .then(response => this.setState({ albums: response.data.results }));
-   }
+   .then(response => this.setState({ albums: response.data.data }));
+ }
 
    renderAlbums() {
      return this.state.albums.map(album =>
@@ -49,7 +48,7 @@ state = { text: '', albums: [] };
 
           value={this.state.newText}
 
-          onChangeText={this.searchDiscogs.bind(this)}
+          onChangeText={this.searchDeezer.bind(this)}
 
           onChange={(event) => this.setState({ newText: event.nativeEvent.text })}
 
@@ -95,4 +94,4 @@ const styles = {
   }
 };
 
-export default DiscogsSearch;
+export default DeezerSearch;
