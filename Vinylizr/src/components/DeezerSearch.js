@@ -95,7 +95,7 @@ const styles = {
     alignItems: 'center'
   },
   renderAlbums: {
-    marginTop: 1,
+    marginTop: -3,
   },
   inputContainer: {
     flexDirection: 'row',

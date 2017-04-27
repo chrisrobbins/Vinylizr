@@ -20,6 +20,11 @@ const AlbumDetail = ({ album }) => {
 
 
   var swipeoutBtnRight = [
+    {
+      text: '',
+      backgroundColor: '#F4702E'
+
+    },
   {
     text: <Image source={wantListIcon} />,
     backgroundColor: '#F4702E'
@@ -29,7 +34,12 @@ const AlbumDetail = ({ album }) => {
 var swipeoutBtnLeft = [
 {
   text: <Image source={collectionIcon} />,
+  backgroundColor: '#2EF470',
+},
+{
+  text: '',
   backgroundColor: '#2EF470'
+
 }
 ]
 
@@ -39,6 +49,8 @@ var swipeoutBtnLeft = [
       left={swipeoutBtnLeft}
       sensitivity={3}
       backgroundColor='rgba(0,0,0,.1)'
+      autoClose={true}
+      close={true}
     >
       <CardSection>
         <View style={imageView}>
@@ -75,6 +87,9 @@ const styles = {
   imageStyle: {
     height: 80,
     width: 80
+  },
+  btn: {
+    width: 50
   }
 };
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, StatusBar } from 'react-native';
 import firebase from 'firebase';
-import { Spinner } from './components/common';
+import { Spinner, Nav } from './components/common';
 import LoginForm from './components/LoginForm';
 import DeezerSearch from './components/DeezerSearch';
 
@@ -49,7 +49,7 @@ class App extends Component {
        barStyle="light-content"
       />
         {this.renderContent()}
-
+        <Nav />
       </View>
     );
   }
