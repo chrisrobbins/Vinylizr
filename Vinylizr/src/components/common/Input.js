@@ -16,6 +16,7 @@ const Input = ({ ref, value, onChangeText, placeholder, secureTextEntry, onChang
         onChange={onChange}
         secureTextEntry={secureTextEntry}
         ref={ref}
+        selectionColor={'#F42E4A'}
       />
 
     </View>
@@ -38,10 +39,9 @@ const styles = {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 25,
-    borderBottomWidth: 2,
-    borderBottomColor: "#F42E4A",
-    marginLeft: 7,
-    marginRight: 7,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ffffff",
+
   }
 };
 

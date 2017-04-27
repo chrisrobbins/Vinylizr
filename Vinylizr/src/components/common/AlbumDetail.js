@@ -15,15 +15,29 @@ const AlbumDetail = ({ album }) => {
     artistTextStyle
   } = styles;
 
-  var swipeoutBtns = [
+  const wantListIcon = require('../../img/wantlistIcon.png');
+  const collectionIcon = require('../../img/collectionIcon.png');
+
+
+  var swipeoutBtnRight = [
   {
-    text: 'Button'
+    text: <Image source={wantListIcon} />,
+    backgroundColor: '#F4702E'
   }
+]
+
+var swipeoutBtnLeft = [
+{
+  text: <Image source={collectionIcon} />,
+  backgroundColor: '#2EF470'
+}
 ]
 
   return (
     <Swipeout
-      right={swipeoutBtns}
+      right={swipeoutBtnRight}
+      left={swipeoutBtnLeft}
+      sensitivity={3}
       backgroundColor='rgba(0,0,0,.1)'
     >
       <CardSection>

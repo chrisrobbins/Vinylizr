@@ -12,6 +12,12 @@ import {
 class DeezerSearch extends Component {
 state = { text: '', albums: [] };
 
+ComponentWillMount() {
+  if (this.state.text === '') {
+    return this.setState({ text: '' })
+  }
+}
+
  searchDeezer() {
    let apiSearch = this.state.newText;
    axios.get(
@@ -43,7 +49,7 @@ state = { text: '', albums: [] };
     return (
       <View style={styles.container}>
 
-        <Debounce time="400" handler="onChangeText">
+        <Debounce time="300" handler="onChangeText">
 
         <Input
 
@@ -89,7 +95,7 @@ const styles = {
     alignItems: 'center'
   },
   renderAlbums: {
-    marginTop: 20,
+    marginTop: 1,
   },
   inputContainer: {
     flexDirection: 'row',
@@ -97,7 +103,7 @@ const styles = {
     alignItems: 'flex-end',
     height: 5,
     alignSelf: 'flex-end',
-    marginRight: 13
+    marginRight: 10
   }
 };
 

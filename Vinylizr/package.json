@@ -6,6 +6,7 @@
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
+    "@remobile/react-native-splashscreen": "^1.0.7",
     "axios": "^0.14.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
