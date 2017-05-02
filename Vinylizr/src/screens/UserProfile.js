@@ -11,7 +11,7 @@ export default class UserProfile extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>I'm the UserProfile component</Text>
+        <Text style={styles.profileText}>User Profile!</Text>
       </View>
     );
   }
@@ -20,5 +20,11 @@ export default class UserProfile extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
+  profileText: {
+    color: '#fff',
+
+  }
 });

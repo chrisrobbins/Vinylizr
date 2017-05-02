@@ -8,7 +8,7 @@ class UserCollections extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>Collection!</Text>
+        <Text style={styles.text}>Want List!</Text>
       </View>
     );
   }

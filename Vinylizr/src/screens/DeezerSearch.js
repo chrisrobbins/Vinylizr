@@ -83,16 +83,19 @@ class DeezerSearch extends Component {
 
 const styles = {
   renderAlbums: {
-    marginTop: -3,
+    marginTop: 0,
+    flex: 1
   },
   inputContainer: {
-    flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
     height: 5,
-    alignSelf: 'flex-end',
-    marginRight: 10
+    marginRight: 10,
+    marginBottom: 0
   },
+  container: {
+    justifyContent: 'flex-start'
+  }
 };
 
 export default DeezerSearch;
