@@ -15,8 +15,8 @@ const AlbumDetail = ({ album }) => {
     artistTextStyle
   } = styles;
 
-  const wantListIcon = require('../../img/wantlistIcon.png');
-  const collectionIcon = require('../../img/collectionIcon.png');
+  const wantListIcon = require('../../img/wantlistButton.png');
+  const collectionIcon = require('../../img/collectionButton.png');
 
 
   var swipeoutBtnRight = [

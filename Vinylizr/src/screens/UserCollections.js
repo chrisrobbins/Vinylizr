@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import {
-  ScrollView,
+  View,
   Text
 } from 'react-native';
 
 class UserCollections extends Component {
   render() {
     return (
-      <ScrollView style={styles.container}>
-        
-      </ScrollView>
+      <View style={styles.container}>
+        <Text style={styles.text}>Scroll me!</Text>
+      </View>
     );
   }
 }
@@ -17,7 +17,12 @@ class UserCollections extends Component {
 const styles = {
   container: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
+  text: {
+    color: '#fff'
+  }
 };
 
 export default UserCollections;

@@ -9,5 +9,4 @@ export * from './Logo';
 export * from './AlbumDetail';
 export * from './BarCode';
 export * from './ClearText';
-export * from './Nav';
 export * from './Card';

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { View, StatusBar } from 'react-native';
 import * as firebase from "firebase";
-import { Spinner, Nav } from './components/common';
+import { Spinner } from './components/common';
+import Nav from './Nav';
 import LoginForm from './components/LoginForm';
 import DeezerSearch from './screens/DeezerSearch';
 
@@ -31,7 +32,7 @@ componentWillMount() {
   renderContent() {
     switch (this.state.loggedIn) {
       case true:
-        return <DeezerSearch />;
+        return <Nav />;
       case false:
         return <LoginForm />;
       default:
@@ -47,7 +48,6 @@ componentWillMount() {
        barStyle="light-content"
       />
         {this.renderContent()}
-        <Nav />
       </View>
     );
   }
