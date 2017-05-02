@@ -15,9 +15,7 @@ class Nav extends React.Component {
   static displayName = 'Nav';
 
   state = {
-    selectedTab: 'redTab',
-    notifCount: 0,
-    presses: 0,
+    selectedTab: '#F42E4A'
   };
 
   render() {
@@ -33,7 +31,7 @@ class Nav extends React.Component {
           selected={false}
           onPress={() => {
             this.setState({
-              selectedTab: 'blueTab',
+              selectedTab: '#777777',
             });
           }}
         />
@@ -46,7 +44,7 @@ class Nav extends React.Component {
           selected={false}
           onPress={() => {
             this.setState({
-              selectedTab: 'redTab',
+              selectedTab: '#F42E4A',
               notifCount: this.state.notifCount + 1,
             });
           }}
@@ -60,7 +58,8 @@ class Nav extends React.Component {
           selected={false}
           onPress={() => {
             this.setState({
-              selectedTab: 'greenTab',
+
+              selectedTab: '#777777',
               presses: this.state.presses + 1
             });
           }}
@@ -73,7 +72,7 @@ class Nav extends React.Component {
           selected={false}
           onPress={() => {
             this.setState({
-              selectedTab: 'greenTab',
+              selectedTab: '#777777',
               presses: this.state.presses + 1
             });
           }}

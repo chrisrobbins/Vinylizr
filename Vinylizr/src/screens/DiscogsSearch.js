@@ -9,22 +9,17 @@ import {
   ScrollView
 } from 'react-native';
 
-class DeezerSearch extends Component {
+class DiscogsSearch extends Component {
 state = { text: '', albums: [] };
 
-ComponentWillMount() {
-  if (this.state.text === '') {
-    return this.setState({ text: '' })
-  }
-}
-
- searchDeezer() {
+ searchDiscogs() {
    let apiSearch = this.state.newText;
    axios.get(
-     `https://api.deezer.com/search/album/?q=${apiSearch}&index=0&limit=50&output=json`
+     `https://api.discogs.com/database/search?artist=${apiSearch}
+     &key=jbUTpFhLTiyyHgLRoBgq&secret=LSQDaLpplgcCGlkzujkHyUkxImNlWVoI`
    )
-   .then(response => this.setState({ albums: response.data.data }));
- }
+     .then(response => this.setState({ albums: response.data.results }));
+   }
 
    renderAlbums() {
      return this.state.albums.map(album =>
@@ -36,20 +31,15 @@ ComponentWillMount() {
      if (this.state.text == " ") {
        return <BarCode />;
    }
-     return <ClearText onPress={this.clearTextInput.bind(this)} />;
+     return <ClearText />;
    }
-   clearTextInput() {
-     this.setState({ newText: '', albums: [] });
-
-   }
-
 
   render() {
     console.log(this.state);
     return (
       <View style={styles.container}>
 
-        <Debounce time="300" handler="onChangeText">
+        <Debounce time="400" handler="onChangeText">
 
         <Input
 
@@ -59,15 +49,13 @@ ComponentWillMount() {
 
           value={this.state.newText}
 
-          onChangeText={this.searchDeezer.bind(this)}
+          onChangeText={this.searchDiscogs.bind(this)}
 
           onChange={(event) => this.setState({ newText: event.nativeEvent.text })}
 
           placeholder="Artist or Album"
 
-          placeholderTextColor="#D9D9D9"
-
-          >
+          placeholderTextColor="#D9D9D9">
 
         </Input>
 
@@ -95,7 +83,7 @@ const styles = {
     alignItems: 'center'
   },
   renderAlbums: {
-    marginTop: -3,
+    marginTop: 20,
   },
   inputContainer: {
     flexDirection: 'row',
@@ -103,8 +91,8 @@ const styles = {
     alignItems: 'flex-end',
     height: 5,
     alignSelf: 'flex-end',
-    marginRight: 10
+    marginRight: 13
   }
 };
 
-export default DeezerSearch;
+export default DiscogsSearch;

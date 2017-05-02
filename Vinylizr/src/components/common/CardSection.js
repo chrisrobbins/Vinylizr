@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { View } from 'react-native';
 
@@ -11,11 +12,13 @@ const CardSection = (props) => {
 
 const styles = {
   containerStyle: {
-    flex: 1,
+    paddingLeft: 0,
+    marginRight: 25,
+    marginTop: 1,
+    backgroundColor: 'rgba(26, 26, 26, .1)',
+    justifyContent: 'flex-start',
     flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(26,26,26,1)',
-    alignSelf: 'stretch'
+    position: 'relative'
   }
 };
 

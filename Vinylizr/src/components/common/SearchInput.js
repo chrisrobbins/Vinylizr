@@ -1,20 +1,22 @@
 import React from 'react';
 import { TextInput, View } from 'react-native';
 
-const Input = ({ value, onChangeText, placeholder, secureTextEntry }) => {
+const SearchInput = ({ ref, value, onChangeText, placeholder, secureTextEntry, onChange }) => {
   const { inputStyle, containerStyle } = styles;
 
   return (
     <View style={containerStyle}>
       <TextInput
         placeholder={placeholder}
-        placeholderTextColor="white"
+        placeholderTextColor="rgba(217,217,217,.6)"
         autoCorrect={false}
         style={inputStyle}
         value={value}
         onChangeText={onChangeText}
-        multiline
+        onChange={onChange}
         secureTextEntry={secureTextEntry}
+        ref={ref}
+        selectionColor={'#F42E4A'}
       />
 
     </View>
@@ -26,15 +28,22 @@ const styles = {
     color: '#fff',
     fontSize: 18,
     lineHeight: 23,
-    flex: 2,
-    marginTop: 8
+    flex: 1,
+    backgroundColor: '#000',
+    justifyContent: 'flex-start',
+    height: 40,
+    paddingLeft: 7,
+    paddingRight: 7
   },
   containerStyle: {
-    height: 40,
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop: 25,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ffffff",
+
   }
 };
 
-export { Input };
+
+export { SearchInput };
