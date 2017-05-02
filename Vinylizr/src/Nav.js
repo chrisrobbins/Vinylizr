@@ -11,6 +11,8 @@ var {
 import DeezerSearch from './screens/DeezerSearch';
 import UserProfile from './screens/UserProfile';
 import UserCollections from './screens/UserCollections';
+import WantList from './screens/WantList';
+
 
 
 class Nav extends React.Component {
@@ -19,7 +21,7 @@ class Nav extends React.Component {
   static displayName = 'Vinylizr';
 
   state = {
-    selectedTab: 'redTab',
+    selectedTab: 'UserCollections',
     notifCount: 0,
     presses: 0,
   };
@@ -31,12 +33,13 @@ class Nav extends React.Component {
         unselectedItemTintColor="yellow"
         barTintColor="#1A1A1A">
         <TabBarIOS.Item
+          renderAsOriginal
           icon={require('./img/collectionIcon.png')}
           selectedIcon={require('./img/collection_select.png')}
-          selected={this.state.selectedTab === 'blueTab'}
+          selected={this.state.selectedTab === 'UserCollections'}
           onPress={() => {
             this.setState({
-              selectedTab: 'blueTab',
+              selectedTab: 'UserCollections',
             });
           }}>
           <UserCollections />
@@ -45,34 +48,34 @@ class Nav extends React.Component {
           renderAsOriginal
           icon={require('./img/wantlistIcon.png')}
           selectedIcon={require('./img/wantlistIcon_select.png')}
-          selected={this.state.selectedTab === 'redTab'}
+          selected={this.state.selectedTab === 'wantList'}
           onPress={() => {
             this.setState({
-              selectedTab: 'redTab',
+              selectedTab: 'wantList',
             });
           }}>
-          <UserCollections />
+          <WantList />
         </TabBarIOS.Item>
         <TabBarIOS.Item
           renderAsOriginal
-          icon={require('./img/collectionIcon.png')}
-          selectedIcon={require('./img/collection_select.png')}
-          selected={this.state.selectedTab === 'blueTab'}
+          icon={require('./img/profile.png')}
+          selectedIcon={require('./img/profile_select.png')}
+          selected={this.state.selectedTab === 'profile'}
           onPress={() => {
             this.setState({
-              selectedTab: 'blueTab',
+              selectedTab: 'profile',
             });
           }}>
-          <UserCollections />
+          <UserProfile />
         </TabBarIOS.Item>
         <TabBarIOS.Item
           icon={require('./img/search.png')}
           selectedIcon={require('./img/search_select.png')}
           renderAsOriginal
-          selected={this.state.selectedTab === 'greenTab'}
+          selected={this.state.selectedTab === 'search'}
           onPress={() => {
             this.setState({
-              selectedTab: 'greenTab',
+              selectedTab: 'search',
               presses: this.state.presses + 1
             });
           }}>

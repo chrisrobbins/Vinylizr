@@ -17,7 +17,6 @@ const styles = {
     backgroundColor: 'rgba(26, 26, 26, .1)',
     justifyContent: 'flex-start',
     flexDirection: 'row',
-    position: 'relative',
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(151,151,151,.3)'
 

@@ -33,14 +33,17 @@ const styles = {
     justifyContent: 'flex-start',
     height: 40,
     paddingLeft: 7,
-    paddingRight: 7
+    paddingRight: 7,
+    paddingBottom: 0,
+    marginBottom: 0
   },
   containerStyle: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
     marginTop: 25,
     borderBottomWidth: 1,
     borderBottomColor: "#ffffff",
+    marginBottom: 0
 
   }
 };
