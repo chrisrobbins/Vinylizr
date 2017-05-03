@@ -15,7 +15,6 @@ const SearchInput = ({ ref, value, onChangeText, placeholder, secureTextEntry, o
         onChangeText={onChangeText}
         onChange={onChange}
         secureTextEntry={secureTextEntry}
-        ref={ref}
         selectionColor={'#F42E4A'}
       />
 

@@ -27,7 +27,8 @@ const styles = {
     alignSelf: 'stretch',
     backgroundColor: '#F42E4A',
     borderRadius: 20,
-    height: 40
+    height: 40,
+    
   }
 };
 
