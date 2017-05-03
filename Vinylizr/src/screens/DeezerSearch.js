@@ -13,6 +13,7 @@ import {
 class DeezerSearch extends Component {
   state = { text: '', albums: [] };
 
+
  searchDeezer() {
    let apiSearch = this.state.newText;
    axios.get(
@@ -27,16 +28,12 @@ class DeezerSearch extends Component {
      );
    }
 
-   renderInputButton() {
-     if (this.state.text == " ") {
-       return <BarCode />;
-   }
-     return <ClearText onPress={this.clearTextInput.bind(this)} />;
-   }
-   clearTextInput(event) {
-     this.setState({ newText: '', albums: [] });
-     event.nativeEvent.text = "";
 
+   clearTextInput() {
+     this.setState({ newText: '', albums: [] });
+   }
+   renderInputButton() {
+     return <ClearText onPress={this.clearTextInput.bind(this)} />
    }
 
   render() {
@@ -44,7 +41,7 @@ class DeezerSearch extends Component {
     return (
       <View style={styles.container}>
 
-        <Debounce time="400" handler="onChangeText">
+      <Debounce time="400" handler="onChangeText">
 
         <SearchInput
 
@@ -59,18 +56,20 @@ class DeezerSearch extends Component {
           placeholder="Artist or Album"
 
           placeholderTextColor="#D9D9D9"
-
-          >
-
-        </SearchInput>
+        />
 
       </Debounce>
 
       <View style={styles.inputContainer}>
+
         {this.renderInputButton()}
+
       </View>
 
-        <ScrollView style={styles.renderAlbums}>
+        <ScrollView
+          style={styles.renderAlbums}
+          automaticallyAdjustContentInsets={false}  
+        >
 
           {this.renderAlbums()}
 
@@ -83,18 +82,18 @@ class DeezerSearch extends Component {
 
 const styles = {
   renderAlbums: {
-    marginTop: 0,
-    flex: 1
+    marginTop: -5,
+    flex: 1,
   },
   inputContainer: {
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
     height: 5,
     marginRight: 10,
-    marginBottom: 0
+    marginBottom: 0,
   },
   container: {
-    justifyContent: 'flex-start'
+    flex: 1
   }
 };
 
