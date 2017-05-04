@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import * as firebase from 'firebase';
-import { Button, SearchInput, AlbumDetail, BarCode, ClearText } from '../components/common';
+import { Button, AlbumDetail, BarCode, ClearText } from '../components/common';
 import { Debounce } from 'react-throttle';
 
 import {
   View,
   Text,
-  ScrollView
+  ScrollView,
+  TextInput
 } from 'react-native';
 
 class DeezerSearch extends Component {
@@ -30,10 +31,11 @@ class DeezerSearch extends Component {
 
 
    clearTextInput() {
-     this.setState({ newText: '', albums: [] });
+     this._textInput.setNativeProps({text: ''});
+     this.setState({ text: '', albums: [] });
    }
    renderInputButton() {
-     return <ClearText onPress={this.clearTextInput.bind(this)} />
+     return <ClearText onPress={this.clearTextInput.bind(this)} />;
    }
 
   render() {
@@ -41,9 +43,17 @@ class DeezerSearch extends Component {
     return (
       <View style={styles.container}>
 
-      <Debounce time="400" handler="onChangeText">
+        <View style={styles.inputStyleContainer}>
 
-        <SearchInput
+      <Debounce time="150" handler="onChangeText">
+
+        <TextInput
+
+          ref={text => this._textInput = text}
+
+          style={styles.inputStyle}
+
+          autoFocus={true}
 
           type="search"
 
@@ -56,9 +66,13 @@ class DeezerSearch extends Component {
           placeholder="Artist or Album"
 
           placeholderTextColor="#D9D9D9"
+
+          selectionColor={'#F42E4A'}
+
         />
 
       </Debounce>
+      </View>
 
       <View style={styles.inputContainer}>
 
@@ -68,7 +82,7 @@ class DeezerSearch extends Component {
 
         <ScrollView
           style={styles.renderAlbums}
-          automaticallyAdjustContentInsets={false}  
+          automaticallyAdjustContentInsets={false}
         >
 
           {this.renderAlbums()}
@@ -82,8 +96,8 @@ class DeezerSearch extends Component {
 
 const styles = {
   renderAlbums: {
-    marginTop: -5,
     flex: 1,
+    marginTop: -3
   },
   inputContainer: {
     justifyContent: 'flex-end',
@@ -94,7 +108,28 @@ const styles = {
   },
   container: {
     flex: 1
-  }
+  },
+  inputStyleContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginTop: 25,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ffffff",
+    marginBottom: 0
+  },
+  inputStyle: {
+    color: '#fff',
+    fontSize: 18,
+    lineHeight: 23,
+    flex: 1,
+    backgroundColor: '#000',
+    justifyContent: 'flex-start',
+    height: 40,
+    paddingLeft: 7,
+    paddingRight: 7,
+    paddingBottom: 0,
+    marginBottom: 0
+  },
 };
 
 export default DeezerSearch;

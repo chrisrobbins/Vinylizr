@@ -3,8 +3,6 @@ import { Text, View, Image, Linking, ListView } from 'react-native';
 import { CardSection } from './CardSection';
 import { Button } from './Button';
 import Swipeout from 'react-native-swipeout';
-
-
 const AlbumDetail = ({ album }) => {
   const { title } = album;
   const {
@@ -20,11 +18,6 @@ const AlbumDetail = ({ album }) => {
 
 
   var swipeoutBtnRight = [
-    {
-      text: '',
-      backgroundColor: '#F4702E'
-
-    },
   {
     text: <Image source={wantListIcon} />,
     backgroundColor: '#F4702E'
@@ -34,12 +27,7 @@ const AlbumDetail = ({ album }) => {
 var swipeoutBtnLeft = [
 {
   text: <Image source={collectionIcon} />,
-  backgroundColor: '#2EF470',
-},
-{
-  text: '',
   backgroundColor: '#2EF470'
-
 }
 ]
 

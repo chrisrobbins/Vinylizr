@@ -22,8 +22,6 @@ class Nav extends React.Component {
 
   state = {
     selectedTab: 'UserCollections',
-    notifCount: 0,
-    presses: 0,
   };
 
 
@@ -33,6 +31,7 @@ class Nav extends React.Component {
         unselectedItemTintColor="yellow"
         barTintColor="#1A1A1A">
         <TabBarIOS.Item
+          title=""
           renderAsOriginal
           icon={require('./img/collectionIcon.png')}
           selectedIcon={require('./img/collection_select.png')}
@@ -45,6 +44,7 @@ class Nav extends React.Component {
           <UserCollections />
         </TabBarIOS.Item>
         <TabBarIOS.Item
+          title=""
           renderAsOriginal
           icon={require('./img/wantlistIcon.png')}
           selectedIcon={require('./img/wantlistIcon_select.png')}
@@ -57,6 +57,7 @@ class Nav extends React.Component {
           <WantList />
         </TabBarIOS.Item>
         <TabBarIOS.Item
+          title=""
           renderAsOriginal
           icon={require('./img/profile.png')}
           selectedIcon={require('./img/profile_select.png')}
@@ -69,14 +70,14 @@ class Nav extends React.Component {
           <UserProfile />
         </TabBarIOS.Item>
         <TabBarIOS.Item
+          title=""
           icon={require('./img/search.png')}
           selectedIcon={require('./img/search_select.png')}
           renderAsOriginal
           selected={this.state.selectedTab === 'search'}
           onPress={() => {
             this.setState({
-              selectedTab: 'search',
-              presses: this.state.presses + 1
+              selectedTab: 'search'
             });
           }}>
           <DeezerSearch />

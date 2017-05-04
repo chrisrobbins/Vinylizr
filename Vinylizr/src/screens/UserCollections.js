@@ -4,24 +4,35 @@ import {
   Text
 } from 'react-native';
 
+import { Header } from '../components/common';
+
 class UserCollections extends Component {
   render() {
     return (
+
       <View style={styles.container}>
-        <Text style={styles.text}>Collection!</Text>
+        <View style={styles.headerContainer}>
+        <Header headerText={"Collection"} />
+        </View>
+        <View style={styles.textContainer}>
+          <Text style={styles.text}>Collection!</Text>
+        </View>
       </View>
     );
   }
 }
 
 const styles = {
-  container: {
+  textContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignSelf: 'center'
   },
   text: {
     color: '#fff'
+  },
+  container: {
+    flex: 1
   }
 };
 

@@ -20,6 +20,7 @@
     "react-native-autocomplete": "^0.3.0",
     "react-native-swipe-list-view": "^0.4.1",
     "react-native-swipeout": "^2.0.13",
+    "react-native-swipeout-plus": "^0.1.0",
     "react-throttle": "^0.3.0",
     "throttle-debounce": "^1.0.1"
   }

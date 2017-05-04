@@ -146,13 +146,14 @@ const styles = {
   },
   sectionContainer: {
     flex: 1,
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    marginLeft: 20,
+    marginRight: 20
   },
   textStyle: {
     alignSelf: 'center',
     color: 'white',
     fontSize: 16,
-    fontWeight: '600',
     paddingTop: 10,
     paddingBottom: 10
   },

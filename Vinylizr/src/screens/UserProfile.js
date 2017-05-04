@@ -7,18 +7,23 @@ import {
   StyleSheet,
 } from 'react-native';
 
-import { Button } from '../components/common'
+import { Button } from '../components/common';
+import { Header } from '../components/common'
+
 
 export default class UserProfile extends Component {
   render() {
     return (
     <View style={styles.container}>
-      <View>
-        <Text style={styles.profileText}>User Profile!</Text>
+
+      <View style={styles.headerContainer}>
+        <Header headerText={"My Profile"} />
       </View>
       <View style={styles.logOut}>
+        <View>
         <Button onPress={() => firebase.auth().signOut()}>Log out</Button>
-      </View>
+        </View>
+    </View>
     </View>
     );
   }
@@ -28,11 +33,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 10,
-    marginLeft: 10
+    alignItems: 'center'
   },
   logOut: {
+    alignSelf: 'stretch',
+    flex: 1,
+    justifyContent: 'flex-end',
+    marginLeft: 20,
+    marginRight: 20,
+    marginBottom: 60
+  },
+  headerContainer: {
     alignSelf: 'stretch'
   }
 });

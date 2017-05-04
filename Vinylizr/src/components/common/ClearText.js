@@ -22,13 +22,13 @@ const styles = {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
-    height: 5,
+    height: 2,
     alignSelf: 'flex-end',
     marginRight: 0
   },
   clearText: {
     alignSelf: 'flex-end',
-    marginBottom: 18
+    marginBottom: 15
   }
 };
 
