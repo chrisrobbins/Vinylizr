@@ -1,8 +1,18 @@
 import React from 'react';
-import { Text, View, Image, Linking, ListView } from 'react-native';
+import {
+  Text,
+  View,
+  Image,
+  Linking,
+  ListView,
+  TouchableHighlight
+} from 'react-native';
+
 import { CardSection } from './CardSection';
 import { Button } from './Button';
-import Swipeout from 'react-native-swipeout';
+
+import Swipeable from 'react-native-swipeable';
+
 const AlbumDetail = ({ album }) => {
   const { title } = album;
   const {
@@ -16,29 +26,27 @@ const AlbumDetail = ({ album }) => {
   const wantListIcon = require('../../img/wantlistButton.png');
   const collectionIcon = require('../../img/collectionButton.png');
 
+  const leftButtons = [
+    <TouchableHighlight
+      style={styles.leftButtons}>
+      <Image style={styles.leftIconStyles} source={collectionIcon} />
+    </TouchableHighlight>
+  ];
 
-  var swipeoutBtnRight = [
-  {
-    text: <Image source={wantListIcon} />,
-    backgroundColor: '#F4702E'
-  }
-]
-
-var swipeoutBtnLeft = [
-{
-  text: <Image source={collectionIcon} />,
-  backgroundColor: '#2EF470'
-}
-]
+  const rightButtons = [
+    <TouchableHighlight
+      style={styles.rightButtons}>
+      <Image style={styles.rightIconStyles} source={wantListIcon} />
+    </TouchableHighlight>
+  ];
 
   return (
-    <Swipeout
-      right={swipeoutBtnRight}
-      left={swipeoutBtnLeft}
-      sensitivity={3}
-      backgroundColor='rgba(0,0,0,.1)'
-      autoClose={true}
-      close={true}
+    <Swipeable
+      leftButtons={leftButtons}
+      leftButtonWidth={80}
+      rightButtons={rightButtons}
+      rightButtonWidth={80}
+      leftActionActivationDistance={75}
     >
       <CardSection>
         <View style={imageView}>
@@ -53,7 +61,7 @@ var swipeoutBtnLeft = [
           <Text style={artistTextStyle}>{album.artist.name}</Text>
         </View>
       </CardSection>
-    </Swipeout>
+    </Swipeable>
   );
 };
 
@@ -76,8 +84,25 @@ const styles = {
     height: 80,
     width: 80
   },
-  btn: {
-    width: 50
+  rightButtons: {
+    backgroundColor: '#F4702E',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  leftButtons: {
+    backgroundColor: '#2EF470',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  leftIconStyles: {
+    alignSelf: 'flex-end',
+    marginRight: 29
+  },
+  rightIconStyles: {
+    alignSelf: 'flex-start',
+    marginLeft: 29
   }
 };
 

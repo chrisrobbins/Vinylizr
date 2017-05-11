@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import * as firebase from 'firebase';
-import { Button, AlbumDetail, BarCode, ClearText } from '../components/common';
+
+import {
+   Button,
+   AlbumDetail,
+   BarCode,
+   ClearText
+} from '../components/common';
+
 import { Debounce } from 'react-throttle';
 
 import {
@@ -31,7 +38,7 @@ class DeezerSearch extends Component {
 
 
    clearTextInput() {
-     this._textInput.setNativeProps({text: ''});
+     this._textInput.setNativeProps({ text: '' });
      this.setState({ text: '', albums: [] });
    }
    renderInputButton() {
@@ -39,13 +46,12 @@ class DeezerSearch extends Component {
    }
 
   render() {
-    console.log(this.state);
     return (
       <View style={styles.container}>
 
         <View style={styles.inputStyleContainer}>
 
-      <Debounce time="150" handler="onChangeText">
+      <Debounce time="250" handler="onChangeText">
 
         <TextInput
 
