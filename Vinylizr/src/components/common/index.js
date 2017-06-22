@@ -6,7 +6,6 @@ export * from './Input';
 export * from './SearchInput';
 export * from './Spinner';
 export * from './Logo';
-export * from './AlbumDetail';
 export * from './BarCode';
 export * from './ClearText';
 export * from './Card';

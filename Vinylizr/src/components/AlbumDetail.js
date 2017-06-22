@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -7,13 +7,60 @@ import {
   ListView,
   TouchableHighlight
 } from 'react-native';
+import * as firebase from 'firebase';
 
-import { CardSection } from './CardSection';
-import { Button } from './Button';
+
+
+import { CardSection } from '../components/common/CardSection';
+import { Button } from '../components/common/Button';
 
 import Swipeable from 'react-native-swipeable';
 
-const AlbumDetail = ({ album }) => {
+export default class AlbumDetail extends Component {
+//   constructor(props) {
+//   super(props);
+//   var myFirebaseRef = new firebase.database().ref();
+//   this.albumsRef = myFirebaseRef.child('albums');
+//
+//   this.state = {
+//     newAlbum: '',
+//     albumSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2})
+//   };
+//
+//   this.albums = [];
+// }
+// componentDidMount() {
+//   // When a album is added
+//   this.albumsRef.on('child_added', (dataSnapshot) => {
+//     this.albums.push({id: dataSnapshot.key(), text: dataSnapshot.val()});
+//     this.setState({
+//       todoSource: this.state.albumSource.cloneWithRows(this.albums)
+//     });
+//   });
+//
+//   // When a album is removed
+//   this.albumsRef.on('child_removed', (dataSnapshot) => {
+//       this.albums = this.albums.filter((x) => x.id !== dataSnapshot.key());
+//       this.setState({
+//         albumSource: this.state.albumSource.cloneWithRows(this.albums)
+//       });
+//   });
+// }
+// saveToCollection(album) {
+//   let myRef = firebase.database();
+// }
+
+
+  saveToCollection() {
+    const myFirebaseRef = firebase.database().ref();
+    myFirebaseRef.set({
+  albums: `${this.props.album.cover}`
+});
+  }
+
+
+render() {
+  const { album } = this.props;
   const { title } = album;
   const {
     imageView,
@@ -23,9 +70,8 @@ const AlbumDetail = ({ album }) => {
     artistTextStyle
   } = styles;
 
-  const wantListIcon = require('../../img/wantlistButton.png');
-  const collectionIcon = require('../../img/collectionButton.png');
-
+  const wantListIcon = require('../img/wantlistButton.png');
+  const collectionIcon = require('../img/collectionButton.png');
   const leftButtons = [
     <TouchableHighlight
       style={styles.leftButtons}>
@@ -47,6 +93,7 @@ const AlbumDetail = ({ album }) => {
       rightButtons={rightButtons}
       rightButtonWidth={80}
       leftActionActivationDistance={75}
+      onLeftActionRelease={this.saveToCollection.bind(this)}
     >
       <CardSection>
         <View style={imageView}>
@@ -63,6 +110,7 @@ const AlbumDetail = ({ album }) => {
       </CardSection>
     </Swipeable>
   );
+}
 };
 
 const styles = {
@@ -105,5 +153,3 @@ const styles = {
     marginLeft: 29
   }
 };
-
-export { AlbumDetail };

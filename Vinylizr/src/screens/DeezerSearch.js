@@ -4,10 +4,12 @@ import * as firebase from 'firebase';
 
 import {
    Button,
-   AlbumDetail,
    BarCode,
    ClearText
 } from '../components/common';
+
+import AlbumDetail from '../components/AlbumDetail';
+
 
 import { Debounce } from 'react-throttle';
 
