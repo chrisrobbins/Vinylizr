@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import * as firebase from 'firebase';
 
 import {
    Button,
@@ -21,20 +20,24 @@ import {
 } from 'react-native';
 
 class DeezerSearch extends Component {
-  state = { text: '', albums: [] };
+  constructor(props) {
+    super(props);
+    this.state = { text: '', albums: [] };
+  }
+
 
 
  searchDeezer() {
    let apiSearch = this.state.newText;
    axios.get(
-     `https://api.deezer.com/search/album/?q=${apiSearch}&index=0&limit=40&output=json`
+     `https://api.deezer.com/search/album/?q=${apiSearch}&index=0&limit=20&output=json`
    )
-   .then(response => this.setState({ albums: response.data.data }));
+   .then((response) => this.setState({ albums: response.data.data }));
  }
 
    renderAlbums() {
-     return this.state.albums.map(album =>
-       <AlbumDetail key={ album.id } album={ album } />
+     return this.state.albums.map((album) =>
+       <AlbumDetail key={album.id} album={ album } />
      );
    }
 

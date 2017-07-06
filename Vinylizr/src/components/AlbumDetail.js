@@ -7,61 +7,32 @@ import {
   ListView,
   TouchableHighlight
 } from 'react-native';
-import * as firebase from 'firebase';
-
-
+import fire from '../fire.js'
+import { connect } from 'react-redux';
+import * as actions from '../actions';
 
 import { CardSection } from '../components/common/CardSection';
 import { Button } from '../components/common/Button';
 
 import Swipeable from 'react-native-swipeable';
 
-export default class AlbumDetail extends Component {
-//   constructor(props) {
-//   super(props);
-//   var myFirebaseRef = new firebase.database().ref();
-//   this.albumsRef = myFirebaseRef.child('albums');
-//
-//   this.state = {
-//     newAlbum: '',
-//     albumSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2})
-//   };
-//
-//   this.albums = [];
-// }
-// componentDidMount() {
-//   // When a album is added
-//   this.albumsRef.on('child_added', (dataSnapshot) => {
-//     this.albums.push({id: dataSnapshot.key(), text: dataSnapshot.val()});
-//     this.setState({
-//       todoSource: this.state.albumSource.cloneWithRows(this.albums)
-//     });
-//   });
-//
-//   // When a album is removed
-//   this.albumsRef.on('child_removed', (dataSnapshot) => {
-//       this.albums = this.albums.filter((x) => x.id !== dataSnapshot.key());
-//       this.setState({
-//         albumSource: this.state.albumSource.cloneWithRows(this.albums)
-//       });
-//   });
-// }
-// saveToCollection(album) {
-//   let myRef = firebase.database();
-// }
+class AlbumDetail extends Component {
+
+componentWillMount() {
+fire
+console.log(this.props);
+}
 
 
-  saveToCollection() {
-    const myFirebaseRef = firebase.database().ref();
-    myFirebaseRef.set({
-  albums: `${this.props.album.cover}`
-});
-  }
+saveToCollection() {
 
+  this.props.saveAlbum(this.props.album.cover)
+  console.log("BOOYA ", this.props.album.cover);
+}
 
 render() {
   const { album } = this.props;
-  const { title } = album;
+  const { title, cover } = album;
   const {
     imageView,
     textView,
@@ -153,3 +124,5 @@ const styles = {
     marginLeft: 29
   }
 };
+
+export default connect(null, actions)(AlbumDetail);

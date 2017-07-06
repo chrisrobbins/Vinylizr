@@ -4,23 +4,18 @@ import * as firebase from "firebase";
 import { Spinner } from './components/common';
 import Nav from './Nav';
 import LoginForm from './components/LoginForm';
-import DeezerSearch from './screens/DeezerSearch';
+import * as actions from './actions';
+import { connect } from 'react-redux';
+import fire from './fire.js';
 
-var config = {
-  apiKey: "AIzaSyAjlUS9NJoXLm_p-KU01lXcECpnI9AGM0U",
-  authDomain: "vinylizr-e5665.firebaseapp.com",
-  databaseURL: "https://vinylizr-e5665.firebaseio.com",
-  projectId: "vinylizr-e5665",
-  storageBucket: "vinylizr-e5665.appspot.com",
-  messagingSenderId: "189276288673"
-};
-firebase.initializeApp(config);
+
 
 class App extends Component {
   state = { loggedIn: null };
 
 componentWillMount() {
-  firebase.auth().onAuthStateChanged((user) => {
+    fire
+    firebase.auth().onAuthStateChanged((user) => {
     if (user) {
       this.setState({ loggedIn: true });
     } else {
@@ -42,12 +37,14 @@ componentWillMount() {
 
   render() {
     return (
-      <View style={styles.container}>
+
+    <View style={styles.container}>
       <StatusBar
        barStyle="light-content"
       />
-        {this.renderContent()}
-      </View>
+      {this.renderContent()}
+    </View>
+
     );
   }
 }
@@ -63,4 +60,10 @@ const styles = {
 };
 
 
-export default App;
+function mapStateToProps(state) {
+  return {
+      ...state
+   };
+}
+
+export default connect(mapStateToProps, actions)(App)

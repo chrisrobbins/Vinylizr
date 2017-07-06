@@ -4,29 +4,35 @@ import {
   Text,
   Image
 } from 'react-native';
-
 import { Header } from '../components/common';
-import * as firebase from "firebase";
-
+import { connect } from 'react-redux';
+import * as actions from '../actions';
+import { fetchAlbums } from '../actions/index';
+import _ from 'lodash';
+import fire from '../fire.js';
 
 class UserCollections extends Component {
-  state = { albums: [] };
+  constructor(props) {
+    super(props);
+    this.state = { albums: [] }
+  }
 
-
-
-componentWillMount() {
-  const rootRef = firebase.database().ref();
-  const speedRef = rootRef.child('albums');
-  speedRef.on('value', snap => {
-    this.setState({
-      albums: snap.val()
-      });
-    });
+  componentWillMount() {
+    this.props.fetchAlbums();
+    this.setState({albums: this.props.albums})
+    console.log(this.state.albums);
   }
 
 
+  renderCollection() {
+    return _.map(this.props.albums, (album, key) => {
+      let newRecord = album
+      return <Image key={key} id={key} source={{uri:`${newRecord}`}} />
+    });
+      console.log("HELLOOOOO ", newRecord);
+  }
+
   render() {
-    let renderCollection = this.state.albums;
     return (
 
       <View style={styles.container}>
@@ -34,8 +40,7 @@ componentWillMount() {
         <Header headerText={"Collection"} />
         </View>
         <View style={styles.textContainer}>
-          <View style={styles.text}>
-            <Image style={styles.collectImage} source={{ uri: `${renderCollection}` }}/></View>
+          {this.renderCollection()}
         </View>
       </View>
     );
@@ -57,7 +62,28 @@ const styles = {
   collectImage: {
     height: 85,
     width: 85
+  },
+  albumStyles: {
+    color: '#fff',
+    fontSize: 20,
+    alignSelf: 'flex-end'
   }
 };
 
-export default UserCollections;
+const mapStateToProps = (state) => {
+    return {
+      ...state
+    }
+}
+// for click events so that dispatches can happen
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchAlbums: () => {
+            dispatch(fetchAlbums())
+        },
+      }
+    }
+
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserCollections);

@@ -1,4 +1,15 @@
+import React from 'react';
 import { AppRegistry } from 'react-native';
-import App from './src/App';
+import { Provider } from "react-redux";
+import configureStore from './src/store/configure-store';
+import App from './src/app';
+const store = configureStore();
 
-AppRegistry.registerComponent('Vinylizr', () => app);
+
+const Vinylizr = () => (
+  <Provider store={store}>
+    <App />
+  </Provider>
+)
+
+AppRegistry.registerComponent('Vinylizr', () => Vinylizr);
