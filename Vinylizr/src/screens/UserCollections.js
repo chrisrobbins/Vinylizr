@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {
   View,
   Text,
-  Image
+  Image,
+  ScrollView
 } from 'react-native';
 import { Header } from '../components/common';
 import { connect } from 'react-redux';
@@ -12,36 +13,35 @@ import _ from 'lodash';
 import fire from '../fire.js';
 
 class UserCollections extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { albums: [] }
-  }
+
 
   componentWillMount() {
     this.props.fetchAlbums();
-    this.setState({albums: this.props.albums})
-    console.log(this.state.albums);
   }
-
+componentDidMount() {
+  console.log(this.props.albums);
+}
 
   renderCollection() {
-    return _.map(this.props.albums, (album, key) => {
-      let newRecord = album
-      return <Image key={key} id={key} source={{uri:`${newRecord}`}} />
-    });
-      console.log("HELLOOOOO ", newRecord);
+    return
   }
 
   render() {
     return (
+      <View>
+      <View style={styles.headerContainer}>
+      <Header headerText={"Collection"} />
+      </View>
 
-      <View style={styles.container}>
-        <View style={styles.headerContainer}>
-        <Header headerText={"Collection"} />
-        </View>
-        <View style={styles.textContainer}>
-          {this.renderCollection()}
-        </View>
+
+        <ScrollView contentContainerStyle={styles.textContainer}>
+          {this.props.albums.albums.map((album, key) => {
+            console.log(this.props.albums)
+            let newRecord = album
+            return (<Image style={styles.albumCovers} key={key} id={key} source={{ uri: newRecord }} />)
+          })
+          }
+        </ScrollView>
       </View>
     );
   }
@@ -50,24 +50,26 @@ class UserCollections extends Component {
 const styles = {
   textContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignSelf: 'center'
+    justifyContent: 'flex-start',
+    alignSelf: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 10,
+    marginLeft: 5,
+    marginRight: 5
   },
-  text: {
-    color: '#fff'
+  albumCovers: {
+    height: 85,
+    width: 85,
+    marginLeft: 1,
+    marginRight: 1,
+    marginTop: 1,
+    marginBottom: 1
   },
   container: {
     flex: 1
   },
-  collectImage: {
-    height: 85,
-    width: 85
-  },
-  albumStyles: {
-    color: '#fff',
-    fontSize: 20,
-    alignSelf: 'flex-end'
-  }
 };
 
 const mapStateToProps = (state) => {

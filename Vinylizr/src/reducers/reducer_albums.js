@@ -1,14 +1,18 @@
 import _ from 'lodash';
 import * as types from '../actions/types';
 
-export default function(state = {}, action) {
+
+export default function(state = {albums: []}, action) {
+  console.log("action ", action);
   switch (action.type) {
     case types.FETCH_ALBUMS:
-      return action.payload;
-      // case SEARCH_DEEZER:
-      //   return action.payload;
+      return {
+        albums: state.albums.concat(action.payload),
+      }
     case types.SAVE_ALBUM:
-      return { ...state, ...action.payload };
+      return {
+        albums: action.payload,
+      }
     case types.DELETE_ALBUM:
       return _.omit(state, action.payload);
   }
