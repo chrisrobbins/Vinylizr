@@ -9,25 +9,30 @@ import {
 } from 'react-native';
 import fire from '../fire.js'
 import { connect } from 'react-redux';
-import * as actions from '../actions';
 
 import { CardSection } from '../components/common/CardSection';
 import { Button } from '../components/common/Button';
-
+import {saveCollectionItem} from '../actions/collection-action'
+import {saveWantlistItem} from '../actions/wantlist-action'
 import Swipeable from 'react-native-swipeable';
 
 class AlbumDetail extends Component {
 
 componentWillMount() {
-fire
-console.log(this.props);
+  fire.auth()
+  console.log("USER: ", this.props.user );
+
 }
 
-
 saveToCollection() {
-
-  this.props.saveAlbum(this.props.album.cover)
-  console.log("BOOYA ", this.props.album.cover);
+  let newRecord = this.props.album.cover;
+  this.props.saveCollectionItem(newRecord)
+  // console.log("COLLECTION: ", newRecord);
+}
+saveToWantlist() {
+  let newRecord = this.props.album.cover;
+  this.props.saveWantlistItem(newRecord)
+  // console.log("WANTLIST: ", newRecord);
 }
 
 render() {
@@ -65,6 +70,8 @@ render() {
       rightButtonWidth={80}
       leftActionActivationDistance={75}
       onLeftActionRelease={this.saveToCollection.bind(this)}
+      rightActionActivationDistance={75}
+      onRightActionRelease={this.saveToWantlist.bind(this)}
     >
       <CardSection>
         <View style={imageView}>
@@ -100,8 +107,8 @@ const styles = {
     marginTop: 5
   },
   imageStyle: {
-    height: 80,
-    width: 80
+    height: 85,
+    width: 85
   },
   rightButtons: {
     backgroundColor: '#F4702E',
@@ -124,5 +131,23 @@ const styles = {
     marginLeft: 29
   }
 };
+const mapStateToProps = (state) => {
+    return {
+      ...state
+    }
+}
+// for click events so that dispatches can happen
+const mapDispatchToProps = (dispatch) => {
+    return {
+        saveCollectionItem: (album) => {
+            dispatch(saveCollectionItem(album))
+        },
+        saveWantlistItem: (album) => {
+            dispatch(saveWantlistItem(album))
+        },
+      }
+    }
 
-export default connect(null, actions)(AlbumDetail);
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(AlbumDetail);

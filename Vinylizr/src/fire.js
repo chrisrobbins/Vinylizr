@@ -1,6 +1,6 @@
 import firebase from 'firebase'
 
-var config = {
+const config = {
   "apiKey": "AIzaSyAjlUS9NJoXLm_p-KU01lXcECpnI9AGM0U",
   "authDomain": "vinylizr-e5665.firebaseapp.com",
   "databaseURL": "https://vinylizr-e5665.firebaseio.com",
@@ -9,5 +9,5 @@ var config = {
   "messagingSenderId": "189276288673"
 };
 
-var fire = firebase.initializeApp(config);
+const fire = firebase.initializeApp(config);
 export default fire;

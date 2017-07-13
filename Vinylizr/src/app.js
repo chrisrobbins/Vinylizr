@@ -4,7 +4,6 @@ import * as firebase from "firebase";
 import { Spinner } from './components/common';
 import Nav from './Nav';
 import LoginForm from './components/LoginForm';
-import * as actions from './actions';
 import { connect } from 'react-redux';
 import fire from './fire.js';
 
@@ -14,8 +13,7 @@ class App extends Component {
   state = { loggedIn: null };
 
 componentWillMount() {
-    fire
-    firebase.auth().onAuthStateChanged((user) => {
+    fire.auth().onAuthStateChanged((user) => {
     if (user) {
       this.setState({ loggedIn: true });
     } else {
@@ -60,10 +58,16 @@ const styles = {
 };
 
 
-function mapStateToProps(state) {
-  return {
+const mapStateToProps = (state) => {
+    return {
       ...state
-   };
+    }
 }
+// for click events so that dispatches can happen
+// const mapDispatchToProps = (dispatch) => {
+//     return;
+//     }
+//
 
-export default connect(mapStateToProps, actions)(App)
+
+export default connect(mapStateToProps)(App);

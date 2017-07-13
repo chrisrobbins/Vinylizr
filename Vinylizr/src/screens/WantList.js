@@ -1,21 +1,41 @@
 import React, { Component } from 'react';
 import {
   View,
-  Text
+  Text,
+  Image,
+  ScrollView
 } from 'react-native';
-
 import { Header } from '../components/common';
+import { connect } from 'react-redux';
+import { fetchWantlist } from '../actions/wantlist-action.js';
+import _ from 'lodash';
+import fire from '../fire.js';
 
-class UserCollections extends Component {
+class Wantlist extends Component {
+
+
+
+  componentWillMount() {
+    this.props.fetchWantlist();
+  }
+componentDidMount() {
+  console.log(this.props);
+}
+
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.headerContainer}>
-        <Header headerText={"Want List"} />
-        </View>
-        <View style={styles.textContainer}>
-          <Text style={styles.text}>Want List!</Text>
-        </View>
+      <View>
+      <View style={styles.headerContainer}>
+      <Header headerText={"Wantlist"} />
+      </View>
+        <ScrollView contentContainerStyle={styles.textContainer}>
+          {this.props.wantlist.wantlist.albums.map((album, key) => {
+            console.log("WANTLIST: ", album)
+            let newRecord = album
+            return (<Image style={styles.albumCovers} key={key} id={key} source={{ uri: newRecord }} />)
+          })
+          }
+        </ScrollView>
       </View>
     );
   }
@@ -24,15 +44,41 @@ class UserCollections extends Component {
 const styles = {
   textContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignSelf: 'center'
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginLeft: 2,
+    marginTop: -17
   },
-  text: {
-    color: '#fff'
+  albumCovers: {
+    height: 85,
+    width: 85,
+    marginLeft: 1,
+    marginRight: 1,
+    marginTop: 1,
+    marginBottom: 1
   },
   container: {
     flex: 1
-  }
+  },
 };
 
-export default UserCollections;
+const mapStateToProps = (state) => {
+    return {
+      ...state,
+    }
+}
+// for click events so that dispatches can happen
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchWantlist: () => {
+            dispatch(fetchWantlist())
+        },
+
+      }
+    }
+
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Wantlist);

@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
-import AlbumsReducer from './reducer_albums';
+import collection from './collection';
+import wantlist from './wantlist';
 
 const rootReducer = combineReducers({
-  albums: AlbumsReducer
+  collection,
+  wantlist
 });
 
 export default rootReducer;
