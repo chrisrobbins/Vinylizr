@@ -20,7 +20,7 @@ class AlbumDetail extends Component {
 
 componentWillMount() {
   fire.auth()
-  console.log("USER: ", this.props.user );
+  console.log("USER: ", fire.auth.user );
 
 }
 

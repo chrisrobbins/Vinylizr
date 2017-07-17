@@ -7,7 +7,10 @@ import {
   DELETE_COLLECTION_ITEM,
 } from './types.js';
 
-
+// fire.child("users").child(authData.uid).set({
+//     provider: authData.provider,
+//     name: getName(authData)
+//   });
 export function fetchCollection() {
   return dispatch => {
     fire.database().ref('collection/albums').on('child_added', snapshot => {
@@ -23,7 +26,7 @@ export function fetchCollection() {
 export function saveCollectionItem(album) {
   console.log(album);
   return dispatch =>
-  fire.database().ref('collection/albums').push({album:album})
+  fire.database().ref('users').push({collection: {albums:album}})
 }
 
 export function deleteCollectionItem(key) {
