@@ -31,12 +31,30 @@ class LoginForm extends Component {
     this.setState({ error: '', loading: true });
         firebase.auth().createUserWithEmailAndPassword(email, password)
           .then(this.onLoginSuccess.bind(this))
-          .catch(this.onLoginFail.bind(this));
-  }
+          .catch((error) => {
+  // Handle Errors here.
+  let errorCode = error.code;
+  let errorMessage = error.message;
+  if (errorCode) {
+    this.setState({ error: error.message, loading: false });
+};
+  })
+}
 
-  onLoginFail() {
-    this.setState({ error: 'Authentication Failed', loading: false });
-  }
+//   onLoginFail() {
+//     .catch(function(error) {
+//   // Handle Errors here.
+//   var errorCode = error.code;
+//   var errorMessage = error.message;
+//   if (errorCode === 'auth/wrong-password') {
+//     alert('Wrong password.');
+//   } else {
+//     alert(errorMessage);
+//   }
+//   console.log(error);
+// });
+//     this.setState({ error: 'Authentication Failed', loading: false });
+//   }
 
   onLoginSuccess() {
     this.setState({
