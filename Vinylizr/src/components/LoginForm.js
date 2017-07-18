@@ -22,7 +22,14 @@ class LoginForm extends Component {
 
     fire.auth().signInWithEmailAndPassword(email, password)
       .then(this.onLoginSuccess.bind(this))
-      .catch(this.onLoginFail.bind(this));
+      .catch((error) => {
+// Handle Errors here.
+let errorCode = error.code;
+let errorMessage = error.message;
+if (errorCode) {
+this.setState({ error: error.message, loading: false });
+};
+})
   }
 
   onCreateButtonPress() {
@@ -31,14 +38,7 @@ class LoginForm extends Component {
     this.setState({ error: '', loading: true });
         fire.auth().createUserWithEmailAndPassword(email, password)
           .then(this.onLoginSuccess.bind(this))
-          .catch((error) => {
-  // Handle Errors here.
-  let errorCode = error.code;
-  let errorMessage = error.message;
-  if (errorCode) {
-    this.setState({ error: error.message, loading: false });
-};
-  })
+
 }
 
 //   onLoginFail() {
