@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
-import firebase from 'firebase';
+import fire from '../fire';
 import {
   Button,
   Card,
@@ -20,7 +20,7 @@ class LoginForm extends Component {
 
     this.setState({ error: '', loading: true });
 
-    firebase.auth().signInWithEmailAndPassword(email, password)
+    fire.auth().signInWithEmailAndPassword(email, password)
       .then(this.onLoginSuccess.bind(this))
       .catch(this.onLoginFail.bind(this));
   }
@@ -29,7 +29,7 @@ class LoginForm extends Component {
     const { email, password } = this.state;
 
     this.setState({ error: '', loading: true });
-        firebase.auth().createUserWithEmailAndPassword(email, password)
+        fire.auth().createUserWithEmailAndPassword(email, password)
           .then(this.onLoginSuccess.bind(this))
           .catch((error) => {
   // Handle Errors here.
@@ -66,7 +66,7 @@ class LoginForm extends Component {
   }
 
   forgotPassword() {
-    firebase.auth().sendPasswordResetEmail(this.state.email)
+    fire.auth().sendPasswordResetEmail(this.state.email)
     .then(this.emailSent.bind(this))
     .catch(this.emailNotSent.bind(this));
   }
