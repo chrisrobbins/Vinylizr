@@ -2,7 +2,13 @@ import _ from 'lodash';
 import * as types from '../actions/types';
 
 
-export default function(state = {collection:{ albums: []}}, action) {
+const initialState = {
+  collection: {
+  albums: []
+  }
+}
+
+export default function(state = initialState, action) {
   console.log("action ", action);
   switch (action.type) {
     case types.FETCH_COLLECTION:

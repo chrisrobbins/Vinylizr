@@ -18,21 +18,13 @@ import Swipeable from 'react-native-swipeable';
 
 class AlbumDetail extends Component {
 
-componentWillMount() {
-  fire.auth()
-  console.log("USER: ", fire.auth.user );
-
-}
-
 saveToCollection() {
   let newRecord = this.props.album.cover;
   this.props.saveCollectionItem(newRecord)
-  // console.log("COLLECTION: ", newRecord);
 }
 saveToWantlist() {
   let newRecord = this.props.album.cover;
   this.props.saveWantlistItem(newRecord)
-  // console.log("WANTLIST: ", newRecord);
 }
 
 render() {

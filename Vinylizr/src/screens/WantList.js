@@ -44,12 +44,12 @@ componentDidMount() {
 const styles = {
   textContainer: {
     flex: 1,
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'flex-start',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginLeft: 2,
-    marginTop: -17
+    marginTop: -17,
+    paddingBottom: 30
   },
   albumCovers: {
     height: 85,
@@ -57,11 +57,8 @@ const styles = {
     marginLeft: 1,
     marginRight: 1,
     marginTop: 1,
-    marginBottom: 1
-  },
-  container: {
-    flex: 1
-  },
+    marginBottom: 1,
+  }
 };
 
 const mapStateToProps = (state) => {
