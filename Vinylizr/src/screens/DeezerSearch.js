@@ -7,7 +7,7 @@ import {
    ClearText
 } from '../components/common';
 
-import AlbumDetail from '../components/AlbumDetail';
+import SearchResultItem from '../components/SearchResultItem';
 
 
 import { Debounce } from 'react-throttle';
@@ -22,8 +22,16 @@ import {
 class DeezerSearch extends Component {
   constructor(props) {
     super(props);
-    this.state = { text: '', albums: [] };
+    this.state = { text: '', albums: [], currentlyOpenSwipeable: null };
   }
+
+    handleScroll = () => {
+      const {currentlyOpenSwipeable} = this.state;
+
+      if (currentlyOpenSwipeable) {
+        currentlyOpenSwipeable.recenter();
+      }
+    };
 
 
 
@@ -36,8 +44,19 @@ class DeezerSearch extends Component {
  }
 
    renderAlbums() {
+     const {currentlyOpenSwipeable} = this.state;
+    const itemProps = {
+      onOpen: (event, gestureState, swipeable) => {
+        if (currentlyOpenSwipeable && currentlyOpenSwipeable !== swipeable) {
+          currentlyOpenSwipeable.recenter();
+        }
+
+        this.setState({currentlyOpenSwipeable: swipeable});
+      },
+      onClose: () => this.setState({currentlyOpenSwipeable: null})
+    };
      return this.state.albums.map((album) =>
-       <AlbumDetail key={album.id} album={ album } />
+       <SearchResultItem {...itemProps} key={album.id} album={ album } />
      );
    }
 
@@ -51,6 +70,7 @@ class DeezerSearch extends Component {
    }
 
   render() {
+    
     return (
       <View style={styles.container}>
 
@@ -92,6 +112,7 @@ class DeezerSearch extends Component {
       </View>
 
         <ScrollView
+          onScroll={this.handleScroll}
           style={styles.renderAlbums}
           automaticallyAdjustContentInsets={false}
         >

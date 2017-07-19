@@ -13,7 +13,7 @@ const Card = (props) => {
 
 const styles = {
   flexContainer: {
-    margintop: 0,
+    marginTop: 0,
   }
 
 };

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
-import fire from '../fire';
+import fire from './fire';
 import {
   Button,
   Card,

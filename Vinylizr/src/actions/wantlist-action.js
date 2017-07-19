@@ -1,4 +1,4 @@
-import fire from '../fire.js';
+import fire from '../components/fire.js';
 import thunk from 'redux-thunk';
 import _ from 'lodash';
 import {

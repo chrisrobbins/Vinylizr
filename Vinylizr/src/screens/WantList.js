@@ -9,7 +9,7 @@ import { Header } from '../components/common';
 import { connect } from 'react-redux';
 import { fetchWantlist } from '../actions/wantlist-action.js';
 import _ from 'lodash';
-import fire from '../fire.js';
+import fire from '../components/fire.js';
 
 class Wantlist extends Component {
 
@@ -18,9 +18,7 @@ class Wantlist extends Component {
   componentWillMount() {
     this.props.fetchWantlist();
   }
-componentDidMount() {
-  console.log(this.props);
-}
+
 
   render() {
     return (
