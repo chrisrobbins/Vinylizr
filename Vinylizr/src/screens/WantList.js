@@ -22,13 +22,15 @@ class Wantlist extends Component {
 
   render() {
     return (
-      <View>
+      <View style={styles.wantlistContainer}>
       <View style={styles.headerContainer}>
       <Header headerText={"Wantlist"} />
       </View>
-        <ScrollView contentContainerStyle={styles.textContainer}>
+        <ScrollView
+          automaticallyAdjustContentInsets={false}
+          contentContainerStyle={styles.textContainer}>
           {this.props.wantlist.wantlist.albums.map((album, key) => {
-            console.log("WANTLIST: ", album)
+            // console.log("WANTLIST: ", album)
             let newRecord = album
             return (<Image style={styles.albumCovers} key={key} id={key} source={{ uri: newRecord }} />)
           })
@@ -40,14 +42,15 @@ class Wantlist extends Component {
 }
 
 const styles = {
+  wantlistContainer: {
+    flex: 1
+  },
   textContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'flex-start',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: -17,
-    paddingBottom: 30
   },
   albumCovers: {
     height: 85,

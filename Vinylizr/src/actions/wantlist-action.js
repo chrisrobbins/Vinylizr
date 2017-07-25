@@ -16,7 +16,7 @@ export function fetchWantlist() {
         type: FETCH_WANTLIST,
         payload: snapshot.val().album
       });
-      console.log("WTF ", snapshot.val().album);
+      // console.log("WTF ", snapshot.val().album);
     });
     fire.database().ref(`users/${userId}/wantlist/albums`).on('child_removed', snapshot => {
       dispatch({
@@ -29,7 +29,7 @@ export function fetchWantlist() {
 
 export function saveWantlistItem(album) {
   let userId = fire.auth().currentUser.uid;
-  console.log(album);
+  // console.log(album);
   return dispatch =>
   fire.database().ref(`users/${userId}/wantlist/albums`).push({
     album:album,

@@ -5,12 +5,20 @@ import {
   FETCH_COLLECTION,
   SAVE_COLLECTION_ITEM,
   DELETE_COLLECTION_ITEM,
+  COLLECTION_ITEM_EXISTS
 } from './types.js';
+
+export function collectionItemExists() {
+  fire.database().ref(`users/${userId}/collection/albums`).on('value', snapshot => {
+    type: COLLECTION_ITEM_EXISTS,
+    
+  )}
+}
 
 export function fetchCollection() {
 
   let userId = fire.auth().currentUser.uid;
-  console.log(fire.auth().currentUser);
+  // console.log(fire.auth().currentUser);
 
   return dispatch => {
 
@@ -21,7 +29,7 @@ export function fetchCollection() {
         type: FETCH_COLLECTION,
         payload: snapshot.val().album
       });
-      console.log("WTF ", snapshot.val().album);
+      // console.log("WTF ", snapshot.val().album);
     });
       //read database when child is removed from collection
       fire.database().ref(`users/${userId}/collection/albums`).on('child_removed', snapshot => {
@@ -35,7 +43,7 @@ export function fetchCollection() {
 
 export function saveCollectionItem(album) {
   let userId = fire.auth().currentUser.uid;
-  console.log(userId);
+  // console.log(userId);
   return dispatch =>
   fire.database().ref(`users/${userId}/collection/albums`).push({
     album:album,

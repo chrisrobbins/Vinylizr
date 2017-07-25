@@ -22,16 +22,8 @@ import {
 class DeezerSearch extends Component {
   constructor(props) {
     super(props);
-    this.state = { text: '', albums: [], currentlyOpenSwipeable: null };
+    this.state = { text: '', albums: [] };
   }
-
-    handleScroll = () => {
-      const {currentlyOpenSwipeable} = this.state;
-
-      if (currentlyOpenSwipeable) {
-        currentlyOpenSwipeable.recenter();
-      }
-    };
 
 
 
@@ -44,19 +36,8 @@ class DeezerSearch extends Component {
  }
 
    renderAlbums() {
-     const {currentlyOpenSwipeable} = this.state;
-    const itemProps = {
-      onOpen: (event, gestureState, swipeable) => {
-        if (currentlyOpenSwipeable && currentlyOpenSwipeable !== swipeable) {
-          currentlyOpenSwipeable.recenter();
-        }
-
-        this.setState({currentlyOpenSwipeable: swipeable});
-      },
-      onClose: () => this.setState({currentlyOpenSwipeable: null})
-    };
      return this.state.albums.map((album) =>
-       <SearchResultItem {...itemProps} key={album.id} album={ album } />
+       <SearchResultItem key={album.id} album={ album } />
      );
    }
 
@@ -70,7 +51,7 @@ class DeezerSearch extends Component {
    }
 
   render() {
-    
+
     return (
       <View style={styles.container}>
 
@@ -112,7 +93,6 @@ class DeezerSearch extends Component {
       </View>
 
         <ScrollView
-          onScroll={this.handleScroll}
           style={styles.renderAlbums}
           automaticallyAdjustContentInsets={false}
         >

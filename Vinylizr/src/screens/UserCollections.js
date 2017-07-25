@@ -12,7 +12,7 @@ import _ from 'lodash';
 import fire from '../components/fire.js';
 
 class UserCollections extends Component {
-  
+
 
 
   componentWillMount() {

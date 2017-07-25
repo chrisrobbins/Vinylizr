@@ -14,9 +14,22 @@ import { CardSection } from '../components/common/CardSection';
 import { Button } from '../components/common/Button';
 import {saveCollectionItem} from '../actions/collection-action'
 import {saveWantlistItem} from '../actions/wantlist-action'
+import {fetchCollection} from '../actions/collection-action'
+import {fetchWantlist} from '../actions/wantlist-action'
 import Swipeable from 'react-native-swipeable';
 
 class SearchResultItem extends Component {
+
+  state = { recordSaved: '' }
+
+
+  componentWillMount() {
+    this.props.fetchCollection();
+    this.props.fetchWantlist();
+    this.saved();
+    // console.log(this.state, this.props.album.cover);
+
+  }
 
 saveToCollection() {
   let newRecord = this.props.album.cover;
@@ -27,6 +40,32 @@ saveToWantlist() {
   this.props.saveWantlistItem(newRecord)
 }
 
+saved() {
+  this.props.collection.collection.albums.map(collectionAlbum => {
+  if (this.props.album.cover === collectionAlbum ) {
+    this.setState({ recordSaved: "collection"})
+      }
+    })
+    this.props.wantlist.wantlist.albums.map(wantlistAlbum => {
+    if (this.props.album.cover === wantlistAlbum) {
+    this.setState({ recordSaved: "wantlist"})
+    }
+  })
+}
+
+beenThereDoneThat() {
+  if (this.state.recordSaved === "wantlist") {
+    return (
+      <Text style={styles.wantlistSavedTextStyle}>wantlist</Text>
+    )
+  } else if (this.state.recordSaved === "collection") {
+return (
+  <Text style={styles.collectionSavedTextStyle}>collection</Text>
+    )
+  }
+}
+
+
 render() {
   const { album } = this.props;
   const { title, cover } = album;
@@ -35,7 +74,8 @@ render() {
     textView,
     imageStyle,
     titleTextStyle,
-    artistTextStyle
+    artistTextStyle,
+    collectionSavedTextStyle
   } = styles;
 
   const wantListIcon = require('../img/wantlistButton.png');
@@ -76,6 +116,7 @@ render() {
       <View style={textView}>
           <Text style={titleTextStyle}>{album.title}</Text>
           <Text style={artistTextStyle}>{album.artist.name}</Text>
+          {this.beenThereDoneThat()}
         </View>
       </CardSection>
     </Swipeable>
@@ -97,6 +138,12 @@ const styles = {
     color: "rgba(217,217,217,.6)",
     marginLeft: 10,
     marginTop: 5
+  },
+  collectionSavedTextStyle: {
+    color: '#2EF470'
+  },
+  wantlistSavedTextStyle: {
+    color: '#F4702E'
   },
   imageStyle: {
     height: 85,
@@ -137,6 +184,12 @@ const mapDispatchToProps = (dispatch) => {
         saveWantlistItem: (album) => {
             dispatch(saveWantlistItem(album))
         },
+        fetchCollection: () => {
+          dispatch(fetchCollection())
+        },
+        fetchWantlist: () => {
+          dispatch(fetchWantlist())
+        }
       }
     }
 
