@@ -35,12 +35,12 @@ export function fetchCollection() {
 
 
 
-export function saveCollectionItem(album) {
+export function saveCollectionItem(deezerRecord) {
   let userId = fire.auth().currentUser.uid;
   let albumRef = fire.database().ref(`users/${userId}/collection/albums`)
   return dispatch =>
   albumRef.push({
-    album:album
+    album:deezerRecord
    })
   }
 

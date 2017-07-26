@@ -30,11 +30,13 @@ class UserCollections extends Component {
       <Header headerText={"Collection"} />
       </View>
         <ScrollView contentContainerStyle={styles.textContainer}>
+          <View style={styles.contentContainer}>
           {this.props.collection.collection.albums.map((album, key) => {
             let newRecord = album
             return (<Image style={styles.albumCovers} key={key} source={{ uri: newRecord }} />)
           })
           }
+          </View>
         </ScrollView>
       </View>
     );
@@ -43,6 +45,9 @@ class UserCollections extends Component {
 
 const styles = {
   textContainer: {
+    flex: 1
+  },
+  contentContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'flex-start',

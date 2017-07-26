@@ -27,14 +27,13 @@ export function fetchWantlist() {
   };
 }
 
-export function saveWantlistItem(album) {
+export function saveWantlistItem(deezerRecord) {
   let userId = fire.auth().currentUser.uid;
-  // console.log(album);
+  let albumRef = fire.database().ref(`users/${userId}/wantlist/albums`)
   return dispatch =>
-  fire.database().ref(`users/${userId}/wantlist/albums`).push({
-    album:album,
-    id:userId
-  })
+  albumRef.push({
+    album:deezerRecord
+   })
 }
 
 export function deleteWantlistItem(key) {

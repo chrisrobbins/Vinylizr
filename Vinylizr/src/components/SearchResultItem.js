@@ -43,9 +43,9 @@ constructor(props){
       // console.log("DATABASE: ", collectionRecord);
       if (deezerRecord === collectionRecord) {
         console.log("already in collection");
-        this.setState({collectionRecordSaved: "collection"})
+        this.setState({collectionRecordSaved: "in collection"})
       } else if (!collectionRecord) {
-        this.setState({recordSaved: ''})
+        this.setState({collectionRecordSaved: ''})
       }
     })
   }
@@ -57,9 +57,9 @@ constructor(props){
       // console.log("DATABASE: ", wantlistRecord);
       if (deezerRecord === wantlistRecord) {
         console.log("already in wantlist");
-        this.setState({wantlistRecordSaved: "Wantlist"})
+        this.setState({wantlistRecordSaved: "in wantlist"})
       } else if (!wantlistRecord) {
-        this.setState({recordSaved: ''})
+        this.setState({wantlistRecordSaved: ''})
       }
     })
   }
@@ -67,7 +67,7 @@ constructor(props){
 saveToCollection() {
   let deezerRecord = this.props.album.cover;
   this.props.saveCollectionItem(deezerRecord)
-  this.setState({collectionRecordSaved: "collection"})
+  this.setState({collectionRecordSaved: "in collection"})
   console.log(deezerRecord);
 
   }
@@ -77,21 +77,9 @@ saveToCollection() {
 saveToWantlist() {
   let deezerRecord = this.props.album.cover;
   this.props.saveWantlistItem(deezerRecord)
-  this.setState({wantlistRecordSaved: "wantlist"})
+  this.setState({wantlistRecordSaved: "in wantlist"})
   console.log(deezerRecord);
 }
-
-// alreadyInCollection() {
-//   let userId = fire.auth().currentUser.uid;
-//   let newRecord = this.props.album.cover;
-//   let albumRef = fire.database().ref(`users/${userId}/collection/albums`);
-//   albumRef.once('value', (snapshot) => {
-//         if (snapshot.hasChild(newRecord)) {
-//           return console.log("collection");
-//         }
-//     });
-// }
-
 beenThereDoneThat() {
   let collectionRecord = this.state.collectionRecordSaved;
   let wantlistRecord = this.state.wantlistRecordSaved;
@@ -142,9 +130,9 @@ render() {
       leftButtonWidth={80}
       rightButtons={rightButtons}
       rightButtonWidth={80}
-      leftActionActivationDistance={25}
+      leftActionActivationDistance={95}
       onLeftActionRelease={this.saveToCollection.bind(this)}
-      rightActionActivationDistance={25}
+      rightActionActivationDistance={95}
       onRightActionRelease={this.saveToWantlist.bind(this)}
     >
       <CardSection>
@@ -172,21 +160,27 @@ const styles = {
     justifyContent: 'center'
   },
   titleTextStyle: {
-    fontSize: 16,
+    fontSize: 20,
     color: "#DADADA",
     marginLeft: 10
   },
   artistTextStyle: {
-    fontSize: 14,
+    fontSize: 16,
     color: "rgba(217,217,217,.6)",
     marginLeft: 10,
-    marginTop: 5
+    marginTop: 1
   },
   collectionSavedTextStyle: {
-    color: '#2EF470'
+    color: '#2EF470',
+    marginLeft: 10,
+    marginTop: 5,
+    fontSize: 10
   },
   wantlistSavedTextStyle: {
-    color: '#F4702E'
+    color: '#F4702E',
+    marginLeft: 10,
+    marginTop: 5,
+    fontSize: 10
   },
   imageStyle: {
     height: 85,
