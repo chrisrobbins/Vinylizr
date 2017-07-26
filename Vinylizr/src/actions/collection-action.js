@@ -4,16 +4,8 @@ import _ from 'lodash';
 import {
   FETCH_COLLECTION,
   SAVE_COLLECTION_ITEM,
-  DELETE_COLLECTION_ITEM,
-  COLLECTION_ITEM_EXISTS
+  DELETE_COLLECTION_ITEM
 } from './types.js';
-
-export function collectionItemExists() {
-  fire.database().ref(`users/${userId}/collection/albums`).on('value', snapshot => {
-    type: COLLECTION_ITEM_EXISTS,
-    
-  )}
-}
 
 export function fetchCollection() {
 
@@ -41,15 +33,17 @@ export function fetchCollection() {
  }
 }
 
+
+
 export function saveCollectionItem(album) {
   let userId = fire.auth().currentUser.uid;
-  // console.log(userId);
+  let albumRef = fire.database().ref(`users/${userId}/collection/albums`)
   return dispatch =>
-  fire.database().ref(`users/${userId}/collection/albums`).push({
-    album:album,
-    id: userId
-  })
-}
+  albumRef.push({
+    album:album
+   })
+  }
+
 
 export function deleteCollectionItem(key) {
   return dispatch => fire.database().child(key).remove();

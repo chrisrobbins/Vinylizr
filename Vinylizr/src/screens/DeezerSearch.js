@@ -30,7 +30,7 @@ class DeezerSearch extends Component {
  searchDeezer() {
    let apiSearch = this.state.newText;
    axios.get(
-     `https://api.deezer.com/search/album/?q=${apiSearch}&index=0&limit=40&output=json`
+     `https://api.deezer.com/search/album/?q=${apiSearch}&index=0&limit=20&output=json`
    )
    .then((response) => this.setState({ albums: response.data.data }));
  }

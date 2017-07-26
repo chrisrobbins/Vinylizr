@@ -12,55 +12,96 @@ import { connect } from 'react-redux';
 
 import { CardSection } from '../components/common/CardSection';
 import { Button } from '../components/common/Button';
-import {saveCollectionItem} from '../actions/collection-action'
-import {saveWantlistItem} from '../actions/wantlist-action'
-import {fetchCollection} from '../actions/collection-action'
-import {fetchWantlist} from '../actions/wantlist-action'
+import {saveCollectionItem} from '../actions/collection-action';
+import {saveWantlistItem} from '../actions/wantlist-action';
+import {fetchCollection} from '../actions/collection-action';
+import {fetchWantlist} from '../actions/wantlist-action';
 import Swipeable from 'react-native-swipeable';
 
 class SearchResultItem extends Component {
+constructor(props){
+	super(props);
+	this.state = { collectionRecordSaved: '', wantlistRecordSaved: '' };
+}
 
-  state = { recordSaved: '' }
 
 
   componentWillMount() {
     this.props.fetchCollection();
-    this.props.fetchWantlist();
-    this.saved();
-    // console.log(this.state, this.props.album.cover);
+    this.checkCollectionForRecords();
+    this.checkWantlistForRecords();
+  }
+  // componentDidMount() {
+  //   this.saved();
+  //
+  // }
 
+  checkCollectionForRecords() {
+    let deezerRecord = this.props.album.cover;
+    // console.log("DEEZER: ", deezerRecord);
+    this.props.collection.collection.albums.map((collectionRecord) => {
+      // console.log("DATABASE: ", collectionRecord);
+      if (deezerRecord === collectionRecord) {
+        console.log("already in collection");
+        this.setState({collectionRecordSaved: "collection"})
+      } else if (!collectionRecord) {
+        this.setState({recordSaved: ''})
+      }
+    })
+  }
+
+  checkWantlistForRecords() {
+    let deezerRecord = this.props.album.cover;
+    // console.log("DEEZER: ", deezerRecord);
+    this.props.wantlist.wantlist.albums.map((wantlistRecord) => {
+      // console.log("DATABASE: ", wantlistRecord);
+      if (deezerRecord === wantlistRecord) {
+        console.log("already in wantlist");
+        this.setState({wantlistRecordSaved: "Wantlist"})
+      } else if (!wantlistRecord) {
+        this.setState({recordSaved: ''})
+      }
+    })
   }
 
 saveToCollection() {
-  let newRecord = this.props.album.cover;
-  this.props.saveCollectionItem(newRecord)
-}
+  let deezerRecord = this.props.album.cover;
+  this.props.saveCollectionItem(deezerRecord)
+  this.setState({collectionRecordSaved: "collection"})
+  console.log(deezerRecord);
+
+  }
+
+
+
 saveToWantlist() {
-  let newRecord = this.props.album.cover;
-  this.props.saveWantlistItem(newRecord)
+  let deezerRecord = this.props.album.cover;
+  this.props.saveWantlistItem(deezerRecord)
+  this.setState({wantlistRecordSaved: "wantlist"})
+  console.log(deezerRecord);
 }
 
-saved() {
-  this.props.collection.collection.albums.map(collectionAlbum => {
-  if (this.props.album.cover === collectionAlbum ) {
-    this.setState({ recordSaved: "collection"})
-      }
-    })
-    this.props.wantlist.wantlist.albums.map(wantlistAlbum => {
-    if (this.props.album.cover === wantlistAlbum) {
-    this.setState({ recordSaved: "wantlist"})
-    }
-  })
-}
+// alreadyInCollection() {
+//   let userId = fire.auth().currentUser.uid;
+//   let newRecord = this.props.album.cover;
+//   let albumRef = fire.database().ref(`users/${userId}/collection/albums`);
+//   albumRef.once('value', (snapshot) => {
+//         if (snapshot.hasChild(newRecord)) {
+//           return console.log("collection");
+//         }
+//     });
+// }
 
 beenThereDoneThat() {
-  if (this.state.recordSaved === "wantlist") {
+  let collectionRecord = this.state.collectionRecordSaved;
+  let wantlistRecord = this.state.wantlistRecordSaved;
+  if (collectionRecord) {
     return (
-      <Text style={styles.wantlistSavedTextStyle}>wantlist</Text>
+      <Text style={styles.collectionSavedTextStyle}>{collectionRecord}</Text>
     )
-  } else if (this.state.recordSaved === "collection") {
+  } else if (wantlistRecord) {
 return (
-  <Text style={styles.collectionSavedTextStyle}>collection</Text>
+  <Text style={styles.wantlistSavedTextStyle}>{wantlistRecord}</Text>
     )
   }
 }
@@ -75,7 +116,8 @@ render() {
     imageStyle,
     titleTextStyle,
     artistTextStyle,
-    collectionSavedTextStyle
+    collectionSavedTextStyle,
+    wantlistSavedTextStyle
   } = styles;
 
   const wantListIcon = require('../img/wantlistButton.png');
@@ -117,6 +159,7 @@ render() {
           <Text style={titleTextStyle}>{album.title}</Text>
           <Text style={artistTextStyle}>{album.artist.name}</Text>
           {this.beenThereDoneThat()}
+
         </View>
       </CardSection>
     </Swipeable>
@@ -178,18 +221,18 @@ const mapStateToProps = (state) => {
 // for click events so that dispatches can happen
 const mapDispatchToProps = (dispatch) => {
     return {
-        saveCollectionItem: (album) => {
-            dispatch(saveCollectionItem(album))
+        saveCollectionItem: (deezerRecord) => {
+            dispatch(saveCollectionItem(deezerRecord))
         },
-        saveWantlistItem: (album) => {
-            dispatch(saveWantlistItem(album))
+        saveWantlistItem: (deezerRecord) => {
+            dispatch(saveWantlistItem(deezerRecord))
         },
         fetchCollection: () => {
-          dispatch(fetchCollection())
+            dispatch(fetchCollection())
         },
         fetchWantlist: () => {
-          dispatch(fetchWantlist())
-        }
+            dispatch(fetchWantlist())
+        },
       }
     }
 
