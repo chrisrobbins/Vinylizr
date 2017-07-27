@@ -46,19 +46,18 @@ const styles = {
     flex: 1
   },
   textContainer: {
-    flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'flex-start',
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
   albumCovers: {
-    height: 85,
-    width: 85,
-    marginLeft: 1,
-    marginRight: 1,
-    marginTop: 1,
-    marginBottom: 1,
+    height: 124,
+    width: 124,
+    marginLeft: .5,
+    marginRight: .5,
+    marginTop: .5,
+    marginBottom: .5,
   }
 };
 

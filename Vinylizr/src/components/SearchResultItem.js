@@ -81,15 +81,17 @@ saveToWantlist() {
   console.log(deezerRecord);
 }
 beenThereDoneThat() {
+  const smallWantlistIcon = require('../img/smallWantlistIcon.png');
+  const smallCollectionIcon = require('../img/smallCollectionIcon.png');
   let collectionRecord = this.state.collectionRecordSaved;
   let wantlistRecord = this.state.wantlistRecordSaved;
   if (collectionRecord) {
     return (
-      <Text style={styles.collectionSavedTextStyle}>{collectionRecord}</Text>
+      <Text style={styles.collectionSavedTextStyle}><Image source={smallCollectionIcon} />  {collectionRecord}</Text>
     )
   } else if (wantlistRecord) {
 return (
-  <Text style={styles.wantlistSavedTextStyle}>{wantlistRecord}</Text>
+  <Text style={styles.wantlistSavedTextStyle}><Image source={smallWantlistIcon} />  {wantlistRecord}</Text>
     )
   }
 }
@@ -110,6 +112,7 @@ render() {
 
   const wantListIcon = require('../img/wantlistButton.png');
   const collectionIcon = require('../img/collectionButton.png');
+
   const leftButtons = [
     <TouchableHighlight
       style={styles.leftButtons}>
@@ -172,14 +175,14 @@ const styles = {
   },
   collectionSavedTextStyle: {
     color: '#2EF470',
-    marginLeft: 10,
-    marginTop: 5,
+    marginLeft: 12,
+    marginTop: 9,
     fontSize: 10
   },
   wantlistSavedTextStyle: {
     color: '#F4702E',
-    marginLeft: 10,
-    marginTop: 5,
+    marginLeft: 12,
+    marginTop: 9,
     fontSize: 10
   },
   imageStyle: {
