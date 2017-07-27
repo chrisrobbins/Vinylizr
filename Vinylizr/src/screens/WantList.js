@@ -43,7 +43,8 @@ class Wantlist extends Component {
 
 const styles = {
   wantlistContainer: {
-    flex: 1
+    flex: 1,
+    marginBottom: 50
   },
   textContainer: {
     justifyContent: 'flex-start',
