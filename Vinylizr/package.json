@@ -11,19 +11,13 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
-    "babel-preset-stage-2": "^6.24.1",
     "eslint-config-rallycoding": "^3.1.0",
     "firebase": "^3.3.2",
     "lodash": "^4.17.4",
-    "react": "15.3.1",
-    "react-native": "0.33.0",
+    "react": "16.0.0-alpha.6",
+    "react-native": "^0.43.0",
     "react-native-autocomplete": "^0.3.0",
-    "react-native-router-flux": "^3.38.0",
-    "react-native-swipe-list-view": "^0.4.1",
     "react-native-swipeable": "^0.4.0",
-    "react-native-swipeout": "^2.0.13",
-    "react-native-swipeout-plus": "^0.1.0",
-    "react-native-swiping-row": "^0.1.2",
     "react-redux": "^5.0.5",
     "react-throttle": "^0.3.0",
     "redux": "^3.7.0",
@@ -31,5 +25,9 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
     "throttle-debounce": "^1.0.1"
+  },
+  "devDependencies": {
+    "babel-preset-react-native": "^2.1.0",
+    "babel-preset-stage-2": "^6.24.1"
   }
 }
