@@ -20,7 +20,7 @@ export default class UserProfile extends Component {
         <Header headerText={"My Profile"} />
       </View>
       <View style={styles.logOut}>
-        <View>
+        <View style={styles.buttonContainer}>
         <Button onPress={() => firebase.auth().signOut()}>Log out</Button>
         </View>
     </View>
@@ -29,21 +29,25 @@ export default class UserProfile extends Component {
   }
 }
 
-const styles = StyleSheet.create({
+const styles = {
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'flex-end',
+  },
+  buttonContainer: {
+    justifyContent: 'flex-end',
+    height: 40,
+    marginBottom: 70
   },
   logOut: {
+    flex:1,
     alignSelf: 'stretch',
-    flex: 1,
-    justifyContent: 'flex-end',
-    marginLeft: 20,
-    marginRight: 20,
-    marginBottom: 60
+    justifyContent: 'flex-end'
+
+
   },
   headerContainer: {
     alignSelf: 'stretch'
   }
-});
+};

@@ -13,34 +13,29 @@ import fire from '../components/fire.js';
 
 class UserCollections extends Component {
 
-
-
   componentWillMount() {
     this.props.fetchCollection();
 
   }
 
   render() {
-
-
-
     return (
       <View style={styles.mainContainer}>
       <View style={styles.headerContainer}>
       <Header headerText={"Collection"} />
-      </View>
-      <View style={styles.contentContainer}>
-      <ScrollView
-        automaticallyAdjustContentInsets={false}
-        contentContainerStyle={styles.textContainer}>
+        </View>
+        <View style={styles.contentContainer}>
+        <ScrollView
+          automaticallyAdjustContentInsets={false}
+          contentContainerStyle={styles.textContainer}>
 
-          {this.props.collection.collection.albums.map((album, key) => {
-            let newRecord = album
-            return (<Image style={styles.albumCovers} key={key} source={{ uri: newRecord }} />)
-          })
-          }
+            {this.props.collection.collection.albums.map((album, key) => {
+              let newRecord = album
+              return (<Image style={styles.albumCovers} key={key} source={{ uri: newRecord }} />)
+            })
+            }
 
-        </ScrollView>
+          </ScrollView>
         </View>
       </View>
     );

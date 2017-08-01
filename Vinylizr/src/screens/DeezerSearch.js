@@ -15,14 +15,14 @@ import { Debounce } from 'react-throttle';
 import {
   View,
   Text,
-  ScrollView,
-  TextInput
+  TextInput,
+  ScrollView
 } from 'react-native';
 
 class DeezerSearch extends Component {
   constructor(props) {
     super(props);
-    this.state = { text: '', albums: [] };
+    this.state = { text: '', albums: [], isSwiping: null };
   }
 
 
@@ -40,6 +40,7 @@ class DeezerSearch extends Component {
        <SearchResultItem key={album.id} album={ album } />
      );
    }
+   
 
 
    clearTextInput() {
@@ -91,25 +92,21 @@ class DeezerSearch extends Component {
         {this.renderInputButton()}
 
       </View>
-
-        <ScrollView
-          style={styles.renderAlbums}
-          automaticallyAdjustContentInsets={false}
-        >
-
-          {this.renderAlbums()}
-
-        </ScrollView>
-
-      </View>
+      <ScrollView
+        scrollEnabled={!this.state.isSwiping}
+        style={styles.renderAlbums}
+        automaticallyAdjustContentInsets={false}
+      >
+      {this.renderAlbums()}
+    </ScrollView>
+    </View>
     );
   }
 }
 
 const styles = {
   renderAlbums: {
-    flex: 1,
-    marginTop: -3
+    marginTop:-3
   },
   inputContainer: {
     justifyContent: 'flex-end',
@@ -121,6 +118,7 @@ const styles = {
   container: {
     flex: 1
   },
+
   inputStyleContainer: {
     flexDirection: 'column',
     alignItems: 'center',
@@ -134,7 +132,7 @@ const styles = {
     color: '#fff',
     fontSize: 18,
     lineHeight: 23,
-    backgroundColor: '#fff',
+    backgroundColor: '#000',
     justifyContent: 'flex-start',
     flex: 1,
     paddingLeft: 7,

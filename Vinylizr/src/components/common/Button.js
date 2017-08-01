@@ -23,12 +23,12 @@ const styles = {
     paddingBottom: 10
   },
   buttonStyle: {
-    flex: 1,
+    flex:1,
     alignSelf: 'stretch',
     backgroundColor: '#F42E4A',
     borderRadius: 20,
     height: 40,
-    
+
   }
 };
 

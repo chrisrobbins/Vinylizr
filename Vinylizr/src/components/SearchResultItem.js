@@ -4,30 +4,40 @@ import {
   View,
   Image,
   Linking,
-  ListView,
-  TouchableHighlight
+  TouchableHighlight,
+  ScrollView
 } from 'react-native';
 import fire from './fire.js'
+import Swipeable from 'react-native-swipeable';
 import { connect } from 'react-redux';
 
 import { CardSection } from '../components/common/CardSection';
 import { Button } from '../components/common/Button';
-import {saveCollectionItem} from '../actions/collection-action';
-import {saveWantlistItem} from '../actions/wantlist-action';
-import {fetchCollection} from '../actions/collection-action';
-import {fetchWantlist} from '../actions/wantlist-action';
-import Swipeable from 'react-native-swipeable';
+import {
+  saveCollectionItem,
+  fetchCollection,
+} from '../actions/collection-action';
+import {
+  saveWantlistItem,
+  fetchWantlist,
+} from '../actions/wantlist-action';
 
 class SearchResultItem extends Component {
 constructor(props){
 	super(props);
-	this.state = { collectionRecordSaved: '', wantlistRecordSaved: '' };
+	this.state = {
+    collectionRecordSaved: '',
+    collectionRecord: [],
+    wantlistRecordSaved: '',
+    wantlistRecord: []
+    };
 }
 
 
 
   componentWillMount() {
     this.props.fetchCollection();
+    this.props.fetchWantlist();
     this.checkCollectionForRecords();
     this.checkWantlistForRecords();
   }
@@ -38,28 +48,25 @@ constructor(props){
 
   checkCollectionForRecords() {
     let deezerRecord = this.props.album.cover;
-    // console.log("DEEZER: ", deezerRecord);
     this.props.collection.collection.albums.map((collectionRecord) => {
-      // console.log("DATABASE: ", collectionRecord);
       if (deezerRecord === collectionRecord) {
         console.log("already in collection");
         this.setState({collectionRecordSaved: "in collection"})
       } else if (!collectionRecord) {
-        this.setState({collectionRecordSaved: ''})
+        this.setState({collectionRecordSaved: '', collectionRecord: collectionRecord })
       }
     })
   }
 
   checkWantlistForRecords() {
     let deezerRecord = this.props.album.cover;
-    // console.log("DEEZER: ", deezerRecord);
     this.props.wantlist.wantlist.albums.map((wantlistRecord) => {
       // console.log("DATABASE: ", wantlistRecord);
       if (deezerRecord === wantlistRecord) {
         console.log("already in wantlist");
         this.setState({wantlistRecordSaved: "in wantlist"})
       } else if (!wantlistRecord) {
-        this.setState({wantlistRecordSaved: ''})
+        this.setState({wantlistRecordSaved: '', wantlistRecord: wantlistRecord })
       }
     })
   }
@@ -67,19 +74,19 @@ constructor(props){
 saveToCollection() {
   let deezerRecord = this.props.album.cover;
   this.props.saveCollectionItem(deezerRecord)
-  this.setState({collectionRecordSaved: "in collection"})
+  this.setState({collectionRecordSaved: " in collection"})
   console.log(deezerRecord);
-
-  }
+ }
 
 
 
 saveToWantlist() {
   let deezerRecord = this.props.album.cover;
   this.props.saveWantlistItem(deezerRecord)
-  this.setState({wantlistRecordSaved: "in wantlist"})
+  this.setState({wantlistRecordSaved: " in wantlist"})
   console.log(deezerRecord);
 }
+
 beenThereDoneThat() {
   const smallWantlistIcon = require('../img/smallWantlistIcon.png');
   const smallCollectionIcon = require('../img/smallCollectionIcon.png');
@@ -87,11 +94,17 @@ beenThereDoneThat() {
   let wantlistRecord = this.state.wantlistRecordSaved;
   if (collectionRecord) {
     return (
-      <Text style={styles.collectionSavedTextStyle}><Image source={smallCollectionIcon} />  {collectionRecord}</Text>
+      <Text
+        style={styles.collectionSavedTextStyle}>
+        <Image source={smallCollectionIcon} />  {collectionRecord}
+      </Text>
     )
   } else if (wantlistRecord) {
 return (
-  <Text style={styles.wantlistSavedTextStyle}><Image source={smallWantlistIcon} />  {wantlistRecord}</Text>
+  <Text
+    style={styles.wantlistSavedTextStyle}>
+    <Image source={smallWantlistIcon} />  {wantlistRecord}
+  </Text>
     )
   }
 }
@@ -109,7 +122,6 @@ render() {
     collectionSavedTextStyle,
     wantlistSavedTextStyle
   } = styles;
-
   const wantListIcon = require('../img/wantlistButton.png');
   const collectionIcon = require('../img/collectionButton.png');
 
@@ -127,16 +139,21 @@ render() {
     </TouchableHighlight>
   ];
 
+
+
   return (
+
     <Swipeable
-      leftButtons={leftButtons}
-      leftButtonWidth={80}
-      rightButtons={rightButtons}
-      rightButtonWidth={80}
-      leftActionActivationDistance={95}
-      onLeftActionRelease={this.saveToCollection.bind(this)}
-      rightActionActivationDistance={95}
-      onRightActionRelease={this.saveToWantlist.bind(this)}
+          leftButtons={leftButtons}
+          leftButtonWidth={80}
+          rightButtons={rightButtons}
+          rightButtonWidth={80}
+          leftActionActivationDistance={95}
+          onLeftActionRelease={this.saveToCollection.bind(this)}
+          rightActionActivationDistance={95}
+          onRightActionRelease={this.saveToWantlist.bind(this)}
+          onSwipeStart={() => this.setState({isSwiping: true})}
+          onSwipeRelease={() => this.setState({isSwiping: false})}
     >
       <CardSection>
         <View style={imageView}>
@@ -153,6 +170,7 @@ render() {
 
         </View>
       </CardSection>
+
     </Swipeable>
   );
 }
@@ -160,7 +178,8 @@ render() {
 
 const styles = {
   textView: {
-    justifyContent: 'center'
+    justifyContent: 'center',
+    flex: 1
   },
   titleTextStyle: {
     fontSize: 20,
@@ -218,20 +237,20 @@ const mapStateToProps = (state) => {
 // for click events so that dispatches can happen
 const mapDispatchToProps = (dispatch) => {
     return {
-        saveCollectionItem: (deezerRecord) => {
-            dispatch(saveCollectionItem(deezerRecord))
-        },
-        saveWantlistItem: (deezerRecord) => {
-            dispatch(saveWantlistItem(deezerRecord))
-        },
-        fetchCollection: () => {
-            dispatch(fetchCollection())
-        },
-        fetchWantlist: () => {
-            dispatch(fetchWantlist())
-        },
-      }
+      saveCollectionItem: (deezerRecord) => {
+          dispatch(saveCollectionItem(deezerRecord))
+      },
+      saveWantlistItem: (deezerRecord) => {
+          dispatch(saveWantlistItem(deezerRecord))
+      },
+      fetchCollection: () => {
+          dispatch(fetchCollection())
+      },
+      fetchWantlist: () => {
+          dispatch(fetchWantlist())
+      },
     }
+  }
 
 
 

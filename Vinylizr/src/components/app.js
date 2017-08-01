@@ -64,11 +64,6 @@ const mapStateToProps = (state) => {
       ...state
     }
 }
-// for click events so that dispatches can happen
-// const mapDispatchToProps = (dispatch) => {
-//     return;
-//     }
-//
 
 
 export default connect(mapStateToProps)(App);
