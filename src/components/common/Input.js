@@ -25,15 +25,14 @@ const styles = {
   inputStyle: {
     color: '#fff',
     fontSize: 18,
-    lineHeight: 23,
-    flex: 2,
-    marginTop: 8
+    borderBottomWidth: .5,
+    borderBottomColor: '#fff',
+    paddingBottom: 7
   },
   containerStyle: {
-    height: 40,
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+    marginTop: 35
   }
 };
 

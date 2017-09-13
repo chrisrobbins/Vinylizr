@@ -88,7 +88,8 @@ this.setState({ error: error.message, loading: false });
       return <Spinner size="small" />;
   }
     return (
-      <Button onPress={this.onButtonPress.bind(this)}>
+      <Button
+        style={styles.buttonSection} onPress={this.onButtonPress.bind(this)}>
         Log in
       </Button>
     );
@@ -101,16 +102,14 @@ this.setState({ error: error.message, loading: false });
       <View style={styles.containerLogo}>
         <Logo />
       </View>
-      <Card>
-        <InputCardSection>
+      <View style={styles.form}>
           <Input
             placeholder="Email"
             value={this.state.email}
             onChangeText={email => this.setState({ email })}
+            style={styles.inputs}
           />
-        </InputCardSection>
 
-        <InputCardSection>
 
           <Input
             secureTextEntry
@@ -126,28 +125,24 @@ this.setState({ error: error.message, loading: false });
             </Text>
           </TouchableOpacity>
 
-        </InputCardSection>
 
         <Text style={styles.errorTextStyle}>
           {this.state.error}
         </Text>
 
 
-        <CardSection style={styles.buttonSection}>
-          {this.renderButton()}
+        <CardSection>
+        {this.renderButton()}
         </CardSection>
 
-      <CardSection>
         <TouchableOpacity style={styles.createButton} onPress={this.onCreateButtonPress.bind(this)}>
           <Text style={styles.textStyle}>
           Create Account
           </Text>
         </TouchableOpacity>
-      </CardSection>
 
-
-      </Card>
         </View>
+      </View>
     );
   }
 }
@@ -155,8 +150,13 @@ this.setState({ error: error.message, loading: false });
 const styles = {
   containerLogo: {
     flex: 1,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    flexDirection: 'column'
   },
+  form: {
+    flex: 1,
+  },
+
   errorTextStyle: {
     fontSize: 20,
     alignSelf: 'center',
@@ -164,29 +164,31 @@ const styles = {
   },
   sectionContainer: {
     flex: 1,
-    justifyContent: 'flex-end',
     marginLeft: 20,
-    marginRight: 20
+    marginRight: 20,
+    flexDirection: 'column',
+    marginTop: 45
+
   },
   textStyle: {
     alignSelf: 'center',
     color: 'white',
     fontSize: 16,
-    paddingTop: 10,
-    paddingBottom: 10
   },
   forgotTextStyle: {
     color: 'white',
+    alignSelf: 'flex-end',
+    bottom: 25
 
   },
-  forgotContainer: {
-    marginTop: 17,
-    paddingRight: 0
-  },
   createButton: {
-    flex: 1,
+    flex:1,
     alignSelf: 'stretch',
-    backgroundColor: '#1A1A1A',
+    backgroundColor: 'transparent',
+    height: 20,
+  },
+  buttonSection: {
+    marginTop: 25
   }
 };
 
