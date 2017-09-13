@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { fetchCollection } from '../actions/collection-action.js';
 import _ from 'lodash';
 import fire from '../components/fire.js';
+import ModalTester from '../components/ModalTester';
 
 class UserCollections extends Component {
   static navigationOptions = {
@@ -48,11 +49,13 @@ class UserCollections extends Component {
           {this.props.collection.collection.albums.map((album) => {
             let newRecord = album
             return (
+              <ModalTester>
               <Image
                 style={styles.albumCovers}
                 key={newRecord.key}
                 source={{ uri: newRecord.value }}
               />
+              </ModalTester>
             )
            })
           }
