@@ -8,17 +8,28 @@ import {
 import { Header } from '../components/common';
 import { connect } from 'react-redux';
 import { fetchWantlist } from '../actions/wantlist-action.js';
-import _ from 'lodash';
-import fire from '../components/fire.js';
 
 class Wantlist extends Component {
 
+  static navigationOptions = {
+
+    tabBarIcon: ({ tintColor }) => (tintColor == '#e91e63' ?
+    <Image
+      source={require('../img/wantlistIcon_select.png')}
+    />
+    :
+    <Image
+      source={require('../img/wantlistIcon.png')}
+    />
+  ),
+};
 
 
-  componentWillMount() {
+
+  componentDidMount() {
     this.props.fetchWantlist();
+    // console.log(this.props.wantlist.wantlist);
   }
-
 
   render() {
     return (
@@ -29,10 +40,10 @@ class Wantlist extends Component {
         <ScrollView
           automaticallyAdjustContentInsets={false}
           contentContainerStyle={styles.textContainer}>
-          {this.props.wantlist.wantlist.albums.map((album, key) => {
+          {this.props.wantlist.wantlist.albums.map((album) => {
             // console.log("WANTLIST: ", album)
             let newRecord = album
-            return (<Image style={styles.albumCovers} key={key} id={key} source={{ uri: newRecord }} />)
+            return (<Image style={styles.albumCovers} key={newRecord.key} source={{ uri: newRecord.value }} />)
           })
           }
         </ScrollView>

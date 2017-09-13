@@ -14,13 +14,7 @@ export default function(state = initialState, action) {
     case types.FETCH_COLLECTION:
       return {
       collection: {
-        albums: state.collection.albums.concat(action.payload),
-      }
-    }
-    case types.SAVE_COLLECTION_ITEM:
-      return {
-        collection: {
-        albums: action.payload,
+        albums: action.payload
       }
     }
     case types.DELETE_COLLECTION_ITEM:

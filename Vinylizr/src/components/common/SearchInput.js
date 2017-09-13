@@ -33,7 +33,7 @@ const styles = {
     height: 40,
     paddingLeft: 7,
     paddingRight: 7,
-    paddingBottom: 0,
+    paddingBottom: 30,
     marginBottom: 0
   },
   containerStyle: {
@@ -43,7 +43,6 @@ const styles = {
     borderBottomWidth: 1,
     borderBottomColor: "#ffffff",
     marginBottom: 0
-
   }
 };
 

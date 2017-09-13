@@ -4,38 +4,51 @@ import _ from 'lodash';
 import {
   FETCH_WANTLIST,
   SAVE_WANTLIST_ITEM,
-  DELETE_WANTLIST_ITEM,
+  DELETE_WANTLIST_ITEM
 } from './types.js';
 
+export const fetchWantlist =() => {
 
-export function fetchWantlist() {
   let userId = fire.auth().currentUser.uid;
+  // console.log(fire.auth().currentUser);
   return dispatch => {
-    fire.database().ref(`users/${userId}/wantlist/albums`).on('child_added', snapshot => {
+    //read database when child is added to wantlist
+    fire.database().ref(`users/${userId}/wantlist/albums`).once('value', snapshot => {
+      const allData = []
+      snapshot.forEach((childSnapshot) => {
+        const key = childSnapshot.key;
+        const value = childSnapshot.val();
+        const eachWantlist = {
+          key,
+          value
+        }
+        allData.push(eachWantlist);
+      })
       dispatch({
         type: FETCH_WANTLIST,
-        payload: snapshot.val().album
+        payload: allData
       });
-      // console.log("WTF ", snapshot.val().album);
     });
-    fire.database().ref(`users/${userId}/wantlist/albums`).on('child_removed', snapshot => {
-      dispatch({
-        type: FETCH_WANTLIST,
-        payload: snapshot.val().album
-      });
-  });
-  };
+ }
 }
 
-export function saveWantlistItem(deezerRecord) {
+export const saveWantlistItem = (item) => {
   let userId = fire.auth().currentUser.uid;
   let albumRef = fire.database().ref(`users/${userId}/wantlist/albums`)
-  return dispatch =>
-  albumRef.push({
-    album:deezerRecord
-   })
-}
+  return dispatch => {
+    albumRef.push(item);
+    dispatch(fetchWantlist());
+  }
+  }
 
-export function deleteWantlistItem(key) {
+
+export const deleteWantlistItem = (key) => {
   return dispatch => fire.database().child(key).remove();
+  //read database when child is removed from wantlist
+  fire.database().ref(`users/${userId}/wantlist/albums`).on('child_removed', snapshot => {
+    dispatch({
+      type: FETCH_WANTLIST,
+      payload: snapshot.val().album
+    });
+});
 }

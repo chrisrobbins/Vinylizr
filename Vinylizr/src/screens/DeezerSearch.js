@@ -10,37 +10,71 @@ import {
 import SearchResultItem from '../components/SearchResultItem';
 
 
-import { Debounce } from 'react-throttle';
+import _ from 'lodash';
 
 import {
   View,
   Text,
   TextInput,
-  ScrollView
+  FlatList,
+  ActivityIndicator
 } from 'react-native';
 
 class DeezerSearch extends Component {
   constructor(props) {
     super(props);
-    this.state = { text: '', albums: [], isSwiping: null };
+    this.searchDeezer = this.searchDeezer.bind(this)
+
+    this.state = {
+      text: '',
+      loading: false,
+      albums: [],
+      page: 1,
+      seed: 1,
+      error: null,
+      refreshing: false,
+    };
+    this.searchDeezer = _.debounce(this.searchDeezer, 215)
   }
 
 
+  searchDeezer = () => {
+    const { page } = this.state;
+    const apiSearch = this.state.newText;
+    const url = `https://api.deezer.com/search/album/?q=${apiSearch}&index=0&limit=40&output=json`
+    this.setState({ loading: true });
 
- searchDeezer() {
-   let apiSearch = this.state.newText;
-   axios.get(
-     `https://api.deezer.com/search/album/?q=${apiSearch}&index=0&limit=20&output=json`
-   )
-   .then((response) => this.setState({ albums: response.data.data }));
- }
+    axios.get(url)
+      .then(res => {
+        this.setState({
+          albums:page === 1 ? res.data.data : [...this.state.albums, ...res.data.data],
+          error: res.error || null,
+          loading: false,
+          refreshing: false
+        });
+        console.log(res.data.data);
+      })
+      .catch(error => {
+        this.setState({ error, loading: false });
+      });
+      console.log(this.state);
+  };
 
-   renderAlbums() {
-     return this.state.albums.map((album) =>
-       <SearchResultItem key={album.id} album={ album } />
-     );
-   }
-   
+
+
+
+ // searchDeezer() {
+ //   let apiSearch = this.state.newText;
+ //   axios.get(
+ //     `https://api.deezer.com/search/album/?q=${apiSearch}&index=0&limit=20&output=json`
+ //   )
+ //   .then((response) => this.setState({ albums: response.data.data }));
+ // }
+
+  //  renderAlbums(album) {
+  //      <SearchResultItem album={album} />
+  //  }
+
 
 
    clearTextInput() {
@@ -51,14 +85,65 @@ class DeezerSearch extends Component {
      return <ClearText onPress={this.clearTextInput.bind(this)} />;
    }
 
-  render() {
+  //  handleRefresh = () => {
+  //    this.setState(
+  //      {
+  //        page: 1,
+  //        seed: this.state.seed + 1,
+  //        refreshing: true
+  //      },
+  //      () => {
+  //        this.searchDeezer();
+  //      }
+  //    );
+  //  };
 
+   handleLoadMore = () => {
+     this.setState(
+       {
+         page: this.state.page + 1
+       },
+       () => {
+         this.searchDeezer();
+       }
+     );
+   };
+
+   renderFooter = () => {
+     if (!this.state.loading) return null;
+     return (
+       <View
+         style={{
+           paddingVertical: 20,
+           borderTopWidth: 1,
+           borderColor: "#CED0CE"
+         }}
+       >
+         <ActivityIndicator animating size="large" />
+       </View>
+     );
+   };
+
+   _keyExtractor = (item) => item.id;
+
+   _renderItem = ({item}) => (
+     <SearchResultItem
+      album={item}
+      key={item.id}
+    />
+  );
+//   arr.forEach(function(item) {
+//     if (names.indexOf(item) === -1) {
+//       names.push(item);
+//     }
+// });
+  render() {
+    console.log(this.state.albums, 'items');
     return (
       <View style={styles.container}>
 
         <View style={styles.inputStyleContainer}>
 
-      <Debounce time="250" handler="onChangeText">
 
         <TextInput
 
@@ -72,7 +157,7 @@ class DeezerSearch extends Component {
 
           value={this.state.newText}
 
-          onChangeText={this.searchDeezer.bind(this)}
+          onChangeText={this.searchDeezer}
 
           onChange={(event) => this.setState({ newText: event.nativeEvent.text })}
 
@@ -84,7 +169,6 @@ class DeezerSearch extends Component {
 
         />
 
-      </Debounce>
       </View>
 
       <View style={styles.inputContainer}>
@@ -92,13 +176,18 @@ class DeezerSearch extends Component {
         {this.renderInputButton()}
 
       </View>
-      <ScrollView
-        scrollEnabled={!this.state.isSwiping}
-        style={styles.renderAlbums}
-        automaticallyAdjustContentInsets={false}
-      >
-      {this.renderAlbums()}
-    </ScrollView>
+        <FlatList
+          data={this.state.albums}
+          renderItem={this._renderItem}
+          keyExtractor={this._keyExtractor}
+          ListFooterComponent={this.renderFooter}
+          refreshing={this.state.refreshing}
+          onEndReached={this.handleLoadMore}
+          onEndReachedThreshold={10}
+          style={styles.renderAlbums}
+          scrollEnabled={!this.props.isSwiping}
+        />
+
     </View>
     );
   }
@@ -106,7 +195,7 @@ class DeezerSearch extends Component {
 
 const styles = {
   renderAlbums: {
-    marginTop:-3
+    paddingBottom: 80,
   },
   inputContainer: {
     justifyContent: 'flex-end',
@@ -121,7 +210,7 @@ const styles = {
 
   inputStyleContainer: {
     flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     marginTop: 25,
     height: 40,
     borderBottomWidth: 1,

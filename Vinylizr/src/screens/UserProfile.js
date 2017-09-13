@@ -5,13 +5,27 @@ import {
   View,
   Text,
   StyleSheet,
+  Image
 } from 'react-native';
 
-import { Button } from '../components/common';
-import { Header } from '../components/common'
+import { Button, Header } from '../components/common';
 
 
 export default class UserProfile extends Component {
+
+  static navigationOptions = {
+
+    tabBarIcon: ({ tintColor }) => (tintColor == '#e91e63' ?
+    <Image
+      source={require('../img/profile_select.png')}
+    />
+    :
+    <Image
+      source={require('../img/profile.png')}
+    />
+  ),
+  };
+
   render() {
     return (
     <View style={styles.container}>

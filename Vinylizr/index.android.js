@@ -1,13 +1,18 @@
 import React from 'react';
 import { AppRegistry } from 'react-native';
 import { Provider } from "react-redux";
-import configureStore from './src/store/configure-store';
-import App from './src/components/app';
-const store = configureStore();
+import UserCollections from './src/screens/UserCollections';
+import { createStore, applyMiddleware } from 'redux';
+import reduxThunk from 'redux-thunk';
+import rootReducer from './src/reducers/index';
 
+
+import App from './src/components/app';
+
+const createStoreWithMiddleware = applyMiddleware(reduxThunk)(createStore);
 
 const Vinylizr = () => (
-  <Provider store={store}>
+  <Provider store={createStoreWithMiddleware(rootReducer)}>
     <App />
   </Provider>
 )

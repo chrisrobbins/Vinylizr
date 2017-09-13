@@ -14,13 +14,7 @@ export default function(state = initialState, action) {
     case types.FETCH_WANTLIST:
       return {
       wantlist: {
-        albums: state.wantlist.albums.concat(action.payload),
-      }
-    }
-    case types.SAVE_WANTLIST_ITEM:
-      return {
-        wantlist: {
-        albums: action.payload,
+        albums: action.payload
       }
     }
     case types.DELETE_WANTLIST_ITEM:

@@ -3,7 +3,7 @@ import {
   View,
   Text,
   Image,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import { Header } from '../components/common';
 import { connect } from 'react-redux';
@@ -12,30 +12,52 @@ import _ from 'lodash';
 import fire from '../components/fire.js';
 
 class UserCollections extends Component {
+  static navigationOptions = {
 
-  componentWillMount() {
+    tabBarIcon: ({ tintColor }) => (tintColor == '#e91e63' ?
+    <Image
+      source={require('../img/collection_select.png')}
+      style={[{tintColor: '#F42E4A'}]}
+    />
+    :
+    <Image
+      source={require('../img/collectionIcon.png')}
+      style={[{tintColor: 'grey'}]}
+    />
+  ),
+};
+
+
+  componentDidMount() {
     this.props.fetchCollection();
 
   }
 
   render() {
+
     return (
       <View style={styles.mainContainer}>
       <View style={styles.headerContainer}>
       <Header headerText={"Collection"} />
-        </View>
-        <View style={styles.contentContainer}>
-        <ScrollView
-          automaticallyAdjustContentInsets={false}
-          contentContainerStyle={styles.textContainer}>
+      </View>
+      <View style={styles.contentContainer}>
+      <ScrollView
+        automaticallyAdjustContentInsets={false}
+        contentContainerStyle={styles.textContainer}>
 
-            {this.props.collection.collection.albums.map((album, key) => {
-              let newRecord = album
-              return (<Image style={styles.albumCovers} key={key} source={{ uri: newRecord }} />)
-            })
-            }
+          {this.props.collection.collection.albums.map((album) => {
+            let newRecord = album
+            return (
+              <Image
+                style={styles.albumCovers}
+                key={newRecord.key}
+                source={{ uri: newRecord.value }}
+              />
+            )
+           })
+          }
 
-          </ScrollView>
+        </ScrollView>
         </View>
       </View>
     );

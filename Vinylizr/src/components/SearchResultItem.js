@@ -4,115 +4,103 @@ import {
   View,
   Image,
   Linking,
-  TouchableHighlight,
-  ScrollView
+  TouchableHighlight
 } from 'react-native';
-import fire from './fire.js'
-import Swipeable from 'react-native-swipeable';
 import { connect } from 'react-redux';
-
-import { CardSection } from '../components/common/CardSection';
-import { Button } from '../components/common/Button';
 import {
   saveCollectionItem,
-  fetchCollection,
 } from '../actions/collection-action';
 import {
   saveWantlistItem,
-  fetchWantlist,
 } from '../actions/wantlist-action';
 
+import { CardSection } from '../components/common/CardSection';
+import { Button } from '../components/common/Button';
+import Swipeable from 'react-native-swipeable';
+
+
 class SearchResultItem extends Component {
-constructor(props){
+constructor(props) {
 	super(props);
 	this.state = {
-    collectionRecordSaved: '',
-    collectionRecord: [],
-    wantlistRecordSaved: '',
-    wantlistRecord: []
+    leftActionActivated: false,
+    rightActionActivated: false,
     };
 }
-
-
-
-  componentWillMount() {
-    this.props.fetchCollection();
-    this.props.fetchWantlist();
-    this.checkCollectionForRecords();
-    this.checkWantlistForRecords();
-  }
-  // componentDidMount() {
-  //   this.saved();
-  //
-  // }
-
-  checkCollectionForRecords() {
-    let deezerRecord = this.props.album.cover;
-    this.props.collection.collection.albums.map((collectionRecord) => {
-      if (deezerRecord === collectionRecord) {
-        console.log("already in collection");
-        this.setState({collectionRecordSaved: "in collection"})
-      } else if (!collectionRecord) {
-        this.setState({collectionRecordSaved: '', collectionRecord: collectionRecord })
-      }
-    })
-  }
-
-  checkWantlistForRecords() {
-    let deezerRecord = this.props.album.cover;
-    this.props.wantlist.wantlist.albums.map((wantlistRecord) => {
-      // console.log("DATABASE: ", wantlistRecord);
-      if (deezerRecord === wantlistRecord) {
-        console.log("already in wantlist");
-        this.setState({wantlistRecordSaved: "in wantlist"})
-      } else if (!wantlistRecord) {
-        this.setState({wantlistRecordSaved: '', wantlistRecord: wantlistRecord })
-      }
-    })
-  }
-
-saveToCollection() {
-  let deezerRecord = this.props.album.cover;
-  this.props.saveCollectionItem(deezerRecord)
-  this.setState({collectionRecordSaved: " in collection"})
-  console.log(deezerRecord);
+//
+//
+//
+// checkCollectionForRecords() {
+//     let discogsRecord = this.props.item.thumb;
+//     this.props.collectionRecords.map((collectionRecord) => {
+//       if (discogsRecord === collectionRecord) {
+//         console.log("already in collection", discogsRecord, collectionRecord);
+//         this.setState({collectionRecordSaved: " in collection"})
+//       } else if (!collectionRecord) {
+//         console.log("NOT HERE ", discogsRecord, collectionRecord);
+//         this.setState({collectionRecordSaved: '' })
+//       }
+//     })
+//   }
+//
+//   checkWantlistForRecords() {
+//     let discogsRecord = this.props.item.thumb;
+//     this.props.wantlistRecords.map((wantlistRecord) => {
+//       // console.log("DATABASE: ", wantlistRecord);
+//       if (discogsRecord === wantlistRecord) {
+//         console.log("already in wantlist");
+//         this.setState({wantlistRecordSaved: " in wantlist"})
+//       } else if (!wantlistRecord) {
+//         this.setState({wantlistRecordSaved: ''})
+//       }
+//     })
+//   }
+//
+saveToCollection = () => {
+  let discogsRecord = this.props.item.thumb;
+  this.props.saveCollectionItem(discogsRecord)
+  console.log('saved to collection: ', discogsRecord);
  }
+//
+//
+//
+saveToWantlist = () => {
+  let discogsRecord = this.props.item.thumb;
+  this.props.saveWantlistItem(discogsRecord)
+  console.log('saved to wantlist: ', discogsRecord);
+ }
+//
+// beenThereDoneThat = () => {
+//   const smallWantlistIcon = require('../img/smallWantlistIcon.png');
+//   const smallCollectionIcon = require('../img/smallCollectionIcon.png');
+//   let collectionRecord = this.state.collectionRecordSaved;
+//   let wantlistRecord = this.state.wantlistRecordSaved;
+//   if (collectionRecord) {
+//     return (
+//       <Text
+//         style={styles.collectionSavedTextStyle}>
+//         <Image source={smallCollectionIcon} />  {collectionRecord}
+//       </Text>
+//     )
+//   } else if (wantlistRecord) {
+// return (
+//   <Text
+//     style={styles.wantlistSavedTextStyle}>
+//     <Image source={smallWantlistIcon} />  {wantlistRecord}
+//   </Text>
+//     )
+//   }
+// }
 
-
-
-saveToWantlist() {
-  let deezerRecord = this.props.album.cover;
-  this.props.saveWantlistItem(deezerRecord)
-  this.setState({wantlistRecordSaved: " in wantlist"})
-  console.log(deezerRecord);
-}
-
-beenThereDoneThat() {
-  const smallWantlistIcon = require('../img/smallWantlistIcon.png');
-  const smallCollectionIcon = require('../img/smallCollectionIcon.png');
-  let collectionRecord = this.state.collectionRecordSaved;
-  let wantlistRecord = this.state.wantlistRecordSaved;
-  if (collectionRecord) {
-    return (
-      <Text
-        style={styles.collectionSavedTextStyle}>
-        <Image source={smallCollectionIcon} />  {collectionRecord}
-      </Text>
-    )
-  } else if (wantlistRecord) {
-return (
-  <Text
-    style={styles.wantlistSavedTextStyle}>
-    <Image source={smallWantlistIcon} />  {wantlistRecord}
-  </Text>
-    )
-  }
-}
 
 
 render() {
-  const { album } = this.props;
-  const { title, cover } = album;
+  let discogsRecord = this.props.item.thumb;
+  const { item, onSwipeStart, onSwipeRelease } = this.props;
+  let discogsString = item.title.split('-');
+  const title = discogsString[1];
+  const artist = discogsString[0];
+
   const {
     imageView,
     textView,
@@ -122,69 +110,91 @@ render() {
     collectionSavedTextStyle,
     wantlistSavedTextStyle
   } = styles;
-  const wantListIcon = require('../img/wantlistButton.png');
+  const { leftActionActivated, rightActionActivated, toggle } = this.state;
+  const wantlistIcon = require('../img/wantlistButton.png');
   const collectionIcon = require('../img/collectionButton.png');
+  const check = require('../img/checkmark.png');
 
-  const leftButtons = [
-    <TouchableHighlight
-      style={styles.leftButtons}>
-      <Image style={styles.leftIconStyles} source={collectionIcon} />
-    </TouchableHighlight>
+  const leftContent = [
+    <View style={[styles.leftSwipeItem, {backgroundColor: leftActionActivated ? '#2EF470' : '#000'}]}>
+    {leftActionActivated ?
+      <Image style={styles.leftIconStyles} source={check} /> :
+      <Image style={styles.leftIconStyles} source={collectionIcon} />}
+    </View>
   ];
-
-  const rightButtons = [
-    <TouchableHighlight
-      style={styles.rightButtons}>
-      <Image style={styles.rightIconStyles} source={wantListIcon} />
-    </TouchableHighlight>
+  const rightContent = [
+    <View style={[styles.rightSwipeItem, {backgroundColor: rightActionActivated ? '#F4702E' : '#000'}]}>
+    {rightActionActivated ?
+      <Image style={styles.rightIconStyles} source={check} /> :
+      <Image style={styles.rightIconStyles} source={wantlistIcon} />}
+    </View>
   ];
-
-
 
   return (
-
     <Swipeable
-          leftButtons={leftButtons}
-          leftButtonWidth={80}
-          rightButtons={rightButtons}
-          rightButtonWidth={80}
-          leftActionActivationDistance={95}
-          onLeftActionRelease={this.saveToCollection.bind(this)}
-          rightActionActivationDistance={95}
-          onRightActionRelease={this.saveToWantlist.bind(this)}
-          onSwipeStart={() => this.setState({isSwiping: true})}
-          onSwipeRelease={() => this.setState({isSwiping: false})}
-    >
+      leftContent={leftContent}
+      rightContent={rightContent}
+      leftActionActivationDistance={100}
+      rightActionActivationDistance={100}
+      onLeftActionActivate={() => {
+        this.setState({leftActionActivated: true})
+        console.log("action activated", "onLeftActionActivated: ", leftActionActivated)
+      }
+    }
+      onLeftActionDeactivate={() => {
+        this.setState({leftActionActivated: false})
+        console.log("action deactivated", "leftActionActivated: ", leftActionActivated)
+      }
+    }
+      onRightActionActivate={() => {
+        this.setState({rightActionActivated: true})
+      }
+    }
+      onRightActionDeactivate={() => {
+        this.setState({rightActionActivated: false})
+      }
+    }
+      onLeftActionRelease={this.saveToCollection}
+      onRightActionRelease={this.saveToWantlist}
+
+      onSwipeStart={onSwipeStart}
+      onSwipeRelease={onSwipeRelease}
+
+
+      >
       <CardSection>
         <View style={imageView}>
-          <Image
+          {!item.thumb ? <Image
             style={imageStyle}
-            source={{ uri: album.cover }}
-          />
-      </View>
+            source={require('../img/n-a.png')}
+          /> : <Image
+            style={imageStyle}
+            source={{ uri: item.thumb }}
+          />}
+        </View>
 
       <View style={textView}>
-          <Text style={titleTextStyle}>{album.title}</Text>
-          <Text style={artistTextStyle}>{album.artist.name}</Text>
-          {this.beenThereDoneThat()}
-
+          <Text style={titleTextStyle}>{title}</Text>
+          <Text style={artistTextStyle}>{artist}</Text>
         </View>
       </CardSection>
-
     </Swipeable>
-  );
-}
+    );
+  }
 };
 
 const styles = {
+  container: {
+    flexDirection: 'column'
+  },
+
   textView: {
     justifyContent: 'center',
-    flex: 1
   },
   titleTextStyle: {
     fontSize: 20,
     color: "#DADADA",
-    marginLeft: 10
+    marginLeft: 5
   },
   artistTextStyle: {
     fontSize: 16,
@@ -192,43 +202,36 @@ const styles = {
     marginLeft: 10,
     marginTop: 1
   },
-  collectionSavedTextStyle: {
-    color: '#2EF470',
-    marginLeft: 12,
-    marginTop: 9,
-    fontSize: 10
+  leftSwipeItem: {
+    flex: 1,
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    paddingRight: 20
   },
-  wantlistSavedTextStyle: {
-    color: '#F4702E',
-    marginLeft: 12,
-    marginTop: 9,
-    fontSize: 10
-  },
+  // collectionSavedTextStyle: {
+  //   color: '#2EF470',
+  //   marginLeft: 12,
+  //   marginTop: 9,
+  //   fontSize: 10
+  // },
+  // wantlistSavedTextStyle: {
+  //   color: '#F4702E',
+  //   marginLeft: 12,
+  //   marginTop: 9,
+  //   fontSize: 10
+  // },
   imageStyle: {
     height: 85,
     width: 85
   },
-  rightButtons: {
-    backgroundColor: '#F4702E',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  leftButtons: {
-    backgroundColor: '#2EF470',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  leftIconStyles: {
-    alignSelf: 'flex-end',
-    marginRight: 29
-  },
-  rightIconStyles: {
-    alignSelf: 'flex-start',
-    marginLeft: 29
-  }
+  rightSwipeItem: {
+      flex: 1,
+      alignItems: 'flex-start',
+      justifyContent: 'center',
+      paddingLeft: 20
+    }
 };
+
 const mapStateToProps = (state) => {
     return {
       ...state
@@ -237,17 +240,11 @@ const mapStateToProps = (state) => {
 // for click events so that dispatches can happen
 const mapDispatchToProps = (dispatch) => {
     return {
-      saveCollectionItem: (deezerRecord) => {
-          dispatch(saveCollectionItem(deezerRecord))
+      saveCollectionItem: (item) => {
+          dispatch(saveCollectionItem(item))
       },
-      saveWantlistItem: (deezerRecord) => {
-          dispatch(saveWantlistItem(deezerRecord))
-      },
-      fetchCollection: () => {
-          dispatch(fetchCollection())
-      },
-      fetchWantlist: () => {
-          dispatch(fetchWantlist())
+      saveWantlistItem: (item) => {
+          dispatch(saveWantlistItem(item))
       },
     }
   }

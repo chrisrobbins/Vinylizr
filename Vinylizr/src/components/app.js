@@ -7,7 +7,7 @@ import LoginForm from './LoginForm';
 import { connect } from 'react-redux';
 import fire from './fire';
 
-
+console.disableYellowBox = true;
 
 class App extends Component {
   state = { loggedIn: null };

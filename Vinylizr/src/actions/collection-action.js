@@ -4,47 +4,51 @@ import _ from 'lodash';
 import {
   FETCH_COLLECTION,
   SAVE_COLLECTION_ITEM,
-  DELETE_COLLECTION_ITEM
+  DELETE_COLLECTION_ITEM,
 } from './types.js';
 
-export function fetchCollection() {
+export const fetchCollection = () => {
 
   let userId = fire.auth().currentUser.uid;
   // console.log(fire.auth().currentUser);
-
   return dispatch => {
-
     //read database when child is added to collection
-
-    fire.database().ref(`users/${userId}/collection/albums`).on('child_added', snapshot => {
+    fire.database().ref(`users/${userId}/collection/albums`).once('value', snapshot => {
+      const allData = []
+      snapshot.forEach((childSnapshot) => {
+        const key = childSnapshot.key;
+        const value = childSnapshot.val();
+        const eachCollection = {
+          key,
+          value
+        }
+        allData.push(eachCollection);
+      })
       dispatch({
         type: FETCH_COLLECTION,
-        payload: snapshot.val().album
+        payload: allData
       });
-      // console.log("WTF ", snapshot.val().album);
-    });
-      //read database when child is removed from collection
-      fire.database().ref(`users/${userId}/collection/albums`).on('child_removed', snapshot => {
-        dispatch({
-          type: FETCH_COLLECTION,
-          payload: snapshot.val().album
-        });
     });
  }
 }
 
 
-
-export function saveCollectionItem(deezerRecord) {
+export const saveCollectionItem = (item) => {
   let userId = fire.auth().currentUser.uid;
   let albumRef = fire.database().ref(`users/${userId}/collection/albums`)
-  return dispatch =>
-  albumRef.push({
-    album:deezerRecord
-   })
+      return dispatch => {
+          albumRef.push(item);
+          dispatch(fetchCollection());
+      }
   }
 
-
-export function deleteCollectionItem(key) {
+export const deleteCollectionItem = (key) => {
   return dispatch => fire.database().child(key).remove();
+  //read database when child is removed from collection
+  fire.database().ref(`users/${userId}/collection/albums`).on('child_removed', snapshot => {
+    dispatch({
+      type: FETCH_COLLECTION,
+      payload: snapshot.val().album
+    });
+});
 }
