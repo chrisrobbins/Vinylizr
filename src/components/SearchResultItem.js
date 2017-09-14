@@ -17,6 +17,7 @@ import {
 import { CardSection } from '../components/common/CardSection';
 import { Button } from '../components/common/Button';
 import Swipeable from 'react-native-swipeable';
+import SearchSuccessModal from '../components/SearchSuccessModal';
 
 
 class SearchResultItem extends Component {
@@ -59,7 +60,7 @@ constructor(props) {
 saveToCollection = () => {
   let discogsRecord = this.props.item.thumb;
   this.props.saveCollectionItem(discogsRecord)
-  console.log('saved to collection: ', discogsRecord);
+  console.log('success modals');
  }
 //
 //
@@ -94,6 +95,7 @@ saveToWantlist = () => {
 
 
 
+
 render() {
   let discogsRecord = this.props.item.thumb;
   const { item, onSwipeStart, onSwipeRelease } = this.props;
@@ -117,16 +119,12 @@ render() {
 
   const leftContent = [
     <View style={[styles.leftSwipeItem, {backgroundColor: leftActionActivated ? '#2EF470' : '#000'}]}>
-    {leftActionActivated ?
-      <Image style={styles.leftIconStyles} source={check} /> :
-      <Image style={styles.leftIconStyles} source={collectionIcon} />}
+      <Image style={styles.leftIconStyles} source={collectionIcon} />
     </View>
   ];
   const rightContent = [
     <View style={[styles.rightSwipeItem, {backgroundColor: rightActionActivated ? '#F4702E' : '#000'}]}>
-    {rightActionActivated ?
-      <Image style={styles.rightIconStyles} source={check} /> :
-      <Image style={styles.rightIconStyles} source={wantlistIcon} />}
+        <Image style={styles.rightIconStyles} source={wantlistIcon} />
     </View>
   ];
 
@@ -136,30 +134,23 @@ render() {
       rightContent={rightContent}
       leftActionActivationDistance={100}
       rightActionActivationDistance={100}
-      onLeftActionActivate={() => {
+      onLeftActionActivate={() =>
         this.setState({leftActionActivated: true})
-        console.log("action activated", "onLeftActionActivated: ", leftActionActivated)
-      }
     }
-      onLeftActionDeactivate={() => {
+      onLeftActionDeactivate={() =>
         this.setState({leftActionActivated: false})
-        console.log("action deactivated", "leftActionActivated: ", leftActionActivated)
-      }
     }
-      onRightActionActivate={() => {
+      onRightActionActivate={() =>
         this.setState({rightActionActivated: true})
-      }
     }
-      onRightActionDeactivate={() => {
+      onRightActionDeactivate={() =>
         this.setState({rightActionActivated: false})
-      }
     }
-      onLeftActionRelease={this.saveToCollection}
-      onRightActionRelease={this.saveToWantlist}
+      onLeftActionRelease={this.saveToCollection && this.props.isModalVisible}
+      onRightActionRelease={this.saveToWantlist && this.props.isModalVisible}
 
       onSwipeStart={onSwipeStart}
       onSwipeRelease={onSwipeRelease}
-
 
       >
       <CardSection>

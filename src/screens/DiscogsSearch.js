@@ -17,6 +17,7 @@ import {
 } from '../components/common';
 import fire from '../components/fire';
 import SearchResultItem from '../components/SearchResultItem';
+import SearchSuccessModal from '../components/SearchSuccessModal';
 
 
 import _ from 'lodash';
@@ -43,7 +44,8 @@ class DiscogsSearch extends Component {
       discogsRecord: '',
       seed: 1,
       error: null,
-      refreshing: false
+      refreshing: false,
+      isModalVisible: false
     };
     this.searchDiscogs = _.debounce(this.searchDiscogs, 150)
 
@@ -139,6 +141,17 @@ class DiscogsSearch extends Component {
        </View>
      );
    };
+
+
+ _showModal = () => {
+   this.setState({ isModalVisible: true })
+   setTimeout(() => this._hideModal(), 2000)
+ }
+
+   _hideModal = () => {
+      this.setState({ isModalVisible: false })
+      console.log(this.state);
+ }
    _keyExtractor = (item, index) => item.id;
 
 
@@ -181,6 +194,8 @@ class DiscogsSearch extends Component {
         {this.renderInputButton()}
 
       </View>
+      <SearchSuccessModal
+         isModalVisible={this.state.isModalVisible}>
         <FlatList
           data={this.state.albums}
           renderItem={({item}) => (
@@ -190,6 +205,7 @@ class DiscogsSearch extends Component {
              item={item}
              onSwipeStart={() => this.setState({isSwiping: true})}
              onSwipeRelease={() => this.setState({isSwiping: false})}
+             isModalVisible={this._showModal}
            />
        )}
           keyExtractor={this._keyExtractor}
@@ -203,6 +219,7 @@ class DiscogsSearch extends Component {
           // itemBackgroundColor={'#1A1A1A'}
 
         />
+        </SearchSuccessModal>
 
     </View>
     );
@@ -246,6 +263,11 @@ const styles = {
     paddingBottom: 0,
     marginBottom: 0
   },
+  searchModal: {
+    justifyContent: 'center',
+    height: 90,
+    width: 90
+  }
 
 };
 
