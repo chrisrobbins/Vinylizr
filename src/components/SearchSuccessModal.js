@@ -6,6 +6,15 @@ import Modal from 'react-native-modal'
 export default class SearchSuccessModal extends Component {
 
 
+renderText() {
+  if(this.props.leftSwiped === true) {
+    return <Text style={styles.text}>Added to collection!</Text>
+  }
+  if(this.props.rightSwiped === true) {
+    return <Text style={styles.text}>Added to wantlist!</Text>
+  }
+}
+
   render () {
     return (
       <View style={styles.mainContainer}>
@@ -23,7 +32,7 @@ export default class SearchSuccessModal extends Component {
           <View style={styles.textBox}>
             <Image
               style={styles.imageStyles} source={require('../img/modal-check.png')} />
-            <Text style={styles.text}>Added to collection!</Text>
+            {this.renderText()}
           </View>
         </Modal>
         </View>

@@ -26,6 +26,9 @@ constructor(props) {
 	this.state = {
     leftActionActivated: false,
     rightActionActivated: false,
+    isModalVisible: false,
+    leftSwiped: false,
+    rightSwiped: false
     };
 }
 //
@@ -59,8 +62,10 @@ constructor(props) {
 //
 saveToCollection = () => {
   let discogsRecord = this.props.item.thumb;
-  this.props.saveCollectionItem(discogsRecord)
-  console.log('success modals');
+  this.props.saveCollectionItem(discogsRecord);
+  this.setState({ leftSwiped: true })
+  setTimeout(() => this._hideModal(), 2000)
+    console.log(this.state);
  }
 //
 //
@@ -68,7 +73,8 @@ saveToCollection = () => {
 saveToWantlist = () => {
   let discogsRecord = this.props.item.thumb;
   this.props.saveWantlistItem(discogsRecord)
-  console.log('saved to wantlist: ', discogsRecord);
+  this.setState({ rightSwiped: true })
+  setTimeout(() => this._hideModal(), 2000)
  }
 //
 // beenThereDoneThat = () => {
@@ -93,7 +99,19 @@ saveToWantlist = () => {
 //   }
 // }
 
+_showLeftModal = () => {
+  this.setState({ isModalVisible: true, leftSwiped: true })
+  setTimeout(() => this._hideModal(), 2000)
+}
+_showRightModal = () => {
+  this.setState({ isModalVisible: true, rightSwiped: true })
+  setTimeout(() => this._hideModal(), 2000)
+}
 
+  _hideModal = () => {
+     this.setState({ isModalVisible: false })
+     console.log(this.state);
+}
 
 
 render() {
@@ -129,6 +147,11 @@ render() {
   ];
 
   return (
+    <SearchSuccessModal
+       isModalVisible={this.state.isModalVisible}
+       leftSwiped={this.state.leftSwiped}
+       rightSwiped={this.state.rightSwiped}
+       >
     <Swipeable
       leftContent={leftContent}
       rightContent={rightContent}
@@ -146,9 +169,10 @@ render() {
       onRightActionDeactivate={() =>
         this.setState({rightActionActivated: false})
     }
-      onLeftActionRelease={this.saveToCollection && this.props.isModalVisible}
-      onRightActionRelease={this.saveToWantlist && this.props.isModalVisible}
-
+      onLeftActionRelease={this.saveToCollection}
+      onLeftActionComplete={() => this.setState({isModalVisible: true})}
+      onRightActionComplete={() => this.setState({isModalVisible: true})}
+      onRightActionRelease={this.saveToWantlist}
       onSwipeStart={onSwipeStart}
       onSwipeRelease={onSwipeRelease}
 
@@ -170,6 +194,8 @@ render() {
         </View>
       </CardSection>
     </Swipeable>
+  </SearchSuccessModal>
+
     );
   }
 };
@@ -220,6 +246,11 @@ const styles = {
       alignItems: 'flex-start',
       justifyContent: 'center',
       paddingLeft: 20
+    },
+    searchModal: {
+      justifyContent: 'center',
+      height: 90,
+      width: 90
     }
 };
 
