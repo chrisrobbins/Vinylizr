@@ -61,17 +61,16 @@ constructor(props) {
 //   }
 //
 saveToCollection = () => {
-  let discogsRecord = this.props.item.thumb;
+  let discogsRecord = this.props.item;
   this.props.saveCollectionItem(discogsRecord);
   this.setState({ leftSwiped: true })
   setTimeout(() => this._hideModal(), 2000)
-    console.log(this.state);
  }
 //
 //
 //
 saveToWantlist = () => {
-  let discogsRecord = this.props.item.thumb;
+  let discogsRecord = this.props.item;
   this.props.saveWantlistItem(discogsRecord)
   this.setState({ rightSwiped: true })
   setTimeout(() => this._hideModal(), 2000)
@@ -100,17 +99,18 @@ saveToWantlist = () => {
 // }
 
 _showLeftModal = () => {
-  this.setState({ isModalVisible: true, leftSwiped: true })
+  this.setState({leftSwiped: true})
+  setTimeout(() => this.setState({ isModalVisible: true }), 300 )
   setTimeout(() => this._hideModal(), 2000)
 }
 _showRightModal = () => {
-  this.setState({ isModalVisible: true, rightSwiped: true })
+  this.setState({rightSwiped: true })
+  setTimeout(() => this.setState({ isModalVisible: true }), 300 )
   setTimeout(() => this._hideModal(), 2000)
 }
 
   _hideModal = () => {
      this.setState({ isModalVisible: false })
-     console.log(this.state);
 }
 
 
@@ -151,7 +151,7 @@ render() {
        isModalVisible={this.state.isModalVisible}
        leftSwiped={this.state.leftSwiped}
        rightSwiped={this.state.rightSwiped}
-       >
+    >
     <Swipeable
       leftContent={leftContent}
       rightContent={rightContent}
@@ -179,12 +179,12 @@ render() {
       >
       <CardSection>
         <View style={imageView}>
-          {!item.thumb ? <Image
+          {!discogsRecord ? <Image
             style={imageStyle}
             source={require('../img/n-a.png')}
           /> : <Image
             style={imageStyle}
-            source={{ uri: item.thumb }}
+            source={{ uri: discogsRecord }}
           />}
         </View>
 

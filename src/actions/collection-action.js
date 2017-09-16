@@ -16,14 +16,17 @@ export const fetchCollection = () => {
     fire.database().ref(`users/${userId}/collection/albums`).once('value', snapshot => {
       const allData = []
       snapshot.forEach((childSnapshot) => {
+        console.log(childSnapshot);
         const key = childSnapshot.key;
-        const value = childSnapshot.val();
+        const album = childSnapshot.val();
         const eachCollection = {
           key,
-          value
+          album
         }
         allData.push(eachCollection);
+        console.log(allData);
       })
+
       dispatch({
         type: FETCH_COLLECTION,
         payload: allData

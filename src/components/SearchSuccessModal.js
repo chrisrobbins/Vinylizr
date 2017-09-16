@@ -23,10 +23,10 @@ renderText() {
         <Modal
           style={styles.modal}
           isVisible={this.props.isModalVisible}
-          backDropOpacity={0.30}
+          backdropOpacity={0.30}
           animationIn={'zoomIn'}
           animationOut={'fadeOutDown'}
-          animationInTiming={500}
+          animationInTiming={800}
           >
 
           <View style={styles.textBox}>

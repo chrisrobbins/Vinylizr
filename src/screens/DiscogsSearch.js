@@ -47,7 +47,7 @@ class DiscogsSearch extends Component {
       refreshing: false,
       isModalVisible: false
     };
-    this.searchDiscogs = _.debounce(this.searchDiscogs, 150)
+    this.searchDiscogs = _.debounce(this.searchDiscogs, 200)
 
   }
   static navigationOptions = {
@@ -165,7 +165,7 @@ class DiscogsSearch extends Component {
 
           value={this.state.newText}
 
-          onChangeText={this.searchDiscogs}
+          onKeyPress={this.searchDiscogs}
 
           onChange={(event) => this.setState({ newText: event.nativeEvent.text })}
 
