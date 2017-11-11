@@ -28,7 +28,8 @@ import {
   TextInput,
   Image,
   ActivityIndicator,
-  FlatList
+  FlatList,
+  StatusBar
 } from 'react-native';
 
 class DiscogsSearch extends Component {
@@ -47,11 +48,11 @@ class DiscogsSearch extends Component {
       refreshing: false,
       isModalVisible: false
     };
-    this.searchDiscogs = _.debounce(this.searchDiscogs, 200)
+    this.searchDiscogs = _.debounce(this.searchDiscogs, 230)
 
   }
   static navigationOptions = {
-
+    header: null,
     tabBarIcon: ({ tintColor }) => (tintColor == '#e91e63' ?
     <Image
       source={require('../img/search_select.png')}
@@ -61,6 +62,7 @@ class DiscogsSearch extends Component {
       source={require('../img/search.png')}
     />
   ),
+
 };
 
 
@@ -148,7 +150,9 @@ class DiscogsSearch extends Component {
   render() {
 
     return (
+
       <View style={styles.container}>
+        <StatusBar barStyle="light-content" />
 
         <View style={styles.inputStyleContainer}>
 
@@ -216,7 +220,8 @@ class DiscogsSearch extends Component {
 const styles = {
   renderAlbums: {
     flex: 1,
-    marginTop: -3
+    marginTop: -3,
+    backgroundColor: '#000'
   },
   inputContainer: {
     justifyContent: 'flex-end',

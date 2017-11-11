@@ -8,4 +8,4 @@ export * from './Spinner';
 export * from './Logo';
 export * from './BarCode';
 export * from './ClearText';
-export * from './Card';
+export * from './DetailButton';

@@ -12,7 +12,7 @@ import { fetchWantlist } from '../actions/wantlist-action.js';
 class Wantlist extends Component {
 
   static navigationOptions = {
-
+    header: null,
     tabBarIcon: ({ tintColor }) => (tintColor == '#e91e63' ?
     <Image
       source={require('../img/wantlistIcon_select.png')}
@@ -43,7 +43,7 @@ class Wantlist extends Component {
           {this.props.wantlist.wantlist.albums.map((album) => {
             // console.log("WANTLIST: ", album)
             let newRecord = album
-            return (<Image style={styles.albumCovers} key={newRecord.key} source={{ uri: newRecord.value }} />)
+            return (<Image style={styles.albumCovers} key={newRecord.key} source={{ uri: newRecord.album.thumb }} />)
           })
           }
         </ScrollView>
@@ -55,7 +55,7 @@ class Wantlist extends Component {
 const styles = {
   wantlistContainer: {
     flex: 1,
-    marginBottom: 50
+    backgroundColor: '#000'
   },
   textContainer: {
     justifyContent: 'flex-start',

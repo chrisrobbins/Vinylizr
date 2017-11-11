@@ -4,17 +4,20 @@ import {
   Text,
   Image,
   ScrollView,
+  TouchableOpacity
 } from 'react-native';
 import { Header } from '../components/common';
 import { connect } from 'react-redux';
 import { fetchCollection } from '../actions/collection-action.js';
 import _ from 'lodash';
 import fire from '../components/fire.js';
-import DetailModal from '../components/DetailModal';
+import { NavigationActions } from 'react-navigation'
+
 
 class UserCollections extends Component {
-  static navigationOptions = {
 
+  static navigationOptions = {
+    header: null,
     tabBarIcon: ({ tintColor }) => (tintColor == '#e91e63' ?
     <Image
       source={require('../img/collection_select.png')}
@@ -26,8 +29,13 @@ class UserCollections extends Component {
       style={[{tintColor: 'grey'}]}
     />
   ),
+  // drawerIcon: ({ tintColor }) => (
+  //   <Image
+  //     source={require('./chats-icon.png')}
+  //     style={[styles.icon, {tintColor: tintColor}]}
+  //   />
+  // ),
 };
-
 
   componentWillMount() {
     this.props.fetchCollection();
@@ -41,7 +49,7 @@ class UserCollections extends Component {
       <View style={styles.mainContainer}>
       <View style={styles.headerContainer}>
       <Header headerText={"Collection"} />
-      </View>
+    </View>
       <View style={styles.contentContainer}>
       <ScrollView
         automaticallyAdjustContentInsets={false}
@@ -49,13 +57,25 @@ class UserCollections extends Component {
 
           {this.props.collection.collection.albums.map((album) => {
             let newRecord = album
+            console.log(newRecord);
             return (
-              <DetailModal album={newRecord} key={newRecord.key}>
+              <TouchableOpacity key={newRecord.key} onPress={() => {
+              this.props.navigation.navigate('AlbumDetail', {
+              title: newRecord.album.title,
+              thumb: newRecord.album.thumb,
+              label: newRecord.album.label[0],
+              catno: newRecord.album.catno,
+              year: newRecord.album.year,
+              genre: newRecord.album.genre[0]
+             })
+           }}>
+
+
               <Image
                 style={styles.albumCovers}
                 source={{ uri: newRecord.album.thumb }}
               />
-            </DetailModal>
+              </TouchableOpacity>
             )
            })
           }
@@ -77,6 +97,7 @@ const styles = {
   },
   contentContainer: {
     flex: 1,
+    backgroundColor: '#000'
 
   },
   mainContainer: {

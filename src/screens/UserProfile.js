@@ -14,7 +14,7 @@ import { Button, Header } from '../components/common';
 export default class UserProfile extends Component {
 
   static navigationOptions = {
-
+    header: null,
     tabBarIcon: ({ tintColor }) => (tintColor == '#e91e63' ?
     <Image
       source={require('../img/profile_select.png')}
@@ -48,6 +48,7 @@ const styles = {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'flex-end',
+    backgroundColor: '#000'
   },
   buttonContainer: {
     justifyContent: 'flex-end',

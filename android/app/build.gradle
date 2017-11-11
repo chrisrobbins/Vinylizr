@@ -133,6 +133,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-vector-icons')
     compile project(':react-native-linear-gradient')
     compile project(':react-native-blur-image')
     compile fileTree(dir: "libs", include: ["*.jar"])

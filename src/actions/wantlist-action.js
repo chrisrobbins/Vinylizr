@@ -17,10 +17,10 @@ export const fetchWantlist =() => {
       const allData = []
       snapshot.forEach((childSnapshot) => {
         const key = childSnapshot.key;
-        const value = childSnapshot.val();
+        const album = childSnapshot.val();
         const eachWantlist = {
           key,
-          value
+          album
         }
         allData.push(eachWantlist);
       })

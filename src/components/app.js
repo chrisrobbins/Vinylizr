@@ -2,14 +2,13 @@ import React, { Component } from 'react';
 import { View, StatusBar } from 'react-native';
 import * as firebase from "firebase";
 import { Spinner } from './common';
-import Nav from './Nav';
+import MainNav from './MainNav';
 import LoginForm from './LoginForm';
-import { connect } from 'react-redux';
 import fire from './fire';
 
 console.disableYellowBox = true;
 
-class App extends Component {
+export default class App extends Component {
   state = { loggedIn: null };
 
 componentWillMount() {
@@ -26,7 +25,7 @@ componentWillMount() {
   renderContent() {
     switch (this.state.loggedIn) {
       case true:
-        return <Nav />;
+        return <MainNav />;
       case false:
         return <LoginForm />;
       default:
@@ -54,16 +53,6 @@ const styles = {
     backgroundColor: '#000000'
   },
   status: {
-    backgroundColor: '#1a1a1a'
+    backgroundColor: 'transparent'
   }
 };
-
-
-const mapStateToProps = (state) => {
-    return {
-      ...state
-    }
-}
-
-
-export default connect(mapStateToProps)(App);

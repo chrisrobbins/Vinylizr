@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity, TextInput, Keyboard, KeyboardAvoidingView, ScrollView } from 'react-native';
 import fire from './fire';
 import {
   Button,
@@ -14,6 +14,8 @@ import {
 
 class LoginForm extends Component {
   state = { email: '', password: '', error: '', loading: false };
+
+
 
   onButtonPress() {
     const { email, password } = this.state;
@@ -97,26 +99,47 @@ this.setState({ error: error.message, loading: false });
 
   render() {
     return (
-      <View style={styles.sectionContainer}>
+      <View
+        onCLick={() => Keyboard.dismiss} 
+        style={styles.sectionContainer}>
 
       <View style={styles.containerLogo}>
         <Logo />
       </View>
       <View style={styles.form}>
-          <Input
-            placeholder="Email"
+        <KeyboardAvoidingView
+      behavior="padding"
+      style={styles.textInputContainerStyle}
+    >
+      <ScrollView scrollEnabled={false}>
+          <TextInput
+            autoCapitalize={"none"}
+            placeholderTextColor={"white"}
+            style={styles.TextInputStyle}
+            multiline={true}
+            numberOfLines={1}
+            placeholder={"Email"}
             value={this.state.email}
             onChangeText={email => this.setState({ email })}
-            style={styles.inputs}
+            onSubmitEditing={Keyboard.dismiss}
           />
 
 
-          <Input
-            secureTextEntry
-            placeholder="password"
+
+          <TextInput
+            autoCapitalize={"none"}
+            style={styles.TextInputStyle}
+            placeholderTextColor={"white"}
+            numberOfLines={1}
+            secureTextEntry={true}
+            placeholder={"password"}
             value={this.state.password}
+            multiline={true}
             onChangeText={password => this.setState({ password })}
+            onSubmitEditing={Keyboard.dismiss}
+
           />
+
           <TouchableOpacity
             onPress={this.forgotPassword.bind(this)} style={styles.forgotContainer}
           >
@@ -140,7 +163,9 @@ this.setState({ error: error.message, loading: false });
           Create Account
           </Text>
         </TouchableOpacity>
-
+        <View style={{ height: 60 }} />
+        </ScrollView>
+    </KeyboardAvoidingView>
         </View>
       </View>
     );
@@ -167,7 +192,8 @@ const styles = {
     marginLeft: 20,
     marginRight: 20,
     flexDirection: 'column',
-    marginTop: 45
+    marginTop: 45,
+
 
   },
   textStyle: {
@@ -189,7 +215,20 @@ const styles = {
   },
   buttonSection: {
     marginTop: 25
+  },
+  TextInputStyle: {
+    color: '#fff',
+    fontSize: 18,
+    borderBottomWidth: 1,
+    borderBottomColor: '#fff',
+    paddingBottom: 7,
+    height: 40,
+    marginTop: 40
+  },
+  textInputContainerStyle: {
+    flexDirection: 'column',
+
   }
-};
+  };
 
 export default LoginForm;

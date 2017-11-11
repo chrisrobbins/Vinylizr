@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "axios": "^0.16.2",
+    "class-autobind": "^0.1.4",
     "firebase": "^4.3.0",
     "react": "16.0.0-alpha.6",
     "react-icons": "^2.2.5",
@@ -15,8 +16,10 @@
     "react-native-blur-image": "^1.0.6",
     "react-native-linear-gradient": "^2.3.0",
     "react-native-modal": "^3.1.0",
+    "react-native-stars-rating": "^0.1.7",
     "react-native-swipeable": "^0.6.0",
     "react-native-swipeable-flat-list": "0.0.4",
+    "react-native-vector-icons": "^4.4.0",
     "react-navigation": "^1.0.0-beta.11",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
@@ -30,5 +33,10 @@
   },
   "jest": {
     "preset": "react-native"
+  },
+  "rnpm": {
+    "assets": [
+      "./assets/fonts"
+    ]
   }
 }

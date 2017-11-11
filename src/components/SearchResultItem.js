@@ -189,8 +189,8 @@ render() {
         </View>
 
       <View style={textView}>
-          <Text style={titleTextStyle}>{title}</Text>
-          <Text style={artistTextStyle}>{artist}</Text>
+          <Text ellipsizeMode={'tail'} numberOfLines={1} style={titleTextStyle}>{title}</Text>
+          <Text ellipsizeMode={'tail'} numberOfLines={1} style={artistTextStyle}>{artist}</Text>
         </View>
       </CardSection>
     </Swipeable>
@@ -207,17 +207,20 @@ const styles = {
 
   textView: {
     justifyContent: 'center',
+    width: 250
   },
   titleTextStyle: {
     fontSize: 20,
     color: "#DADADA",
-    marginLeft: 5
+    marginLeft: 5,
+    fontFamily: 'Lato-Regular'
   },
   artistTextStyle: {
     fontSize: 16,
     color: "rgba(217,217,217,.6)",
     marginLeft: 10,
-    marginTop: 1
+    marginTop: 1,
+    fontFamily: 'Lato-Regular'
   },
   leftSwipeItem: {
     flex: 1,

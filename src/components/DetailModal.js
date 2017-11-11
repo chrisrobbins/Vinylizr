@@ -2,12 +2,26 @@
 import React, { Component } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import Modal from 'react-native-modal';
-import AlbumDetail from './AlbumDetail'
+import AlbumDetail from '../screens/AlbumDetail'
 
 export default class DetailModal extends Component {
   state = {
     isModalVisible: false
   }
+
+  static navigationOptions = {
+
+    tabBarIcon: ({ tintColor }) => (tintColor == '#e91e63' ?
+    <Image
+      source={require('../img/search_select.png')}
+    />
+    :
+    <Image
+      source={require('../img/search.png')}
+    />
+  ),
+};
+
 
   componentWillMount() {
     console.log(this.props, "modal props bro!!");
@@ -32,6 +46,7 @@ export default class DetailModal extends Component {
           animationInTiming={800}
           onBackdropPress={() => this._hideModal()}
           >
+
           <AlbumDetail {...this.props} />
         </Modal>
       </View>
@@ -42,6 +57,6 @@ export default class DetailModal extends Component {
 
 const styles = {
   detailModalContainer: {
-    
+
   }
 }
