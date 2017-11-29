@@ -3,33 +3,42 @@ import {
   View,
   Text,
   Image,
-  ScrollView
+  ScrollView,
+  Linking
 } from 'react-native';
 import { Header } from '../components/common';
 import { connect } from 'react-redux';
 import { fetchWantlist } from '../actions/wantlist-action.js';
-
+import DeepLinking from 'react-native-deep-linking'
+import {linking} from 'react-native'
 class Wantlist extends Component {
 
-  static navigationOptions = {
-    header: null,
-    tabBarIcon: ({ tintColor }) => (tintColor == '#e91e63' ?
-    <Image
-      source={require('../img/wantlistIcon_select.png')}
-    />
-    :
-    <Image
-      source={require('../img/wantlistIcon.png')}
-    />
-  ),
-};
+//   static navigationOptions = {
+//     header: null,
+//     tabBarIcon: ({ tintColor }) =>{(tintColor == '#e91e63' ?
+//     <Image
+//       source={require('../img/wantlistIcon_select.png')}
+//     />
+//     :
+//     <Image
+//       source={require('../img/wantlistIcon.png')}
+//     />
+//   )},
+// };
 
 
 
-  componentDidMount() {
-    this.props.fetchWantlist();
-    // console.log(this.props.wantlist.wantlist);
-  }
+  // componentDidMount() {
+  //   this.props.fetchWantlist();
+  //
+  // }
+
+  // {this.props.wantlist.wantlist.albums.map((album) => {
+  //   // console.log("WANTLIST: ", album)
+  //   let newRecord = album
+  //   return (<Image style={styles.albumCovers} key={newRecord.key} source={{ uri: newRecord.album.thumb }} />)
+  // })
+  // }
 
   render() {
     return (
@@ -40,12 +49,7 @@ class Wantlist extends Component {
         <ScrollView
           automaticallyAdjustContentInsets={false}
           contentContainerStyle={styles.textContainer}>
-          {this.props.wantlist.wantlist.albums.map((album) => {
-            // console.log("WANTLIST: ", album)
-            let newRecord = album
-            return (<Image style={styles.albumCovers} key={newRecord.key} source={{ uri: newRecord.album.thumb }} />)
-          })
-          }
+
         </ScrollView>
       </View>
     );

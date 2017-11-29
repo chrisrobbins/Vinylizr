@@ -53,7 +53,7 @@ class DiscogsSearch extends Component {
   }
   static navigationOptions = {
     header: null,
-    tabBarIcon: ({ tintColor }) => (tintColor == '#e91e63' ?
+    tabBarIcon: ({ tintColor }) => {tintColor == '#e91e63' ?
     <Image
       source={require('../img/search_select.png')}
     />
@@ -61,7 +61,7 @@ class DiscogsSearch extends Component {
     <Image
       source={require('../img/search.png')}
     />
-  ),
+  },
 
 };
 
