@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import firebase from 'firebase';
 
 import {
   View,
   Text,
   StyleSheet,
-  Image
+  Image,
+  AsyncStorage,
+  Linking
 } from 'react-native';
 
 import { Button, Header } from '../components/common';
@@ -13,18 +14,27 @@ import { Button, Header } from '../components/common';
 
 export default class UserProfile extends Component {
 
-  static navigationOptions = {
+  componentWillMount() {
+    console.log(this.props, "Navigator props");
+  }
+
+  static navigationOptions = ({screenProps}) => ({
     header: null,
-    tabBarIcon: ({ tintColor }) => (tintColor == '#e91e63' ?
-    <Image
-      source={require('../img/profile_select.png')}
-    />
+    tabBarIcon: ({ tintColor }) => (tintColor == '#e91e63'
+    ?
+    <Image source={require('../img/profile_select.png')} />
     :
-    <Image
-      source={require('../img/profile.png')}
-    />
-  ),
-  };
+    <Image source={require('../img/profile.png')} />
+    )
+  })
+
+
+  signOut() {
+    AsyncStorage.removeItem('oauth_token').then(() => {console.log("Token Removed")}).then(() => {console.log("TOKEN SUCCESS!!")})
+    AsyncStorage.removeItem('oauth_secret').then(() => {console.log("SECRET SUCCESS!!")})
+    this.props.navigation.navigate('LoginForm')
+
+  }
 
   render() {
     return (
@@ -35,7 +45,9 @@ export default class UserProfile extends Component {
       </View>
       <View style={styles.logOut}>
         <View style={styles.buttonContainer}>
-        <Button onPress={() => firebase.auth().signOut()}>Log out</Button>
+        <Button onPress={this.signOut.bind(this)}>
+          Log Out
+        </Button>
         </View>
     </View>
     </View>

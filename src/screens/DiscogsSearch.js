@@ -51,20 +51,19 @@ class DiscogsSearch extends Component {
     this.searchDiscogs = _.debounce(this.searchDiscogs, 230)
 
   }
-  static navigationOptions = {
-    header: null,
-    tabBarIcon: ({ tintColor }) => {tintColor == '#e91e63' ?
-    <Image
-      source={require('../img/search_select.png')}
-    />
-    :
-    <Image
-      source={require('../img/search.png')}
-    />
-  },
 
-};
-
+   static navigationOptions = ({screenProps}) => ({
+     header: null,
+     cardStyle: {
+       backgroundColor: '#000000'
+     },
+     tabBarIcon: ({ tintColor }) => ( tintColor == '#e91e63'
+     ?
+     <Image source={require('../img/search_select.png')} />
+     :
+     <Image source={require('../img/search.png')} />
+   ),
+   })
 
   searchDiscogs = () => {
     const apiKey = "jbUTpFhLTiyyHgLRoBgq";

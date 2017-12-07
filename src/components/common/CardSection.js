@@ -14,7 +14,8 @@ const styles = {
   containerStyle: {
     justifyContent: 'flex-start',
     flexDirection: 'row',
-    flex:1
+    flex:1,
+    backgroundColor: '#000000'
 
   }
 };

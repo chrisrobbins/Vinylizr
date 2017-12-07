@@ -13,6 +13,8 @@ const Card = (props) => {
 
 const styles = {
   flexContainer: {
+    flex:1,
+    backgroundColor: '#000000',
     marginTop: 0,
   }
 

@@ -1,17 +1,27 @@
-import React from 'react';
+import React from 'react'
 
 import {
     StackNavigator,
-} from 'react-navigation';
+} from 'react-navigation'
 
-import TabBar from './TabBar';
+import TabBar from './TabBar'
 import AlbumDetail from '../screens/AlbumDetail'
+import LoginForm from './LoginForm'
+import app from './app'
+
 
 
 
 const MainNav = StackNavigator({
-    TabBar: { screen: TabBar },
+    TabBar: {
+      screen: TabBar,
+      cardStyle: {
+        backgroundColor: '#000000'
+      }
+
+     },
     AlbumDetail: { screen: AlbumDetail },
+    LoginForm: {screen: LoginForm },
 },
 { HeaderMode: 'screen' }
 );

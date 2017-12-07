@@ -5,60 +5,90 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
-  Linking
+  Linking,
+  AsyncStorage
 } from 'react-native';
 import { Header } from '../components/common';
 import { connect } from 'react-redux';
 import { fetchCollection } from '../actions/collection-action.js';
 import _ from 'lodash';
-import fire from '../components/fire.js';
 import { NavigationActions } from 'react-navigation'
+import axios from 'axios'
 
 
 class UserCollections extends Component {
+constructor(props) {
+  super(props)
 
-//   static navigationOptions = {
-//     header: null,
-//     tabBarIcon: ({ tintColor }) =>
-//     (tintColor == '#e91e63' ?
-//     <Image
-//       source={require('../img/collection_select.png')}
-//       style={[{tintColor: '#F42E4A'}]}
-//     />
-//     :
-//     <Image
-//       source={require('../img/collectionIcon.png')}
-//       style={[{tintColor: 'grey'}]}
-//     />
-//   ),
-// };
-
-  // componentWillMount() {
-  //   this.props.fetchCollection();
-  //   console.log(this.props);
-  //
-  // }
-
-componentDidMount() {
-  Linking.addEventListener('url', this.handleOpenURL);
-
+  this.getSecret = this.getSecret.bind(this)
+  this.getToken = this.getToken.bind(this)
 }
 
-componentWillUnmount() { // C
-    Linking.removeEventListener('url', this.handleOpenURL);
-  }
-  handleOpenURL = (event) => { // D
-    this.navigate(event.url);
-  }
-  navigate = (url) => { // E
-    const { navigate } = this.props.navigation;
-    const route = url.replace(/.*?:\/\//g, '');
-    const routeName = route.split('/')[0];
+  static navigationOptions = ({screenProps}) => ({
+    header: null,
+    tabBarIcon: ({ tintColor }) => (tintColor == '#e91e63'
+    ?
+    <Image source={require('../img/collection_select.png')} />
+    :
+    <Image source={require('../img/collectionIcon.png')} />
+    )
+  })
 
-    if (routeName === 'collection') {
-      navigate('vinylizr')
-    };
+ getSecret() {
+  AsyncStorage.getItem('oauth_token').then((value) => {
+    console.log(value, "this SHOULD BE THE TOKEN");
+  })
+  .catch((error) => {
+    console.log(error, " ERROR GETTING TOKEN FROM LOCAL DISK");
+  })
+}
+
+getToken() {
+  AsyncStorage.getItem('oauth_secret').then((value) => {
+    console.log(value, "this SHOULD BE THE TOKEN");
+  })
+ .catch((error) => {
+   console.log(error, " ERROR GETTING TOKEN FROM LOCAL DISK");
+ })
+}
+
+
+
+
+componentDidMount() {
+  let secret = this.getSecret()
+  let token = this.getToken()
+
+  axios({method:'GET', url:`https://api.discogs.com/oauth/identity`,
+  headers:{
+  'Content-Type': 'application/x-www-form-urlencoded',
+  'Authorization':`OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
+  'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
+ }
+})
+  .then((response) => {
+    console.log(response, "SECRET IDENTITY OF BATMAN!");
+
+})
+  .catch( (error) => {
+  if (error.response) {
+    // The request was made and the server responded with a status code
+    // that falls out of the range of 2xx
+    console.log(error.response.data);
+    console.log(error.response.status);
+    console.log(error.response.headers);
+  } else if (error.request) {
+    // The request was made but no response was received
+    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+    // http.ClientRequest in node.js
+    console.log(error.request);
+  } else {
+    // Something happened in setting up the request that triggered an Error
+    console.log('Error', error.message);
   }
+  console.log(error.config);
+});
+}
 
   // {this.props.collection.collection.albums.map((album) => {
   //   let newRecord = album

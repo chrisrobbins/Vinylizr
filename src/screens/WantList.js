@@ -13,18 +13,40 @@ import DeepLinking from 'react-native-deep-linking'
 import {linking} from 'react-native'
 class Wantlist extends Component {
 
-//   static navigationOptions = {
-//     header: null,
-//     tabBarIcon: ({ tintColor }) =>{(tintColor == '#e91e63' ?
-//     <Image
-//       source={require('../img/wantlistIcon_select.png')}
-//     />
-//     :
-//     <Image
-//       source={require('../img/wantlistIcon.png')}
-//     />
-//   )},
-// };
+  static navigationOptions = {
+    header: null,
+    tabBarIcon: ({ tintColor }) => (tintColor == '#e91e63' ?
+    <Image
+      source={require('../img/wantlistIcon_select.png')}
+    />
+    :
+    <Image
+      source={require('../img/wantlistIcon.png')}
+    />
+  ),
+};
+
+componentDidMount() {
+  Linking.addEventListener('url', this.handleOpenURL);
+
+}
+
+componentWillUnmount() { // C
+    Linking.removeEventListener('url', this.handleOpenURL);
+  }
+
+  handleOpenURL = (event) => { // D
+    this.navigate(event.url);
+  }
+  navigate = (url) => { // E
+    const { navigate } = this.props.navigation;
+    const route = url.replace(/.*?:\/\//g, '');
+    const routeName = route.split('/')[0];
+
+    if (routeName === 'wantlist') {
+      navigate('vinylizr')
+    };
+  }
 
 
 

@@ -7,28 +7,72 @@ import {
   Button,
   CardSection,
   Spinner,
-  Logo
+  Logo,
+  AsyncStorage
 } from './common'
 
 
 class LoginForm extends Component {
+  constructor(props) {
+    super(props)
 
 
-  // signIn() {
-  //   if(!this.props.isLoggedIn) {
-  //     return (
-  //       Linking.openURL(`https://discogs.com/oauth/authorize?oauth_token=${access_token}`)
-  //     )
-  //   } else {
-  //     return (
-  //       this.props.
-  //     )
-  //   }
-  // }
+      this.getToken = this.getToken.bind(this)
+  }
+
+  static navigationOptions = () => ({
+    drawerLabel: 'LoginForm',
+    header: null,
+    cardStyle: {
+      backgroundColor: '#000000'
+    },
+  });
+
+
+  componentWillMount() {
+    getToken = this.getToken()
+    if (getToken === null || getToken === undefined) {
+    console.log("NO TOKEN YOU HAVE BEEN LOGGED OUT ");
+       this.props.loggedOut
+    } else {
+      console.log("you are LOGGED IN FROM THE LOGIN FORM MY FRIEND: ");
+       this.props.loggedIn()
+    }
+
+
+
+  }
+
+  getToken() {
+    if(this.props.isLoggedIn) {
+    AsyncStorage.getItem('oauth_token').then((result) => {
+      console.log(result) //Display key value
+      if (result === null || result === undefined) {
+        return null
+      }
+      if (result) {
+        return result
+      }
+
+    }).catch((error) => {
+      console.log(error, "NOT WORKING FOR GETITING TOKENS")
+    })
+  } else {
+    console.log("not Logged In");
+  }
+  }
+
+
+
+
+discogsRedirect = () => {
+  const { access_token } = this.props
+  Linking.openURL(`https://discogs.com/oauth/authorize?oauth_token=${access_token}`)
+
+}
+
 
   render() {
-    console.log(this.props);
-    const {access_token} = this.props
     return (
       <View
         style={styles.sectionContainer}>
@@ -40,7 +84,7 @@ class LoginForm extends Component {
 
         <CardSection>
         <Button
-          style={styles.buttonSection} onPress={() => Linking.openURL(`https://discogs.com/oauth/authorize?oauth_token=${access_token}`)}>
+          style={styles.buttonSection} onPress={this.discogsRedirect}>
           Log in
         </Button>
         </CardSection>
@@ -51,6 +95,10 @@ class LoginForm extends Component {
 }
 
 const styles = {
+  sectionContainer: {
+    flex: 1,
+    backgroundColor: '#000000'
+  },
   containerLogo: {
     flex: 1,
     justifyContent: 'center',
@@ -71,6 +119,7 @@ const styles = {
     marginRight: 20,
     flexDirection: 'column',
     marginTop: 45,
+    backgroundColor: '#000000'
 
 
   },
