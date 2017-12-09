@@ -40,13 +40,15 @@ export default class App extends Component {
   }
 
   componentWillMount() {
-    if (!this.getToken()) {
-    console.log("NO TOKEN YOU HAVE BEEN LOGGED OUT ");
-       this.logOut()
-    } else {
-      console.log("you are LOGGED IN FROM THE APP MY FRIEND: ");
-       this.logIn()
-    }
+    AsyncStorage.getItem('oauth_token').then((token) => {
+      console.log(token, "THIS IS TOKENS");
+      if(token === null) {
+        this.logOut()
+      }
+      if(token.length > 0) {
+        this.logIn()
+      }
+    })
 
 
      let config = {
@@ -86,27 +88,38 @@ export default class App extends Component {
   });
 }
 
-getSecret() {
- AsyncStorage.getItem('oauth_secret').then((keyValue) => {
-   console.log(keyValue) //Display key value
-   return keyValue
-   }, (error) => {
-   console.log(error) //Display error
- });
-}
+getToken = () => {
+  if(this.state.loggedIn) {
+  AsyncStorage.getItem('oauth_token').then((result) => {
+    console.log(result) //Display key value
 
-getToken() {
-  AsyncStorage.getItem('oauth_token').then((keyValue) => {
-    console.log(keyValue) //Display key value
-    if (keyValue) {
-      return keyValue
-    } else {
-      return 0
-    }
+      return result
+
   }).catch((error) => {
     console.log(error, "NOT WORKING FOR GETITING TOKENS")
   })
+} else {
+  console.log("not Logged In");
 }
+}
+
+
+getSecret = () => {
+  if(this.state.loggedIn) {
+  AsyncStorage.getItem('oauth_secret').then((result) => {
+    console.log(result) //Display key value
+
+      return result
+
+
+  }).catch((error) => {
+    console.log(error, "NOT WORKING FOR GETITING TOKENS")
+  })
+} else {
+  console.log("not Logged In");
+}
+}
+
 
 componentDidMount() {
 
@@ -148,11 +161,10 @@ getAccessToken() {
     const oauthToken = stringBreak[2]
     const oauthSecret = secretSplit[0]
 
-    AsyncStorage.setItem("oauth_token", `${oauthToken}`).then((value) => {console.log("STORAGE VALS: ")})
-    AsyncStorage.setItem("oauth_secret", `${oauthSecret}`).then((value) => {console.log("STORAGE VALS: ")})
+    AsyncStorage.setItem("oauth_token", `${oauthToken}`).then((value) => {console.log("STORAGE VALS: ", value)})
+    AsyncStorage.setItem("oauth_secret", `${oauthSecret}`).then((value) => {console.log("STORAGE VALS: ", value)})
 
       this.setState({ loggedIn: true })
-
 
 })
   .catch( (error) => {

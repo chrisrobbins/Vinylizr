@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
 import {
   View,
@@ -7,9 +7,9 @@ import {
   Image,
   AsyncStorage,
   Linking
-} from 'react-native';
+} from 'react-native'
 
-import { Button, Header } from '../components/common';
+import { Button, Header } from '../components/common'
 
 
 export default class UserProfile extends Component {

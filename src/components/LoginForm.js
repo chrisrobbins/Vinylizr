@@ -13,12 +13,7 @@ import {
 
 
 class LoginForm extends Component {
-  constructor(props) {
-    super(props)
-
-
-      this.getToken = this.getToken.bind(this)
-  }
+  
 
   static navigationOptions = () => ({
     drawerLabel: 'LoginForm',
@@ -29,38 +24,6 @@ class LoginForm extends Component {
   });
 
 
-  componentWillMount() {
-    getToken = this.getToken()
-    if (getToken === null || getToken === undefined) {
-    console.log("NO TOKEN YOU HAVE BEEN LOGGED OUT ");
-       this.props.loggedOut
-    } else {
-      console.log("you are LOGGED IN FROM THE LOGIN FORM MY FRIEND: ");
-       this.props.loggedIn()
-    }
-
-
-
-  }
-
-  getToken() {
-    if(this.props.isLoggedIn) {
-    AsyncStorage.getItem('oauth_token').then((result) => {
-      console.log(result) //Display key value
-      if (result === null || result === undefined) {
-        return null
-      }
-      if (result) {
-        return result
-      }
-
-    }).catch((error) => {
-      console.log(error, "NOT WORKING FOR GETITING TOKENS")
-    })
-  } else {
-    console.log("not Logged In");
-  }
-  }
 
 
 

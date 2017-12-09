@@ -17,12 +17,11 @@ import axios from 'axios'
 
 
 class UserCollections extends Component {
-constructor(props) {
-  super(props)
+  constructor(props) {
+    super(props)
 
-  this.getSecret = this.getSecret.bind(this)
-  this.getToken = this.getToken.bind(this)
-}
+    this.state = {userData: {}, records: []}
+  }
 
   static navigationOptions = ({screenProps}) => ({
     header: null,
@@ -34,89 +33,123 @@ constructor(props) {
     )
   })
 
- getSecret() {
-  AsyncStorage.getItem('oauth_token').then((value) => {
-    console.log(value, "this SHOULD BE THE TOKEN");
-  })
-  .catch((error) => {
-    console.log(error, " ERROR GETTING TOKEN FROM LOCAL DISK");
-  })
-}
-
-getToken() {
-  AsyncStorage.getItem('oauth_secret').then((value) => {
-    console.log(value, "this SHOULD BE THE TOKEN");
-  })
- .catch((error) => {
-   console.log(error, " ERROR GETTING TOKEN FROM LOCAL DISK");
- })
-}
-
-
-
-
-componentDidMount() {
-  let secret = this.getSecret()
-  let token = this.getToken()
-
-  axios({method:'GET', url:`https://api.discogs.com/oauth/identity`,
-  headers:{
-  'Content-Type': 'application/x-www-form-urlencoded',
-  'Authorization':`OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
-  'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
- }
-})
-  .then((response) => {
-    console.log(response, "SECRET IDENTITY OF BATMAN!");
-
-})
-  .catch( (error) => {
-  if (error.response) {
-    // The request was made and the server responded with a status code
-    // that falls out of the range of 2xx
-    console.log(error.response.data);
-    console.log(error.response.status);
-    console.log(error.response.headers);
-  } else if (error.request) {
-    // The request was made but no response was received
-    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-    // http.ClientRequest in node.js
-    console.log(error.request);
-  } else {
-    // Something happened in setting up the request that triggered an Error
-    console.log('Error', error.message);
+  getSecret = () => {
+    AsyncStorage.getItem('oauth_secret').then((result) => {
+        console.log("this is the SECRET RESULT!! ", result);
+        return result
+    }).catch((error) => {
+      console.log(error, "NOT WORKING FOR GETITING SECRETS")
+    })
   }
-  console.log(error.config);
-});
+
+
+
+  getToken = () => {
+    AsyncStorage.getItem('oauth_token').then((result) => {
+        console.log("this is the TOKEN RESULT!! ", result);
+        return result
+    }).catch((error) => {
+      console.log(error, "NOT WORKING FOR GETITING TOKENS")
+    })
+  }
+
+
+
+
+componentWillMount() {
+
+  value = AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then((values) => {
+    const user_token = values[0][1]
+    const user_secret = values[1][1]
+
+      axios({method:'GET', url:`https://api.discogs.com/oauth/identity`,
+      headers:{
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization':`OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
+      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
+     }
+    })
+      .then((response) => {
+        console.log(response.data, "SECRET IDENTITY OF BATMAN!");
+        this.setState({userData:response.data})
+
+    })
+    .then((response) => {
+      this.getUserCollection()
+    })
+      .catch( (error) => {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log('Error', error.message);
+      }
+      console.log(error.config);
+    })
+  })
+
+console.log(this.state, "Here's the state");
+
 }
 
-  // {this.props.collection.collection.albums.map((album) => {
-  //   let newRecord = album
-  //   console.log(newRecord);
-  //   return (
-  //     <TouchableOpacity key={newRecord.key} onPress={() => {
-  //     this.props.navigation.navigate('AlbumDetail', {
-  //     title: newRecord.album.title,
-  //     thumb: newRecord.album.thumb,
-  //     label: newRecord.album.label[0],
-  //     catno: newRecord.album.catno,
-  //     year: newRecord.album.year,
-  //     genre: newRecord.album.genre[0]
-  //    })
-  //  }}>
-  //
-  //
-  //     <Image
-  //       style={styles.albumCovers}
-  //       source={{ uri: newRecord.album.thumb }}
-  //     />
-  //     </TouchableOpacity>
-  //   )
-  //  })
-  // }
+getUserCollection() {
+  const { userData } = this.state
+  value = AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then((values) => {
+    const user_token = values[0][1]
+    const user_secret = values[1][1]
+    const user_name = userData.username
+
+    console.log(user_name, "USER NAME");
+
+      axios({method:'GET', url:`https://api.discogs.com/users/${user_name}/collection/folders/1/releases`,
+      headers:{
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization':`OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
+      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
+     }
+    })
+    .then((response) => {
+      this.setState({records: response.data.releases})
+
+  })
+
+
+      .catch( (error) => {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log('Error', error.message);
+      }
+      console.log(error.config);
+    })
+  })
+}
+
+
+
 
   render() {
-
+    const { records, userData } = this.state
+console.log(this.state, " COOKIN WITH GAS");
     return (
       <View style={styles.mainContainer}>
       <View style={styles.headerContainer}>
@@ -126,6 +159,29 @@ componentDidMount() {
       <ScrollView
         automaticallyAdjustContentInsets={false}
         contentContainerStyle={styles.textContainer}>
+        {records.map((album) => {
+          let newRecord = album
+          console.log(newRecord, "FIGURE THE RECORD DUDE NOW");
+          return (
+            <TouchableOpacity key={newRecord.instance_id} onPress={() => {
+            this.props.navigation.navigate('AlbumDetail', {
+            title: newRecord.basic_information.title,
+            thumb: newRecord.basic_information.thumb,
+            label: newRecord.basic_information.labels[0].name,
+            catno: newRecord.basic_information.catno,
+            year: newRecord.basic_information.year,
+           })
+         }}>
+
+
+            <Image
+              style={styles.albumCovers}
+              source={{ uri: newRecord.basic_information.cover_image }}
+            />
+            </TouchableOpacity>
+          )
+         })
+        }
 
         </ScrollView>
         </View>
