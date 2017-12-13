@@ -29,7 +29,8 @@ import {
   Image,
   ActivityIndicator,
   FlatList,
-  StatusBar
+  StatusBar,
+  AsyncStorage
 } from 'react-native';
 
 class DiscogsSearch extends Component {
@@ -46,9 +47,10 @@ class DiscogsSearch extends Component {
       seed: 1,
       error: null,
       refreshing: false,
-      isModalVisible: false
+      isModalVisible: false,
+      userData: {}
     };
-    this.searchDiscogs = _.debounce(this.searchDiscogs, 230)
+    this.searchDiscogs = _.debounce(this.searchDiscogs, 210)
 
   }
 
@@ -65,13 +67,55 @@ class DiscogsSearch extends Component {
    ),
    })
 
+   componentWillMount() {
+
+     value = AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then((values) => {
+       const user_token = values[0][1]
+       const user_secret = values[1][1]
+
+         axios({method:'GET', url:`https://api.discogs.com/oauth/identity`,
+         headers:{
+         'Content-Type': 'application/x-www-form-urlencoded',
+         'Authorization':`OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
+         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
+        }
+       })
+         .then((response) => {
+           this.setState({userData:response.data})
+
+       })
+         .catch( (error) => {
+         if (error.response) {
+           // The request was made and the server responded with a status code
+           // that falls out of the range of 2xx
+           console.log(error.response.data);
+           console.log(error.response.status);
+           console.log(error.response.headers);
+         } else if (error.request) {
+           // The request was made but no response was received
+           // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+           // http.ClientRequest in node.js
+           console.log(error.request);
+         } else {
+           // Something happened in setting up the request that triggered an Error
+           console.log('Error', error.message);
+         }
+         console.log(error.config);
+       })
+     })
+
+   console.log(this.state, "Here's the state");
+
+   }
+
+
   searchDiscogs = () => {
     const apiKey = "jbUTpFhLTiyyHgLRoBgq";
     const apiSecret = "LSQDaLpplgcCGlkzujkHyUkxImNlWVoI";
     const { page } = this.state;
     const apiSearch = this.state.newText;
-    const url = `https://api.discogs.com/database/search?artist=${apiSearch}
-    &key=${apiKey}&secret=${apiSecret}`
+    const releaseType = 'release'
+    const url = `https://api.discogs.com/database/search?artist=${apiSearch}&${releaseType}&key=${apiKey}&secret=${apiSecret}`
     this.setState({ loading: true });
 
     axios.get(url)
@@ -81,7 +125,7 @@ class DiscogsSearch extends Component {
           error: res.error || null,
           loading: false,
           refreshing: false
-        });
+        })
       })
       .catch(error => {
         this.setState({ error, loading: false });
@@ -143,10 +187,13 @@ class DiscogsSearch extends Component {
      );
    };
 
-   _keyExtractor = (item, index) => item.id;
+   _keyExtractor = (item, index) => item.id + index;
 
 
   render() {
+    const { userData, albums } = this.state
+
+    console.log(albums, "DISCOGS SEARCH ALBUMS");
 
     return (
 
@@ -189,12 +236,14 @@ class DiscogsSearch extends Component {
       </View>
 
         <FlatList
-          data={this.state.albums}
-          renderItem={({item}) => (
+          data={albums}
+          renderItem={({ item, index }) => (
 
 
             <SearchResultItem
              item={item}
+             key={item.id + index}
+             userData={userData}
              onSwipeStart={() => this.setState({isSwiping: true})}
              onSwipeRelease={() => this.setState({isSwiping: false})}
            />

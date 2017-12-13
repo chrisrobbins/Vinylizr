@@ -29,19 +29,16 @@ export default class App extends Component {
   }
 
  logIn() {
-   console.log("LOGGIN IN!!! I'm FIRING OK!");
    this.setState({ loggedIn: true })
 
   }
 
   logOut() {
-    console.log("LOGGIN OUT!!!");
     this.setState({ loggedIn: false })
   }
 
   componentWillMount() {
     AsyncStorage.getItem('oauth_token').then((token) => {
-      console.log(token, "THIS IS TOKENS");
       if(token === null) {
         this.logOut()
       }
@@ -134,7 +131,6 @@ _handleOpenURL(event) {
   let dscVerifier = dscUrl[2]
 
 this.setState({verifier:dscVerifier})
-console.log(this.state, "what a shit show");
 if (this.state.verifier === dscVerifier) {
 this.getAccessToken()
 }
@@ -194,7 +190,7 @@ getAccessToken() {
       case true:
         return <MainNav />
       case false:
-        return <LoginForm access_token={this.state.access_token} loggedIn={this.logIn} isLoggedIn={this.state.loggedIn} loggedOut={this.logOut} getToken={this.getToken} getSecret={this.getSecret} />
+        return <LoginForm access_token={this.state.access_token}  />
       default:
         return <Spinner size="large" />;
     }

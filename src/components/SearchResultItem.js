@@ -4,8 +4,10 @@ import {
   View,
   Image,
   Linking,
-  TouchableHighlight
+  TouchableHighlight,
+  AsyncStorage
 } from 'react-native';
+import axios from 'axios'
 import { connect } from 'react-redux';
 import {
   saveCollectionItem,
@@ -31,72 +33,67 @@ constructor(props) {
     rightSwiped: false
     };
 }
-//
-//
-//
-// checkCollectionForRecords() {
-//     let discogsRecord = this.props.item.thumb;
-//     this.props.collectionRecords.map((collectionRecord) => {
-//       if (discogsRecord === collectionRecord) {
-//         console.log("already in collection", discogsRecord, collectionRecord);
-//         this.setState({collectionRecordSaved: " in collection"})
-//       } else if (!collectionRecord) {
-//         console.log("NOT HERE ", discogsRecord, collectionRecord);
-//         this.setState({collectionRecordSaved: '' })
-//       }
-//     })
-//   }
-//
-//   checkWantlistForRecords() {
-//     let discogsRecord = this.props.item.thumb;
-//     this.props.wantlistRecords.map((wantlistRecord) => {
-//       // console.log("DATABASE: ", wantlistRecord);
-//       if (discogsRecord === wantlistRecord) {
-//         console.log("already in wantlist");
-//         this.setState({wantlistRecordSaved: " in wantlist"})
-//       } else if (!wantlistRecord) {
-//         this.setState({wantlistRecordSaved: ''})
-//       }
-//     })
-//   }
-//
+
 saveToCollection = () => {
-  let discogsRecord = this.props.item;
-  this.props.saveCollectionItem(discogsRecord);
-  this.setState({ leftSwiped: true })
-  setTimeout(() => this._hideModal(), 2000)
- }
+  const { userData } = this.props
+  value = AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then((values) => {
+    const user_token = values[0][1]
+    const user_secret = values[1][1]
+    const user_name = userData.username
+    const release_id = this.props.item.id
+
+      axios({method:'POST', url:`https://api.discogs.com/users/${user_name}/collection/folders/1/releases/${release_id}`,
+      headers:{
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization':`OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
+      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
+     }
+    })
+    .then((response) => {
+      console.log(response, " SAVE TO COLLECTION RESPONSE");
+      this.setState({records: response.data.releases})
+
+  })
+  .then(() => {
+    this.setState({ leftSwiped: true })
+     setTimeout(this._hideModal, 2000)
+  })
+
+
+      .catch( (error) => {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log('Error', error.message);
+      }
+      console.log(error.config);
+    })
+  })
+}
+
+// saveToCollection = () => {
+//   let discogsRecord = this.props.item;
+//   this.props.saveCollectionItem(discogsRecord);
+//   this.setState({ leftSwiped: true })
+//   setTimeout(() => this._hideModal(), 2000)
+//  }
 //
-//
-//
-saveToWantlist = () => {
-  let discogsRecord = this.props.item;
-  this.props.saveWantlistItem(discogsRecord)
-  this.setState({ rightSwiped: true })
-  setTimeout(() => this._hideModal(), 2000)
- }
-//
-// beenThereDoneThat = () => {
-//   const smallWantlistIcon = require('../img/smallWantlistIcon.png');
-//   const smallCollectionIcon = require('../img/smallCollectionIcon.png');
-//   let collectionRecord = this.state.collectionRecordSaved;
-//   let wantlistRecord = this.state.wantlistRecordSaved;
-//   if (collectionRecord) {
-//     return (
-//       <Text
-//         style={styles.collectionSavedTextStyle}>
-//         <Image source={smallCollectionIcon} />  {collectionRecord}
-//       </Text>
-//     )
-//   } else if (wantlistRecord) {
-// return (
-//   <Text
-//     style={styles.wantlistSavedTextStyle}>
-//     <Image source={smallWantlistIcon} />  {wantlistRecord}
-//   </Text>
-//     )
-//   }
-// }
+// saveToWantlist = () => {
+//   let discogsRecord = this.props.item;
+//   this.props.saveWantlistItem(discogsRecord)
+//   this.setState({ rightSwiped: true })
+//   setTimeout(() => this._hideModal(), 2000)
+//  }
 
 _showLeftModal = () => {
   this.setState({leftSwiped: true})

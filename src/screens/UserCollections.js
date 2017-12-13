@@ -23,7 +23,7 @@ class UserCollections extends Component {
     this.state = {userData: {}, records: []}
   }
 
-  static navigationOptions = ({screenProps}) => ({
+  static navigationOptions = ({ screenProps }) => ({
     header: null,
     tabBarIcon: ({ tintColor }) => (tintColor == '#e91e63'
     ?
@@ -32,28 +32,6 @@ class UserCollections extends Component {
     <Image source={require('../img/collectionIcon.png')} />
     )
   })
-
-  getSecret = () => {
-    AsyncStorage.getItem('oauth_secret').then((result) => {
-        console.log("this is the SECRET RESULT!! ", result);
-        return result
-    }).catch((error) => {
-      console.log(error, "NOT WORKING FOR GETITING SECRETS")
-    })
-  }
-
-
-
-  getToken = () => {
-    AsyncStorage.getItem('oauth_token').then((result) => {
-        console.log("this is the TOKEN RESULT!! ", result);
-        return result
-    }).catch((error) => {
-      console.log(error, "NOT WORKING FOR GETITING TOKENS")
-    })
-  }
-
-
 
 
 componentWillMount() {
@@ -70,12 +48,14 @@ componentWillMount() {
      }
     })
       .then((response) => {
-        console.log(response.data, "SECRET IDENTITY OF BATMAN!");
         this.setState({userData:response.data})
 
     })
     .then((response) => {
       this.getUserCollection()
+    })
+    .then(() => {
+      console.log(records, "COLLECTION RECORDS");
     })
       .catch( (error) => {
       if (error.response) {
@@ -96,9 +76,6 @@ componentWillMount() {
       console.log(error.config);
     })
   })
-
-console.log(this.state, "Here's the state");
-
 }
 
 getUserCollection() {
@@ -149,7 +126,7 @@ getUserCollection() {
 
   render() {
     const { records, userData } = this.state
-console.log(this.state, " COOKIN WITH GAS");
+    console.log(records, "COLLECTION RECORDS");
     return (
       <View style={styles.mainContainer}>
       <View style={styles.headerContainer}>
