@@ -72,9 +72,6 @@ componentWillMount() {
       console.log(error.config);
     })
   })
-
-console.log(this.state, "Here's the state");
-
 }
 
 getUserWantlist() {
@@ -84,8 +81,6 @@ getUserWantlist() {
     const user_secret = values[1][1]
     const user_name = userData.username
 
-    console.log(user_name, "USER NAME");
-
       axios({method:'GET', url:`https://api.discogs.com/users/${user_name}/wants`,
       headers:{
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -94,7 +89,6 @@ getUserWantlist() {
      }
     })
     .then((response) => {
-      console.log(response, "FIGURE IT OUT MAAAAAAn");
       this.setState({ records: response.data.wants })
 
   })
@@ -126,7 +120,6 @@ getUserWantlist() {
 
   render() {
     const { records, userData } = this.state
-console.log(this.state, " COOKIN WITH GAS");
     return (
       <View style={styles.mainContainer}>
       <View style={styles.headerContainer}>
@@ -138,7 +131,6 @@ console.log(this.state, " COOKIN WITH GAS");
         contentContainerStyle={styles.textContainer}>
         {records.map((album) => {
           let newRecord = album
-          console.log(newRecord, "FIGURE THE RECORD DUDE NOW");
           return (
             <TouchableOpacity key={newRecord.id} onPress={() => {
             this.props.navigation.navigate('AlbumDetail', {

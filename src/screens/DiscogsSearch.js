@@ -48,7 +48,8 @@ class DiscogsSearch extends Component {
       error: null,
       refreshing: false,
       isModalVisible: false,
-      userData: {}
+      userData: {},
+      artist_id: ''
     };
     this.searchDiscogs = _.debounce(this.searchDiscogs, 210)
 
@@ -68,6 +69,7 @@ class DiscogsSearch extends Component {
    })
 
    componentWillMount() {
+     const { artist_id } = this.state
 
      value = AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then((values) => {
        const user_token = values[0][1]
@@ -104,18 +106,42 @@ class DiscogsSearch extends Component {
        })
      })
 
-   console.log(this.state, "Here's the state");
-
    }
+
+   getArtistReleases = (artist_id) => {
+     console.log(artist_id, "this is the ARTIST ID");
+     AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then((values) => {
+       const user_token = values[0][1]
+       const user_secret = values[1][1]
+     axios({method:'GET', url:`https://api.discogs.com/artists/${artist_id}/releases`,
+     headers:{
+     'Content-Type': 'application/x-www-form-urlencoded',
+     'Authorization':`OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
+     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
+     }
+     })
+     .then((res) => {
+     let artist_releases = res.data.releases
+     this.state.albums.unshift(artist_releases)
+     console.log("YIPPEEE");
+     })
+     .catch((err) => {
+       console.log(err, "ERROR");
+     })
+   })
+   }
+
+
+
 
 
   searchDiscogs = () => {
     const apiKey = "jbUTpFhLTiyyHgLRoBgq";
     const apiSecret = "LSQDaLpplgcCGlkzujkHyUkxImNlWVoI";
-    const { page } = this.state;
+    const { page, artist_id } = this.state;
     const apiSearch = this.state.newText;
-    const releaseType = 'release'
-    const url = `https://api.discogs.com/database/search?artist=${apiSearch}&${releaseType}&key=${apiKey}&secret=${apiSecret}`
+    const releaseType = 'master'
+    const url = `https://api.discogs.com/database/search?q=${apiSearch}&key=${apiKey}&secret=${apiSecret}`
     this.setState({ loading: true });
 
     axios.get(url)
@@ -124,14 +150,38 @@ class DiscogsSearch extends Component {
           albums:page === 1 ? res.data.results : [...this.state.albums, ...res.data.results],
           error: res.error || null,
           loading: false,
-          refreshing: false
+          refreshing: false,
+          artist_id: res.data.results[0].type === 'artist' ? res.data.results[0].id : null
         })
       })
+
+
+
+        .catch( (error) => {
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message);
+        }
+        console.log(error.config);
+      })
+
       .catch(error => {
         this.setState({ error, loading: false });
       });
+}
 
-  };
+
 
    clearTextInput = () => {
      this._textInput.setNativeProps({ text: '' });
@@ -187,14 +237,27 @@ class DiscogsSearch extends Component {
      );
    };
 
+
+   renderResults(item, index) {
+     const { userData, artistId } = this.state
+    if(item.type === "release") {
+      return (
+    <SearchResultItem
+     item={item}
+     key={item.id + index}
+     userData={userData}
+     onSwipeStart={() => this.setState({isSwiping: true})}
+     onSwipeRelease={() => this.setState({isSwiping: false})}
+   />
+ )
+}
+   }
+
    _keyExtractor = (item, index) => item.id + index;
 
 
   render() {
     const { userData, albums } = this.state
-
-    console.log(albums, "DISCOGS SEARCH ALBUMS");
-
     return (
 
       <View style={styles.container}>
@@ -238,15 +301,8 @@ class DiscogsSearch extends Component {
         <FlatList
           data={albums}
           renderItem={({ item, index }) => (
+            this.renderResults(item, index)
 
-
-            <SearchResultItem
-             item={item}
-             key={item.id + index}
-             userData={userData}
-             onSwipeStart={() => this.setState({isSwiping: true})}
-             onSwipeRelease={() => this.setState({isSwiping: false})}
-           />
        )}
           keyExtractor={this._keyExtractor}
           ListFooterComponent={this.renderFooter}
@@ -255,8 +311,8 @@ class DiscogsSearch extends Component {
           onEndReachedThreshold={40}
           style={styles.renderAlbums}
           scrollEnabled={!this.state.isSwiping}
-          // backgroundColor={'#1A1A1A'}
-          // itemBackgroundColor={'#1A1A1A'}
+          backgroundColor={'#1A1A1A'}
+          itemBackgroundColor={'#1A1A1A'}
 
         />
 

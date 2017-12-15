@@ -55,7 +55,7 @@ componentWillMount() {
       this.getUserCollection()
     })
     .then(() => {
-      console.log(records, "COLLECTION RECORDS");
+      console.log(this.state.records, "COLLECTION RECORDS");
     })
       .catch( (error) => {
       if (error.response) {
@@ -85,9 +85,7 @@ getUserCollection() {
     const user_secret = values[1][1]
     const user_name = userData.username
 
-    console.log(user_name, "USER NAME");
-
-      axios({method:'GET', url:`https://api.discogs.com/users/${user_name}/collection/folders/1/releases`,
+      axios({method:'GET', url:`https://api.discogs.com/users/${user_name}/collection/folders/0/releases`,
       headers:{
       'Content-Type': 'application/x-www-form-urlencoded',
       'Authorization':`OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
@@ -126,7 +124,6 @@ getUserCollection() {
 
   render() {
     const { records, userData } = this.state
-    console.log(records, "COLLECTION RECORDS");
     return (
       <View style={styles.mainContainer}>
       <View style={styles.headerContainer}>
@@ -138,7 +135,6 @@ getUserCollection() {
         contentContainerStyle={styles.textContainer}>
         {records.map((album) => {
           let newRecord = album
-          console.log(newRecord, "FIGURE THE RECORD DUDE NOW");
           return (
             <TouchableOpacity key={newRecord.instance_id} onPress={() => {
             this.props.navigation.navigate('AlbumDetail', {
