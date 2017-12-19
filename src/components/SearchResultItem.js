@@ -112,8 +112,8 @@ _showRightModal = () => {
 
 
 render() {
-  let discogsRecord = this.props.item.thumb;
   const { item, onSwipeStart, onSwipeRelease } = this.props;
+  let discogsRecord = item.thumb;
   let discogsString = item.title.split('-');
   const title = discogsString[1];
   const artist = discogsString[0];
@@ -133,12 +133,12 @@ render() {
   const check = require('../img/checkmark.png');
 
   const leftContent = [
-    <View style={[styles.leftSwipeItem, {backgroundColor: leftActionActivated ? '#2EF470' : '#000'}]}>
+    <View key={item.id} style={[styles.leftSwipeItem, {backgroundColor: leftActionActivated ? '#2EF470' : '#000'}]}>
       <Image style={styles.leftIconStyles} source={collectionIcon} />
     </View>
   ];
   const rightContent = [
-    <View style={[styles.rightSwipeItem, {backgroundColor: rightActionActivated ? '#F4702E' : '#000'}]}>
+    <View key={item.id} style={[styles.rightSwipeItem, {backgroundColor: rightActionActivated ? '#F4702E' : '#000'}]}>
         <Image style={styles.rightIconStyles} source={wantlistIcon} />
     </View>
   ];
@@ -150,6 +150,7 @@ render() {
        rightSwiped={this.state.rightSwiped}
     >
     <Swipeable
+      key={item.id}
       leftContent={leftContent}
       rightContent={rightContent}
       leftActionActivationDistance={100}
