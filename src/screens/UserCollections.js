@@ -135,13 +135,14 @@ getUserCollection() {
         contentContainerStyle={styles.textContainer}>
         {records.map((album) => {
           let newRecord = album
+          console.log(newRecord, "USER COLLECTION NEW RECORD TRYN FIND CATNO");
           return (
             <TouchableOpacity key={newRecord.instance_id} onPress={() => {
             this.props.navigation.navigate('AlbumDetail', {
             title: newRecord.basic_information.title,
             thumb: newRecord.basic_information.thumb,
             label: newRecord.basic_information.labels[0].name,
-            catno: newRecord.basic_information.catno,
+            catno: newRecord.basic_information.labels[0].catno,
             year: newRecord.basic_information.year,
            })
          }}>

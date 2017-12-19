@@ -141,7 +141,7 @@ class DiscogsSearch extends Component {
     const { page, artist_id } = this.state;
     const apiSearch = this.state.newText;
     const releaseType = 'master'
-    const url = `https://api.discogs.com/database/search?q=${apiSearch}&key=${apiKey}&secret=${apiSecret}`
+    const url = `https://api.discogs.com/database/search?q=${apiSearch}&artist=${apiSearch}&type=Release&format=Vinyl&key=${apiKey}&secret=${apiSecret}`
     this.setState({ loading: true });
 
     axios.get(url)
@@ -239,6 +239,7 @@ class DiscogsSearch extends Component {
 
 
    renderResults(item, index) {
+     console.log(item, "SEARCH RESULTS ITEM");
      const { userData, artistId } = this.state
     if(item.type === "release") {
       return (

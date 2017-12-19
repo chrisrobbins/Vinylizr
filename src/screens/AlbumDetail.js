@@ -14,6 +14,7 @@ export default class AlbumDetail extends Component {
 
   render() {
     const item = this.props.navigation.state.params
+    console.log(item, " DETAIL ITEM");
     let discogsString = item.title.split('-');
     const title = discogsString[1];
     const artist = discogsString[0];
