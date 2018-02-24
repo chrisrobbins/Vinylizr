@@ -1,3 +1,3 @@
 dependencies: \
-  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/ReactCommon/jschelpers/systemJSCWrapper.cpp \
-  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/React/../ReactCommon/jschelpers/JSCWrapper.h
+  /Users/robbins/code/Vinylizr/node_modules/react-native/ReactCommon/jschelpers/systemJSCWrapper.cpp \
+  /Users/robbins/code/Vinylizr/node_modules/react-native/React/../ReactCommon/jschelpers/JSCWrapper.h

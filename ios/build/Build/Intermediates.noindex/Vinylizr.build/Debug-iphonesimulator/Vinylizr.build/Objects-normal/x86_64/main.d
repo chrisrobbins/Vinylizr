@@ -1,2 +1,2 @@
-dependencies: /Users/chrisrobbins/code/Vinylizr/ios/Vinylizr/main.m \
-  /Users/chrisrobbins/code/Vinylizr/ios/Vinylizr/AppDelegate.h
+dependencies: /Users/robbins/code/Vinylizr/ios/Vinylizr/main.m \
+  /Users/robbins/code/Vinylizr/ios/Vinylizr/AppDelegate.h

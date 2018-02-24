@@ -1,7 +1,7 @@
 dependencies: \
-  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/React/Base/RCTPlatform.m \
-  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/React/Base/RCTPlatform.h \
-  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/React/Base/RCTBridgeModule.h \
-  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/React/Base/RCTDefines.h \
-  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/React/Base/RCTUtils.h \
-  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/React/Base/RCTAssert.h
+  /Users/robbins/code/Vinylizr/node_modules/react-native/React/Base/RCTPlatform.m \
+  /Users/robbins/code/Vinylizr/node_modules/react-native/React/Base/RCTPlatform.h \
+  /Users/robbins/code/Vinylizr/node_modules/react-native/React/Base/RCTBridgeModule.h \
+  /Users/robbins/code/Vinylizr/node_modules/react-native/React/Base/RCTDefines.h \
+  /Users/robbins/code/Vinylizr/node_modules/react-native/React/Base/RCTUtils.h \
+  /Users/robbins/code/Vinylizr/node_modules/react-native/React/Base/RCTAssert.h

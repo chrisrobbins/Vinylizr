@@ -38,27 +38,7 @@
 		</data>
 		<key>Assets.car</key>
 		<data>
-		52yjm6lTEJtRXKM6Rq3nTi8R/Xo=
-		</data>
-		<key>Entypo.ttf</key>
-		<data>
-		R4cKZ91Qhxdl95nKqX2ochnuR8U=
-		</data>
-		<key>EvilIcons.ttf</key>
-		<data>
-		QZrcvnS7qREj2zspB3XjYvIS8+U=
-		</data>
-		<key>Feather.ttf</key>
-		<data>
-		AiHzjp4t0CEzVCcxbr7QXuznQyM=
-		</data>
-		<key>FontAwesome.ttf</key>
-		<data>
-		E7HqtlqYPHpzvHmXxHnWaUP3xss=
-		</data>
-		<key>Foundation.ttf</key>
-		<data>
-		SyvObHkkk6SlcWtv7C2+/olJLD8=
+		Wulzl0Pz5jxVukKDyv+julAV0RA=
 		</data>
 		<key>Frameworks/IDEBundleInjection.framework/IDEBundleInjection</key>
 		<data>
@@ -103,47 +83,11 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		VSsoT+AinmyQixQfuN3Y7tey8TY=
-		</data>
-		<key>Ionicons.ttf</key>
-		<data>
-		D3lWcE/mG0nEHqGiIFEkD3AKK0Q=
-		</data>
-		<key>Lato-Black.ttf</key>
-		<data>
-		VzIpy8RiIZCjit/z2QbgwUZoAr0=
-		</data>
-		<key>Lato-Bold.ttf</key>
-		<data>
-		wzDVnz5k4HolccK6T0EJsgoWj2k=
-		</data>
-		<key>Lato-Light.ttf</key>
-		<data>
-		brlRCP74G9jPv34g1MoGNOWYkBk=
-		</data>
-		<key>Lato-Regular.ttf</key>
-		<data>
-		En8kGHGp/kLNjQc6CDVBDzgk1Xw=
-		</data>
-		<key>LaunchImage-700-568h@2x.png</key>
-		<data>
-		jUzAVDZErJq8r4xRQMYF5Kc4BgE=
+		BaRLk5Y4VNaD77aB2J12373cQIM=
 		</data>
 		<key>LaunchImage-800-667h@2x.png</key>
 		<data>
 		gJSexB6v0S7S0MH1Nt82JfTzy1s=
-		</data>
-		<key>MaterialCommunityIcons.ttf</key>
-		<data>
-		iEMpKSoaB/KiSnpQryZBH+pXuYo=
-		</data>
-		<key>MaterialIcons.ttf</key>
-		<data>
-		/AXeMSNOAJD33cKM4bI69AJssdo=
-		</data>
-		<key>Octicons.ttf</key>
-		<data>
-		43wPh5FmspBv+00q8kJl9AIbRBc=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -155,27 +99,19 @@
 		</data>
 		<key>PlugIns/VinylizrTests.xctest.dSYM/Contents/Resources/DWARF/VinylizrTests</key>
 		<data>
-		csoxaBZySZfNVMsKKQ+QcG5uknY=
+		A2hpFmvyl0KWwOlrXNT5j/bKbdA=
 		</data>
 		<key>PlugIns/VinylizrTests.xctest/Info.plist</key>
 		<data>
-		PhaIvwvAqSH1629onLKzbsNILH8=
+		S/xVnVcNwgnZzrZP8zHEvVrhhBc=
 		</data>
 		<key>PlugIns/VinylizrTests.xctest/VinylizrTests</key>
 		<data>
-		TW+fzjmRrjd7ckrBQi+WYMAzK54=
+		OQ2cheJW81ekzueXJ0ohDvkq0rQ=
 		</data>
 		<key>PlugIns/VinylizrTests.xctest/_CodeSignature/CodeResources</key>
 		<data>
-		/EEUITCtzpVBp872IVtmhDEJS1g=
-		</data>
-		<key>SimpleLineIcons.ttf</key>
-		<data>
-		n/uBpaEREuKS8swyPphIa61ZdZk=
-		</data>
-		<key>Zocial.ttf</key>
-		<data>
-		C9pZx7zT05J94EfgkYdaRCi/0as=
+		1D5zdOf8eYYDjdFnR0AkAzTf4nM=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -272,66 +208,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			52yjm6lTEJtRXKM6Rq3nTi8R/Xo=
+			Wulzl0Pz5jxVukKDyv+julAV0RA=
 			</data>
 			<key>hash2</key>
 			<data>
-			jNdmut5LoglSWcqyYJ/FNxu58cPXNoFyV0gFgfKuHXs=
-			</data>
-		</dict>
-		<key>Entypo.ttf</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			R4cKZ91Qhxdl95nKqX2ochnuR8U=
-			</data>
-			<key>hash2</key>
-			<data>
-			3QhJoVkfiNp5N7I/kiQYpc7FTgdeCePMyo/rYgFvqoI=
-			</data>
-		</dict>
-		<key>EvilIcons.ttf</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			QZrcvnS7qREj2zspB3XjYvIS8+U=
-			</data>
-			<key>hash2</key>
-			<data>
-			J9GohnZmGjoiaVdpUtb3ANoFZEvAMFUR3iO3D3HKVDY=
-			</data>
-		</dict>
-		<key>Feather.ttf</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			AiHzjp4t0CEzVCcxbr7QXuznQyM=
-			</data>
-			<key>hash2</key>
-			<data>
-			sse5lKY8HPl6gBWzGq4njD9mmOqvSOduEWdc+dNdrHY=
-			</data>
-		</dict>
-		<key>FontAwesome.ttf</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			E7HqtlqYPHpzvHmXxHnWaUP3xss=
-			</data>
-			<key>hash2</key>
-			<data>
-			qljzPyOaD7AvXHpsRcBD16msmgkzNYBmlOzW1O3A1qg=
-			</data>
-		</dict>
-		<key>Foundation.ttf</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			SyvObHkkk6SlcWtv7C2+/olJLD8=
-			</data>
-			<key>hash2</key>
-			<data>
-			fh3QPdTOkLZYBSVUzXRZ3xZxZxc4mlUvpMbVal+JM+Y=
+			5PXy7pvsS/SbBKM7QJGlfKclDX0ZYUKxGNKczctjjSs=
 			</data>
 		</dict>
 		<key>Frameworks/IDEBundleInjection.framework/IDEBundleInjection</key>
@@ -435,72 +316,6 @@
 			Jh5i9giCFfo5GhN25CjMKdDJ6Kdlz/p4L95RITR+WeA=
 			</data>
 		</dict>
-		<key>Ionicons.ttf</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			D3lWcE/mG0nEHqGiIFEkD3AKK0Q=
-			</data>
-			<key>hash2</key>
-			<data>
-			u0dnmwuuuEgbf1HGitM65aUmc2y1CxcXzGD/a2X5CKM=
-			</data>
-		</dict>
-		<key>Lato-Black.ttf</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			VzIpy8RiIZCjit/z2QbgwUZoAr0=
-			</data>
-			<key>hash2</key>
-			<data>
-			izK8U5ypXdotIgakMjS187D+lkvSWWbIYLyA7H8G1wI=
-			</data>
-		</dict>
-		<key>Lato-Bold.ttf</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			wzDVnz5k4HolccK6T0EJsgoWj2k=
-			</data>
-			<key>hash2</key>
-			<data>
-			FPfea2FpUDlQYpAuuPcPAcCpASI9tdQPKgVyisSoMPY=
-			</data>
-		</dict>
-		<key>Lato-Light.ttf</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			brlRCP74G9jPv34g1MoGNOWYkBk=
-			</data>
-			<key>hash2</key>
-			<data>
-			BZA1QKBnVJH9qQFaeMBbtYl2mVG++rEqWKVWgXVWa0k=
-			</data>
-		</dict>
-		<key>Lato-Regular.ttf</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			En8kGHGp/kLNjQc6CDVBDzgk1Xw=
-			</data>
-			<key>hash2</key>
-			<data>
-			eucUtjwsi5QL3SEaDMZ48BFoo07qiqE8DfJTZPKSOKc=
-			</data>
-		</dict>
-		<key>LaunchImage-700-568h@2x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			jUzAVDZErJq8r4xRQMYF5Kc4BgE=
-			</data>
-			<key>hash2</key>
-			<data>
-			zk4M8Nt4RUdrZyscD2Fls3DuhrSZpwnGFwXIWTdHmrw=
-			</data>
-		</dict>
 		<key>LaunchImage-800-667h@2x.png</key>
 		<dict>
 			<key>hash</key>
@@ -510,39 +325,6 @@
 			<key>hash2</key>
 			<data>
 			oWNYPJuTQ881RZx/5S5G8MYTj4veyfBgMxwJAQJ8Y5U=
-			</data>
-		</dict>
-		<key>MaterialCommunityIcons.ttf</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			iEMpKSoaB/KiSnpQryZBH+pXuYo=
-			</data>
-			<key>hash2</key>
-			<data>
-			1bSKsbDzuZUQE0oDJhp+sgYYtyyRBwyCUcQIAoyRcm4=
-			</data>
-		</dict>
-		<key>MaterialIcons.ttf</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			/AXeMSNOAJD33cKM4bI69AJssdo=
-			</data>
-			<key>hash2</key>
-			<data>
-			t/Sjq1YgSPKN0fppFgG8QzY6YdD4dtFtgxbFLk8y1pY=
-			</data>
-		</dict>
-		<key>Octicons.ttf</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			43wPh5FmspBv+00q8kJl9AIbRBc=
-			</data>
-			<key>hash2</key>
-			<data>
-			IDC914RgQrcm7e1pDO4UjqugvZKBAae3xLoaLztAPMg=
 			</data>
 		</dict>
 		<key>PlugIns/VinylizrTests.xctest.dSYM/Contents/Info.plist</key>
@@ -560,66 +342,44 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			csoxaBZySZfNVMsKKQ+QcG5uknY=
+			A2hpFmvyl0KWwOlrXNT5j/bKbdA=
 			</data>
 			<key>hash2</key>
 			<data>
-			NTe9dEEOjuE9zPsiSfa120QFADk8tMnT/9y+RutMFac=
+			JV01ixm4dzdHxJ7jn2vwZH9W7guYopVHzPTxs3BUPgA=
 			</data>
 		</dict>
 		<key>PlugIns/VinylizrTests.xctest/Info.plist</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			PhaIvwvAqSH1629onLKzbsNILH8=
+			S/xVnVcNwgnZzrZP8zHEvVrhhBc=
 			</data>
 			<key>hash2</key>
 			<data>
-			1Aso4tuwidpWDgbXlbXXwxJeBI0Dkuk2CF2KUc44jIg=
+			nhAwPwJgd5US5fuAWr6ZRCR5BjIlKtgQQWm2Kq3fq7w=
 			</data>
 		</dict>
 		<key>PlugIns/VinylizrTests.xctest/VinylizrTests</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			TW+fzjmRrjd7ckrBQi+WYMAzK54=
+			OQ2cheJW81ekzueXJ0ohDvkq0rQ=
 			</data>
 			<key>hash2</key>
 			<data>
-			5I/5FhtjrOceUhMoaiXlUoQcpqBFzrp0ns+5dNEGtPo=
+			wbTdmmiL7bglGcgDHJVOiksSb6MdvwKoxaCDZgU34bI=
 			</data>
 		</dict>
 		<key>PlugIns/VinylizrTests.xctest/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			/EEUITCtzpVBp872IVtmhDEJS1g=
+			1D5zdOf8eYYDjdFnR0AkAzTf4nM=
 			</data>
 			<key>hash2</key>
 			<data>
-			J/ca6aIALiOxOn/Xr5zev08Ha+bDbTSMHt8RLSUTXSI=
-			</data>
-		</dict>
-		<key>SimpleLineIcons.ttf</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			n/uBpaEREuKS8swyPphIa61ZdZk=
-			</data>
-			<key>hash2</key>
-			<data>
-			P1Ad2wXHCCm7tRz+nKn/9X854GBFfCV7PM8l33Z/CHA=
-			</data>
-		</dict>
-		<key>Zocial.ttf</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			C9pZx7zT05J94EfgkYdaRCi/0as=
-			</data>
-			<key>hash2</key>
-			<data>
-			17EKHr4YMOWi8I9JA7moDiwZEsDdL3O5P88r+DIhZgI=
+			UEPiXALscMG0FYNBbHW9PXYDzofzPvjtLj2/U0d0608=
 			</data>
 		</dict>
 	</dict>

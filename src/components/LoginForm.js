@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Text, View, Linking } from 'react-native'
 import axios from 'axios'
 import DeepLinking from 'react-native-deep-linking'
+import * as Animatable from 'react-native-animatable';
 
 import {
   Button,
@@ -13,7 +14,7 @@ import {
 
 
 class LoginForm extends Component {
-  
+
 
   static navigationOptions = () => ({
     drawerLabel: 'LoginForm',
@@ -40,16 +41,24 @@ discogsRedirect = () => {
       <View
         style={styles.sectionContainer}>
 
-      <View style={styles.containerLogo}>
-        <Logo />
-      </View>
+        <View style={styles.containerLogo}>
+          <Animatable.View animation="zoomInUp">
+              <Logo />
+
+          </Animatable.View>
+        </View>
+
 
 
         <CardSection>
-        <Button
-          style={styles.buttonSection} onPress={this.discogsRedirect}>
-          Log in
-        </Button>
+          <Animatable.View animation="zoomInUp" style={styles.animateStyles}>
+            <Button
+              onPress={this.discogsRedirect}>
+              Log in
+            </Button>
+
+          </Animatable.View>
+
         </CardSection>
 
       </View>
@@ -66,6 +75,11 @@ const styles = {
     flex: 1,
     justifyContent: 'center',
     flexDirection: 'column'
+  },
+  animateStyles: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    marginBottom: 75
   },
   form: {
     flex: 1,
@@ -102,9 +116,6 @@ const styles = {
     alignSelf: 'stretch',
     backgroundColor: 'transparent',
     height: 20,
-  },
-  buttonSection: {
-    marginTop: 25
   },
   TextInputStyle: {
     color: '#fff',

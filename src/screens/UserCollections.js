@@ -36,7 +36,7 @@ class UserCollections extends Component {
 
 componentWillMount() {
 
-  value = AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then((values) => {
+  AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then((values) => {
     const user_token = values[0][1]
     const user_secret = values[1][1]
 
@@ -80,7 +80,7 @@ componentWillMount() {
 
 getUserCollection() {
   const { userData } = this.state
-  value = AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then((values) => {
+  AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then((values) => {
     const user_token = values[0][1]
     const user_secret = values[1][1]
     const user_name = userData.username

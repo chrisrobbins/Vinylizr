@@ -15,22 +15,22 @@ import {
 
 const TabBar = TabNavigator({
   Collection: {
-    path: 'vinylizr/:collection',
+    path: 'vinylizr://collection',
     screen: UserCollections,
     navigationOptions: {
       header: null
     },
   },
   Wantlist: {
-    path: 'vinylizr/:wantlist',
+    path: 'vinylizr://wantlist',
    screen: WantList
  },
   UserProfile: {
-    path: 'vinylizr/:UserProfile',
+    path: 'vinylizr://UserProfile',
     screen: UserProfile
   },
   DiscogsSearch: {
-    path: 'vinylizr/:search',
+    path: 'vinylizr://search',
     screen: DiscogsSearch
    }
 
