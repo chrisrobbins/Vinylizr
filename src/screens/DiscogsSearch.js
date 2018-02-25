@@ -227,16 +227,18 @@ const styles = {
     marginBottom: 0,
   },
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: '#000'
   },
   inputStyleContainer: {
     flexDirection: 'column',
     alignItems: 'flex-start',
-    marginTop: 25,
     height: 40,
     borderBottomWidth: 1,
     borderBottomColor: "#ffffff",
-    marginBottom: 0
+    marginBottom: 0,
+    marginTop:40,
+    backgroundColor: '#000'
   },
   inputStyle: {
     color: '#fff',

@@ -42,7 +42,7 @@ discogsRedirect = () => {
         style={styles.sectionContainer}>
 
         <View style={styles.containerLogo}>
-          <Animatable.View animation="zoomInUp">
+          <Animatable.View animation="fadeIn">
               <Logo />
 
           </Animatable.View>
@@ -51,7 +51,7 @@ discogsRedirect = () => {
 
 
         <CardSection>
-          <Animatable.View animation="zoomInUp" style={styles.animateStyles}>
+          <Animatable.View animation="fadeIn" style={styles.animateStyles}>
             <Button
               onPress={this.discogsRedirect}>
               Log in
@@ -69,7 +69,8 @@ discogsRedirect = () => {
 const styles = {
   sectionContainer: {
     flex: 1,
-    backgroundColor: '#000000'
+    backgroundColor: '#000000',
+
   },
   containerLogo: {
     flex: 1,
@@ -81,9 +82,7 @@ const styles = {
     justifyContent: 'flex-end',
     marginBottom: 75
   },
-  form: {
-    flex: 1,
-  },
+
 
   errorTextStyle: {
     fontSize: 20,
@@ -92,44 +91,21 @@ const styles = {
   },
   sectionContainer: {
     flex: 1,
-    marginLeft: 20,
-    marginRight: 20,
     flexDirection: 'column',
-    marginTop: 45,
-    backgroundColor: '#000000'
+    backgroundColor: '#000000',
+    paddingLeft: 20,
+    paddingRight: 20
 
 
   },
-  textStyle: {
-    alignSelf: 'center',
-    color: 'white',
-    fontSize: 16,
-  },
-  forgotTextStyle: {
-    color: 'white',
-    alignSelf: 'flex-end',
-    bottom: 25
 
-  },
   createButton: {
     flex:1,
     alignSelf: 'stretch',
     backgroundColor: 'transparent',
     height: 20,
-  },
-  TextInputStyle: {
-    color: '#fff',
-    fontSize: 18,
-    borderBottomWidth: 1,
-    borderBottomColor: '#fff',
-    paddingBottom: 7,
-    height: 40,
-    marginTop: 40
-  },
-  textInputContainerStyle: {
-    flexDirection: 'column',
 
-  }
+  },
   };
 
 export default LoginForm;
