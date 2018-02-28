@@ -6,6 +6,7 @@ import {
   FlatList,
   TouchableOpacity,
   Linking,
+  ActivityIndicator,
   AsyncStorage
 } from 'react-native';
 import { Header } from '../components/common';
@@ -20,7 +21,7 @@ class UserCollections extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {userData: {}, records: []}
+    this.state = {userData: {}, records: [], refreshing: false}
   }
 
   static navigationOptions = ({ screenProps }) => ({
@@ -93,7 +94,7 @@ getUserCollection() {
      }
     })
     .then((response) => {
-      this.setState({records: response.data.releases})
+      this.setState({records: response.data.releases, refreshing: false})
 
   })
 
@@ -119,7 +120,45 @@ getUserCollection() {
   })
 }
 
+handleRefresh = () => {
+  this.setState(
+    {
+      page: 1,
+      seed: this.state.seed + 1,
+      refreshing: true
+    },
+    () => {
+      this.getUserCollection();
+    }
+  );
+};
+handleLoadMore = () => {
+  this.setState(
+    {
+      page: this.state.page + 1
+    },
+    () => {
+      this.searchDiscogs;
+    }
+  );
+};
+renderFooter = () => {
+  if (!this.state.loading) return null;
+  return (
+    <View
+      style={{
+        paddingVertical: 20,
+        borderTopWidth: 1,
+        borderColor: "#CED0CE"
+      }}
+    >
+      <ActivityIndicator animating size="large" />
+    </View>
+  );
+};
 
+
+_keyExtractor = (item, index) => item.id + index;
 
 
   render() {
@@ -133,7 +172,7 @@ getUserCollection() {
         <FlatList
           data={records}
           renderItem={({ item, index }) => (
-            <TouchableOpacity key={item.id} onPress={() => {
+            <TouchableOpacity key={item.intance_id} onPress={() => {
             this.props.navigation.navigate('AlbumDetail', {
             title: item.basic_information.title,
             thumb: item.basic_information.thumb,
@@ -154,6 +193,7 @@ getUserCollection() {
           keyExtractor={this._keyExtractor}
           ListFooterComponent={this.renderFooter}
           refreshing={this.state.refreshing}
+          onRefresh={this.handleRefresh}
           onEndReached={this.handleLoadMore}
           onEndReachedThreshold={40}
           style={styles.textContainer}
