@@ -7,31 +7,6 @@ import {
   DELETE_COLLECTION_ITEM,
 } from './types.js';
 
-export const fetchCollection = () => {
-
-  let userId = fire.auth().currentUser.uid;
-  // console.log(fire.auth().currentUser);
-  return dispatch => {
-    //read database when child is added to collection
-    fire.database().ref(`users/${userId}/collection/albums`).once('value', snapshot => {
-      const allData = []
-      snapshot.forEach((childSnapshot) => {
-        const key = childSnapshot.key;
-        const album = childSnapshot.val();
-        const eachCollection = {
-          key,
-          album
-        }
-        allData.push(eachCollection);
-      })
-
-      dispatch({
-        type: FETCH_COLLECTION,
-        payload: allData
-      });
-    });
- }
-}
 
 
 export const saveCollectionItem = (item) => {

@@ -3,7 +3,7 @@ import {
   View,
   Text,
   Image,
-  ScrollView,
+  FlatList,
   TouchableOpacity,
   Linking,
   AsyncStorage
@@ -130,34 +130,36 @@ getUserCollection() {
       <Header headerText={"Collection"} />
     </View>
       <View style={styles.contentContainer}>
-      <ScrollView
-        automaticallyAdjustContentInsets={false}
-        contentContainerStyle={styles.textContainer}>
-        {records.map((album) => {
-          let newRecord = album
-          console.log(newRecord, "USER COLLECTION NEW RECORD TRYN FIND CATNO");
-          return (
-            <TouchableOpacity key={newRecord.instance_id} onPress={() => {
+        <FlatList
+          data={records}
+          renderItem={({ item, index }) => (
+            <TouchableOpacity key={item.id} onPress={() => {
             this.props.navigation.navigate('AlbumDetail', {
-            title: newRecord.basic_information.title,
-            thumb: newRecord.basic_information.thumb,
-            label: newRecord.basic_information.labels[0].name,
-            catno: newRecord.basic_information.labels[0].catno,
-            year: newRecord.basic_information.year,
+            title: item.basic_information.title,
+            thumb: item.basic_information.thumb,
+            label: item.basic_information.labels[0].name,
+            catno: item.basic_information.labels[0].catno,
+            year: item.basic_information.year,
            })
          }}>
 
 
             <Image
               style={styles.albumCovers}
-              source={{ uri: newRecord.basic_information.cover_image }}
+              source={{ uri: item.basic_information.cover_image }}
             />
             </TouchableOpacity>
           )
-         })
-        }
+         }
+          keyExtractor={this._keyExtractor}
+          ListFooterComponent={this.renderFooter}
+          refreshing={this.state.refreshing}
+          onEndReached={this.handleLoadMore}
+          onEndReachedThreshold={40}
+          style={styles.textContainer}
+          contentContainerStyle={styles.contentContainerStyle}
 
-        </ScrollView>
+        />
         </View>
       </View>
     );
@@ -166,15 +168,19 @@ getUserCollection() {
 
 const styles = {
   textContainer: {
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: 'column',
     paddingBottom: 50,
   },
   contentContainer: {
     flex: 1,
-    backgroundColor: '#000'
+    backgroundColor: '#000',
+
+  },
+  contentContainerStyle: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    flexWrap: 'wrap',
+
 
   },
   mainContainer: {

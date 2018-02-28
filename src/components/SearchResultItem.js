@@ -20,6 +20,7 @@ import { CardSection } from '../components/common/CardSection';
 import { Button } from '../components/common/Button';
 import Swipeable from 'react-native-swipeable';
 import SearchSuccessModal from '../components/SearchSuccessModal';
+import { fetchUser } from '../actions/user-action.js';
 
 
 class SearchResultItem extends Component {

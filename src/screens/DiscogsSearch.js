@@ -28,6 +28,8 @@ import {
   StatusBar,
   AsyncStorage
 } from 'react-native';
+
+
 class DiscogsSearch extends Component {
   constructor(props) {
     super(props);
@@ -206,8 +208,7 @@ class DiscogsSearch extends Component {
           onEndReachedThreshold={40}
           style={styles.renderAlbums}
           scrollEnabled={!this.state.isSwiping}
-          // backgroundColor={'#1A1A1A'}
-          // itemBackgroundColor={'#1A1A1A'}
+          
         />
     </View>
     );
