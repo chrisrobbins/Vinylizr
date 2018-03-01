@@ -1,5 +1,5 @@
-import _ from 'lodash';
-import * as types from '../actions/types';
+import _ from 'lodash'
+import * as types from '../actions/types'
 
 
 const initialState = {
@@ -9,7 +9,7 @@ const initialState = {
 }
 
 export default function(state = initialState, action) {
-  // console.log("action ", action);
+  // console.log("action ", action)
   switch (action.type) {
     case types.FETCH_WANTLIST:
       return {
@@ -18,8 +18,8 @@ export default function(state = initialState, action) {
       }
     }
     case types.DELETE_WANTLIST_ITEM:
-      return _.omit(state, action.payload);
+      return _.omit(state, action.payload)
   }
 
-  return state;
+  return state
 }

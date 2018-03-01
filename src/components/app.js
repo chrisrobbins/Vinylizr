@@ -1,14 +1,14 @@
-import './ReactotronConfig';
-import React, { Component } from 'react';
-import { View, StatusBar, Linking, AsyncStorage } from 'react-native';
-import * as firebase from "firebase";
-import { Spinner } from './common';
-import MainNav from './MainNav';
-import LoginForm from './LoginForm';
+import './ReactotronConfig'
+import React, { Component } from 'react'
+import { View, StatusBar, Linking, AsyncStorage } from 'react-native'
+import * as firebase from "firebase"
+import { Spinner } from './common'
+import MainNav from './MainNav'
+import LoginForm from './LoginForm'
 import DeepLinking from 'react-native-deep-linking'
 import axios from 'axios'
 
-console.disableYellowBox = true;
+console.disableYellowBox = true
 
 export default class App extends Component {
   constructor(props) {
@@ -52,7 +52,7 @@ export default class App extends Component {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Authorization':`OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}",oauth_callback="vinylizr://collection"`,
-          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
+          'User-Agent': 'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
         },
       }
 
@@ -69,20 +69,20 @@ export default class App extends Component {
     if (error.response) {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx
-      console.log(error.response.data);
-      console.log(error.response.status);
-      console.log(error.response.headers);
+      console.log(error.response.data)
+      console.log(error.response.status)
+      console.log(error.response.headers)
     } else if (error.request) {
       // The request was made but no response was received
       // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
       // http.ClientRequest in node.js
-      console.log(error.request);
+      console.log(error.request)
     } else {
       // Something happened in setting up the request that triggered an Error
-      console.log('Error', error.message);
+      console.log('Error', error.message)
     }
-    console.log(error.config);
-  });
+    console.log(error.config)
+  })
 }
 
 getToken = () => {
@@ -96,7 +96,7 @@ getToken = () => {
     console.log(error, "NOT WORKING FOR GETITING TOKENS")
   })
 } else {
-  console.log("not Logged In");
+  console.log("not Logged In")
 }
 }
 
@@ -113,18 +113,18 @@ getSecret = () => {
     console.log(error, "NOT WORKING FOR GETITING TOKENS")
   })
 } else {
-  console.log("not Logged In");
+  console.log("not Logged In")
 }
 }
 
 
 componentDidMount() {
 
-Linking.addEventListener('url', this._handleOpenURL);
+Linking.addEventListener('url', this._handleOpenURL)
 
 }
 componentWillUnmount() {
-Linking.removeEventListener('url', this._handleOpenURL);
+Linking.removeEventListener('url', this._handleOpenURL)
 }
 _handleOpenURL(event) {
   let dscUrl = event.url.split('=')
@@ -141,17 +141,17 @@ this.getAccessToken()
 //ACCESS TOKEN/VERIFIER
 getAccessToken() {
   const {access_token, verifier, token_secret} = this.state
-  console.log("CMON I NEED THIS: ", access_token);
+  console.log("CMON I NEED THIS: ", access_token)
   axios({method:'POST', url:`https://api.discogs.com/oauth/access_token`,
   headers:{
   'Content-Type': 'application/x-www-form-urlencoded',
   'Authorization':`OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${access_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${token_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}",oauth_verifier="${verifier}"`,
-  'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
+  'User-Agent': 'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
  }
 })
   .then((response) => {
     this.logIn()
-    console.log(response.data, "OH MAN I HOPE THIS WORKS");
+    console.log(response.data, "OH MAN I HOPE THIS WORKS")
     const stringBreak = response.data.split('=')
     let secretSplit = stringBreak[1].split('&')
     const oauthToken = stringBreak[2]
@@ -167,20 +167,20 @@ getAccessToken() {
   if (error.response) {
     // The request was made and the server responded with a status code
     // that falls out of the range of 2xx
-    console.log(error.response.data);
-    console.log(error.response.status);
-    console.log(error.response.headers);
+    console.log(error.response.data)
+    console.log(error.response.status)
+    console.log(error.response.headers)
   } else if (error.request) {
     // The request was made but no response was received
     // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
     // http.ClientRequest in node.js
-    console.log(error.request);
+    console.log(error.request)
   } else {
     // Something happened in setting up the request that triggered an Error
-    console.log('Error', error.message);
+    console.log('Error', error.message)
   }
-  console.log(error.config);
-});
+  console.log(error.config)
+})
 }
 
 
@@ -192,7 +192,7 @@ getAccessToken() {
       case false:
         return <LoginForm access_token={this.state.access_token}  />
       default:
-        return <Spinner size="large" />;
+        return <Spinner size="large" />
     }
   }
 
@@ -206,7 +206,7 @@ getAccessToken() {
     {this.renderContent()}
     </View>
 
-    );
+    )
   }
 }
 
@@ -218,4 +218,4 @@ const styles = {
   status: {
     backgroundColor: '#000000'
   }
-};
+}

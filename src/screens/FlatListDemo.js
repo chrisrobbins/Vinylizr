@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import { View, Text, FlatList, ActivityIndicator } from "react-native";
-import { List, ListItem, SearchBar } from "react-native-elements";
+import React, { Component } from "react"
+import { View, Text, FlatList, ActivityIndicator } from "react-native"
+import { List, ListItem, SearchBar } from "react-native-elements"
 
 class FlatListDemo extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       loading: false,
@@ -13,17 +13,17 @@ class FlatListDemo extends Component {
       seed: 1,
       error: null,
       refreshing: false
-    };
+    }
   }
 
   componentDidMount() {
-    this.makeRemoteRequest();
+    this.makeRemoteRequest()
   }
 
   makeRemoteRequest = () => {
-    const { page, seed } = this.state;
-    const url = `https://randomuser.me/api/?seed=${seed}&page=${page}&results=20`;
-    this.setState({ loading: true });
+    const { page, seed } = this.state
+    const url = `https://randomuser.me/api/?seed=${seed}&page=${page}&results=20`
+    this.setState({ loading: true })
 
     fetch(url)
       .then(res => res.json())
@@ -33,12 +33,12 @@ class FlatListDemo extends Component {
           error: res.error || null,
           loading: false,
           refreshing: false
-        });
+        })
       })
       .catch(error => {
-        this.setState({ error, loading: false });
-      });
-  };
+        this.setState({ error, loading: false })
+      })
+  }
 
   handleRefresh = () => {
     this.setState(
@@ -48,10 +48,10 @@ class FlatListDemo extends Component {
         refreshing: true
       },
       () => {
-        this.makeRemoteRequest();
+        this.makeRemoteRequest()
       }
-    );
-  };
+    )
+  }
 
   handleLoadMore = () => {
     this.setState(
@@ -59,10 +59,10 @@ class FlatListDemo extends Component {
         page: this.state.page + 1
       },
       () => {
-        this.makeRemoteRequest();
+        this.makeRemoteRequest()
       }
-    );
-  };
+    )
+  }
 
   renderSeparator = () => {
     return (
@@ -74,15 +74,15 @@ class FlatListDemo extends Component {
           marginLeft: "14%"
         }}
       />
-    );
-  };
+    )
+  }
 
   renderHeader = () => {
-    return <SearchBar placeholder="Type Here..." lightTheme round />;
-  };
+    return <SearchBar placeholder="Type Here..." lightTheme round />
+  }
 
   renderFooter = () => {
-    if (!this.state.loading) return null;
+    if (!this.state.loading) return null
 
     return (
       <View
@@ -94,8 +94,8 @@ class FlatListDemo extends Component {
       >
         <ActivityIndicator animating size="large" />
       </View>
-    );
-  };
+    )
+  }
 
   render() {
     return (
@@ -121,8 +121,8 @@ class FlatListDemo extends Component {
           onEndReachedThreshold={50}
         />
       </List>
-    );
+    )
   }
 }
 
-export default FlatListDemo;
+export default FlatListDemo

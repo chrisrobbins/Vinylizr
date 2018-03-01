@@ -1,23 +1,23 @@
-import React, { Component } from 'react';
-import { Text, View, Image, ScrollView, Dimensions } from 'react-native';
-import { DetailButton } from '../components/common';
-import Stars from 'react-native-stars-rating';
-const windowSize = Dimensions.get('window');
+import React, { Component } from 'react'
+import { Text, View, Image, ScrollView, Dimensions } from 'react-native'
+import { DetailButton } from '../components/common'
+import Stars from 'react-native-stars-rating'
+const windowSize = Dimensions.get('window')
 
 
 export default class AlbumDetail extends Component {
   static navigationOptions = {
     drawerLabel: 'AlbumDetail',
     header: null
-  };
+  }
 
 
   render() {
     const item = this.props.navigation.state.params
-    console.log(item, " DETAIL ITEM");
-    let discogsString = item.title.split('-');
-    const title = discogsString[1];
-    const artist = discogsString[0];
+    console.log(item, " DETAIL ITEM")
+    let discogsString = item.title.split('-')
+    const title = discogsString[1]
+    const artist = discogsString[0]
     const label = item.label
     return(
       <View style={styles.detailScrollView}>

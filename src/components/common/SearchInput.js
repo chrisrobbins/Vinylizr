@@ -1,8 +1,8 @@
-import React from 'react';
-import { TextInput, View } from 'react-native';
+import React from 'react'
+import { TextInput, View } from 'react-native'
 
 const SearchInput = ({ ref, value, onChangeText, placeholder, secureTextEntry, onChange }) => {
-  const { inputStyle, containerStyle } = styles;
+  const { inputStyle, containerStyle } = styles
 
   return (
     <View style={containerStyle}>
@@ -19,8 +19,8 @@ const SearchInput = ({ ref, value, onChangeText, placeholder, secureTextEntry, o
       />
 
     </View>
-  );
-};
+  )
+}
 
 const styles = {
   inputStyle: {
@@ -44,7 +44,7 @@ const styles = {
     borderBottomColor: "#ffffff",
     marginBottom: 0
   }
-};
+}
 
 
-export { SearchInput };
+export { SearchInput }

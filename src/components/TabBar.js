@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
-import { Image } from 'react-native';
+import React, { Component } from 'react'
+import { Image } from 'react-native'
 
 
-import DiscogsSearch from '../screens/DiscogsSearch';
-import UserProfile from '../screens/UserProfile';
-import UserCollections from '../screens/UserCollections';
-import WantList from '../screens/WantList';
-import AlbumDetail from '../screens/AlbumDetail';
+import DiscogsSearch from '../screens/DiscogsSearch'
+import UserProfile from '../screens/UserProfile'
+import UserCollections from '../screens/UserCollections'
+import WantList from '../screens/WantList'
+import AlbumDetail from '../screens/AlbumDetail'
 
 
 import {
   TabNavigator,
-} from 'react-navigation';
+} from 'react-navigation'
 
 const TabBar = TabNavigator({
   Collection: {
@@ -43,6 +43,6 @@ const TabBar = TabNavigator({
       backgroundColor: '#1A1A1A'
     }
   },
-});
+})
 
-export default TabBar;
+export default TabBar

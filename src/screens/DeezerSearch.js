@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { Component } from 'react'
+import axios from 'axios'
 
 import {
    Button,
    BarCode,
    ClearText
-} from '../components/common';
+} from '../components/common'
 
-import SearchResultItem from '../components/SearchResultItem';
+import SearchResultItem from '../components/SearchResultItem'
 
 
-import _ from 'lodash';
+import _ from 'lodash'
 
 import {
   View,
@@ -18,11 +18,11 @@ import {
   TextInput,
   FlatList,
   ActivityIndicator
-} from 'react-native';
+} from 'react-native'
 
 class DeezerSearch extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.searchDeezer = this.searchDeezer.bind(this)
 
     this.state = {
@@ -33,16 +33,16 @@ class DeezerSearch extends Component {
       seed: 1,
       error: null,
       refreshing: false,
-    };
+    }
     this.searchDeezer = _.debounce(this.searchDeezer, 215)
   }
 
 
   searchDeezer = () => {
-    const { page } = this.state;
-    const apiSearch = this.state.newText;
+    const { page } = this.state
+    const apiSearch = this.state.newText
     const url = `https://api.deezer.com/search/album/?q=${apiSearch}&index=0&limit=40&output=json`
-    this.setState({ loading: true });
+    this.setState({ loading: true })
 
     axios.get(url)
       .then(res => {
@@ -51,24 +51,24 @@ class DeezerSearch extends Component {
           error: res.error || null,
           loading: false,
           refreshing: false
-        });
-        console.log(res.data.data);
+        })
+        console.log(res.data.data)
       })
       .catch(error => {
-        this.setState({ error, loading: false });
-      });
-      console.log(this.state);
-  };
+        this.setState({ error, loading: false })
+      })
+      console.log(this.state)
+  }
 
 
 
 
  // searchDeezer() {
- //   let apiSearch = this.state.newText;
+ //   let apiSearch = this.state.newText
  //   axios.get(
  //     `https://api.deezer.com/search/album/?q=${apiSearch}&index=0&limit=20&output=json`
  //   )
- //   .then((response) => this.setState({ albums: response.data.data }));
+ //   .then((response) => this.setState({ albums: response.data.data }))
  // }
 
   //  renderAlbums(album) {
@@ -78,11 +78,11 @@ class DeezerSearch extends Component {
 
 
    clearTextInput() {
-     this._textInput.setNativeProps({ text: '' });
-     this.setState({ text: '', albums: [] });
+     this._textInput.setNativeProps({ text: '' })
+     this.setState({ text: '', albums: [] })
    }
    renderInputButton() {
-     return <ClearText onPress={this.clearTextInput.bind(this)} />;
+     return <ClearText onPress={this.clearTextInput.bind(this)} />
    }
 
   //  handleRefresh = () => {
@@ -93,10 +93,10 @@ class DeezerSearch extends Component {
   //        refreshing: true
   //      },
   //      () => {
-  //        this.searchDeezer();
+  //        this.searchDeezer()
   //      }
-  //    );
-  //  };
+  //    )
+  //  }
 
    handleLoadMore = () => {
      this.setState(
@@ -104,13 +104,13 @@ class DeezerSearch extends Component {
          page: this.state.page + 1
        },
        () => {
-         this.searchDeezer();
+         this.searchDeezer()
        }
-     );
-   };
+     )
+   }
 
    renderFooter = () => {
-     if (!this.state.loading) return null;
+     if (!this.state.loading) return null
      return (
        <View
          style={{
@@ -121,24 +121,24 @@ class DeezerSearch extends Component {
        >
          <ActivityIndicator animating size="large" />
        </View>
-     );
-   };
+     )
+   }
 
-   _keyExtractor = (item) => item.id;
+   _keyExtractor = (item) => item.id
 
    _renderItem = ({item}) => (
      <SearchResultItem
       album={item}
       key={item.id}
     />
-  );
+  )
 //   arr.forEach(function(item) {
 //     if (names.indexOf(item) === -1) {
-//       names.push(item);
+//       names.push(item)
 //     }
-// });
+// })
   render() {
-    console.log(this.state.albums, 'items');
+    console.log(this.state.albums, 'items')
     return (
       <View style={styles.container}>
 
@@ -189,7 +189,7 @@ class DeezerSearch extends Component {
         />
 
     </View>
-    );
+    )
   }
 }
 
@@ -229,6 +229,6 @@ const styles = {
     paddingBottom: 0,
     marginBottom: 0
   },
-};
+}
 
-export default DeezerSearch;
+export default DeezerSearch

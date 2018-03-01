@@ -1,5 +1,5 @@
-import _ from 'lodash';
-import * as types from '../actions/types';
+import _ from 'lodash'
+import * as types from '../actions/types'
 
 
 const initialState = {
@@ -7,8 +7,8 @@ const initialState = {
 }
 
 export default function(state = initialState, action) {
-  console.log(action, "USER ACTION");
-  // console.log("action ", action);
+  console.log(action, "USER ACTION")
+  // console.log("action ", action)
   switch (action.type) {
     case types.FETCH_USER:
       return {
@@ -16,5 +16,5 @@ export default function(state = initialState, action) {
     }
   }
 
-  return state;
+  return state
 }

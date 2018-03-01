@@ -1,23 +1,23 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import { connect } from 'react-redux';
+import React, { Component } from 'react'
+import axios from 'axios'
+import { connect } from 'react-redux'
 import {
   saveCollectionItem,
   fetchCollection,
-} from '../actions/collection-action';
+} from '../actions/collection-action'
 import {
   saveWantlistItem,
   fetchWantlist,
-} from '../actions/wantlist-action';
+} from '../actions/wantlist-action'
 import {
    Button,
    BarCode,
    ClearText
-} from '../components/common';
-import fire from '../components/fire';
-import SearchResultItem from '../components/SearchResultItem';
-import SearchSuccessModal from '../components/SearchSuccessModal';
-import _ from 'lodash';
+} from '../components/common'
+import fire from '../components/fire'
+import SearchResultItem from '../components/SearchResultItem'
+import SearchSuccessModal from '../components/SearchSuccessModal'
+import _ from 'lodash'
 import {
   View,
   Text,
@@ -27,12 +27,12 @@ import {
   FlatList,
   StatusBar,
   AsyncStorage
-} from 'react-native';
+} from 'react-native'
 
 
 class DiscogsSearch extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.searchDiscogs = this.searchDiscogs.bind(this)
     this.state = {
       text: '',
@@ -45,8 +45,8 @@ class DiscogsSearch extends Component {
       refreshing: false,
       isModalVisible: false,
       userData: {}
-    };
-    this.searchDiscogs = _.debounce(this.searchDiscogs, 210)
+    }
+    this.searchDiscogs = _.debounce(this.searchDiscogs, 250)
   }
    static navigationOptions = ({screenProps}) => ({
      header: null,
@@ -68,7 +68,7 @@ class DiscogsSearch extends Component {
          headers:{
          'Content-Type': 'application/x-www-form-urlencoded',
          'Authorization':`OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
-         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
+         'User-Agent': 'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
         }
        })
          .then((response) => {
@@ -78,31 +78,30 @@ class DiscogsSearch extends Component {
          if (error.response) {
            // The request was made and the server responded with a status code
            // that falls out of the range of 2xx
-           console.log(error.response.data);
-           console.log(error.response.status);
-           console.log(error.response.headers);
+           console.log(error.response.data)
+           console.log(error.response.status)
+           console.log(error.response.headers)
          } else if (error.request) {
            // The request was made but no response was received
            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
            // http.ClientRequest in node.js
-           console.log(error.request);
+           console.log(error.request)
          } else {
            // Something happened in setting up the request that triggered an Error
-           console.log('Error', error.message);
+           console.log('Error', error.message)
          }
-         console.log(error.config);
+         console.log(error.config)
        })
      })
-   console.log(this.state, "Here's the state");
+   console.log(this.state, "Here's the state")
    }
   searchDiscogs = () => {
-    const apiKey = "jbUTpFhLTiyyHgLRoBgq";
-    const apiSecret = "LSQDaLpplgcCGlkzujkHyUkxImNlWVoI";
-    const { page } = this.state;
-    const apiSearch = this.state.newText;
-    const releaseType = 'release'
-    const url = `https://api.discogs.com/database/search?artist=${apiSearch}&${releaseType}&key=${apiKey}&secret=${apiSecret}`
-    this.setState({ loading: true });
+    const apiKey = "jbUTpFhLTiyyHgLRoBgq"
+    const apiSecret = "LSQDaLpplgcCGlkzujkHyUkxImNlWVoI"
+    const { page } = this.state
+    const apiSearch = this.state.newText
+    const url = `https://api.discogs.com/database/search?q=${apiSearch}&?artist&key=${apiKey}&secret=${apiSecret}`
+    this.setState({ loading: true })
     axios.get(url)
       .then(res => {
         this.setState({
@@ -113,23 +112,23 @@ class DiscogsSearch extends Component {
         })
       })
       .catch(error => {
-        this.setState({ error, loading: false });
-      });
-  };
+        this.setState({ error, loading: false })
+      })
+  }
    clearTextInput = () => {
-     this._textInput.setNativeProps({ text: '' });
-     this.setState({ text: '', albums: [] });
+     this._textInput.setNativeProps({ text: '' })
+     this.setState({ text: '', albums: [] })
    }
    renderInputButton = () => {
-     return <ClearText onPress={this.clearTextInput.bind(this)} />;
+     return <ClearText onPress={this.clearTextInput.bind(this)} />
    }
   //  handleScroll = () => {
-  //   const {currentlyOpenSwipeable} = this.state;
+  //   const {currentlyOpenSwipeable} = this.state
   //
   //   if (currentlyOpenSwipeable) {
-  //     currentlyOpenSwipeable.recenter();
+  //     currentlyOpenSwipeable.recenter()
   //   }
-  // };
+  // }
    handleRefresh = () => {
      this.setState(
        {
@@ -138,22 +137,22 @@ class DiscogsSearch extends Component {
          refreshing: true
        },
        () => {
-         this.searchDiscogs;
+         this.searchDiscogs
        }
-     );
-   };
+     )
+   }
    handleLoadMore = () => {
      this.setState(
        {
          page: this.state.page + 1
        },
        () => {
-         this.searchDiscogs;
+         this.searchDiscogs
        }
-     );
-   };
+     )
+   }
    renderFooter = () => {
-     if (!this.state.loading) return null;
+     if (!this.state.loading) return null
      return (
        <View
          style={{
@@ -164,12 +163,12 @@ class DiscogsSearch extends Component {
        >
          <ActivityIndicator animating size="large" />
        </View>
-     );
-   };
-   _keyExtractor = (item, index) => item.id + index;
+     )
+   }
+   _keyExtractor = (item, index) => item.id + index
   render() {
     const { userData, albums } = this.state
-    console.log(albums, "DISCOGS SEARCH ALBUMS");
+    console.log(albums, "DISCOGS SEARCH ALBUMS")
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
@@ -204,14 +203,15 @@ class DiscogsSearch extends Component {
           keyExtractor={this._keyExtractor}
           ListFooterComponent={this.renderFooter}
           refreshing={this.state.refreshing}
+          onRefresh={this.handleRefresh}
           onEndReached={this.handleLoadMore}
           onEndReachedThreshold={40}
           style={styles.renderAlbums}
           scrollEnabled={!this.state.isSwiping}
-          
+
         />
     </View>
-    );
+    )
   }
 }
 const styles = {
@@ -253,7 +253,7 @@ const styles = {
     paddingBottom: 0,
     marginBottom: 0
   },
-};
+}
 const mapStateToProps = (state) => {
     return {
       ...state
