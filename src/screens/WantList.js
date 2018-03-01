@@ -89,7 +89,7 @@ getUserWantlist() {
      }
     })
     .then((response) => {
-      console.log(response, "WANTLIST RESPONSE")
+      // console.log(response, "WANTLIST RESPONSE")
       this.setState({ records: response.data.wants, refreshing: false })
 
   })

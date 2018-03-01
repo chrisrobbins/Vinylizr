@@ -28,12 +28,9 @@ import {
   StatusBar,
   AsyncStorage
 } from 'react-native'
-
-
 class DiscogsSearch extends Component {
   constructor(props) {
     super(props)
-    this.searchDiscogs = this.searchDiscogs.bind(this)
     this.state = {
       text: '',
       loading: false,
@@ -46,7 +43,8 @@ class DiscogsSearch extends Component {
       isModalVisible: false,
       userData: {}
     }
-    this.searchDiscogs = _.debounce(this.searchDiscogs, 250)
+
+    this.searchDiscogs = _.debounce(this.searchDiscogs, 210)
   }
    static navigationOptions = ({screenProps}) => ({
      header: null,
@@ -100,7 +98,8 @@ class DiscogsSearch extends Component {
     const apiSecret = "LSQDaLpplgcCGlkzujkHyUkxImNlWVoI"
     const { page } = this.state
     const apiSearch = this.state.newText
-    const url = `https://api.discogs.com/database/search?q=${apiSearch}&?artist&key=${apiKey}&secret=${apiSecret}`
+    const releaseType = 'master'
+    const url = `https://api.discogs.com/database/search?artist=${apiSearch}&type=${releaseType}&key=${apiKey}&secret=${apiSecret}`
     this.setState({ loading: true })
     axios.get(url)
       .then(res => {
@@ -165,10 +164,14 @@ class DiscogsSearch extends Component {
        </View>
      )
    }
+
    _keyExtractor = (item, index) => item.id + index
+
   render() {
     const { userData, albums } = this.state
-    console.log(albums, "DISCOGS SEARCH ALBUMS")
+
+  let records = _.uniqBy(albums, 'title');
+  console.log(records, "SEARCH RECORDS");
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
@@ -190,7 +193,7 @@ class DiscogsSearch extends Component {
         {this.renderInputButton()}
       </View>
         <FlatList
-          data={albums}
+          data={records}
           renderItem={({ item, index }) => (
             <SearchResultItem
              item={item}
@@ -203,12 +206,12 @@ class DiscogsSearch extends Component {
           keyExtractor={this._keyExtractor}
           ListFooterComponent={this.renderFooter}
           refreshing={this.state.refreshing}
-          onRefresh={this.handleRefresh}
           onEndReached={this.handleLoadMore}
           onEndReachedThreshold={40}
           style={styles.renderAlbums}
           scrollEnabled={!this.state.isSwiping}
-
+          // backgroundColor={'#1A1A1A'}
+          // itemBackgroundColor={'#1A1A1A'}
         />
     </View>
     )

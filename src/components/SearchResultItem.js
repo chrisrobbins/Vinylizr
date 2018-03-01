@@ -34,9 +34,6 @@ constructor(props) {
     rightSwiped: false
     }
 }
-componentWillMount() {
-  this.saveToWantlist()
-}
 
 saveToCollection = () => {
   const { userData, item } = this.props
@@ -91,7 +88,6 @@ saveToWantlist = () => {
     const user_secret = values[1][1]
     const user_name = userData.username
     const release_id = item.id
-    console.log(item, "this is the item id")
 
       axios({method:'PUT',
       url:`https://api.discogs.com/users/${user_name}/wants/${release_id}`,
@@ -102,8 +98,9 @@ saveToWantlist = () => {
      }
     })
     .then((response) => {
-      console.log(response, "WTF RESPOND WANTS")})
-      this.setState(records: response.data.wants)
+      this.setState({records: response.data.wants})
+      })
+
 
   .then(() => {
     this._showRightModal()
