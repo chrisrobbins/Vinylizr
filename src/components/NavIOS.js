@@ -1,22 +1,22 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
-import { TabBarIOS } from 'react-native'
+import { TabBarIOS } from 'react-native';
 
-import DiscogsSearch from '../screens/DiscogsSearch'
-import UserProfile from '../screens/UserProfile'
-import UserCollections from '../screens/UserCollections'
-import WantList from '../screens/WantList'
+import DiscogsSearch from '../screens/DiscogsSearch';
+import UserProfile from '../screens/UserProfile';
+import UserCollections from '../screens/UserCollections';
+import WantList from '../screens/WantList';
 
 
 
 class Nav extends Component {
-  static title = '<TabBarIOS>'
-  static description = 'Tab-based navigation.'
-  static displayName = 'Vinylizr'
+  static title = '<TabBarIOS>';
+  static description = 'Tab-based navigation.';
+  static displayName = 'Vinylizr';
 
   state = {
     selectedTab: 'UserCollections',
-  }
+  };
 
 
   render() {
@@ -33,7 +33,7 @@ class Nav extends Component {
           onPress={() => {
             this.setState({
               selectedTab: 'UserCollections',
-            })
+            });
           }}>
           <UserCollections />
         </TabBarIOS.Item>
@@ -46,7 +46,7 @@ class Nav extends Component {
           onPress={() => {
             this.setState({
               selectedTab: 'wantList',
-            })
+            });
           }}>
           <WantList />
         </TabBarIOS.Item>
@@ -59,7 +59,7 @@ class Nav extends Component {
           onPress={() => {
             this.setState({
               selectedTab: 'profile',
-            })
+            });
           }}>
           <UserProfile />
         </TabBarIOS.Item>
@@ -72,14 +72,14 @@ class Nav extends Component {
           onPress={() => {
             this.setState({
               selectedTab: 'search'
-            })
+            });
           }}>
           <DiscogsSearch />
         </TabBarIOS.Item>
       </TabBarIOS>
-    )
+    );
   }
 }
 
 
-export default Nav
+export default Nav;

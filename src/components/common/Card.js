@@ -1,5 +1,5 @@
-import React from 'react'
-import { View } from 'react-native'
+import React from 'react';
+import { View } from 'react-native';
 
 const Card = (props) => {
   return (
@@ -8,8 +8,8 @@ const Card = (props) => {
       {props.children}
       </View>
 
-  )
-}
+  );
+};
 
 const styles = {
   flexContainer: {
@@ -18,6 +18,6 @@ const styles = {
     marginTop: 0,
   }
 
-}
+};
 
-export { Card }
+export { Card };

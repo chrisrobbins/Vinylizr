@@ -1,8 +1,8 @@
-import React from 'react'
-import { TextInput, View } from 'react-native'
+import React from 'react';
+import { TextInput, View } from 'react-native';
 
 const Input = ({ value, onChangeText, placeholder, secureTextEntry }) => {
-  const { inputStyle, containerStyle } = styles
+  const { inputStyle, containerStyle } = styles;
 
   return (
     <View style={containerStyle}>
@@ -18,8 +18,8 @@ const Input = ({ value, onChangeText, placeholder, secureTextEntry }) => {
       />
 
     </View>
-  )
-}
+  );
+};
 
 const styles = {
   inputStyle: {
@@ -34,6 +34,6 @@ const styles = {
     alignItems: 'flex-end',
     marginTop: 35
   }
-}
+};
 
-export { Input }
+export { Input };

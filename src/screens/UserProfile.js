@@ -15,7 +15,7 @@ import { Button, Header } from '../components/common'
 export default class UserProfile extends Component {
 
   componentWillMount() {
-    console.log(this.props, "Navigator props")
+    console.log(this.props, "Navigator props");
   }
 
   static navigationOptions = ({screenProps}) => ({
@@ -51,7 +51,7 @@ export default class UserProfile extends Component {
         </View>
     </View>
     </View>
-    )
+    );
   }
 }
 
@@ -77,4 +77,4 @@ const styles = {
   headerContainer: {
     alignSelf: 'stretch'
   }
-}
+};

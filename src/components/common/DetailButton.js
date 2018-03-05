@@ -1,5 +1,5 @@
-import React from 'react'
-import { Text, TouchableOpacity } from 'react-native'
+import React from 'react';
+import { Text, TouchableOpacity } from 'react-native';
 
 const DetailButton = ({ onPress, children, btnStyle, txtStyle }) => {
 
@@ -9,8 +9,8 @@ const DetailButton = ({ onPress, children, btnStyle, txtStyle }) => {
         {children}
       </Text>
     </TouchableOpacity>
-  )
-}
+  );
+};
 
 
-export { DetailButton }
+export { DetailButton };

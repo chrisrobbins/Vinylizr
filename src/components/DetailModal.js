@@ -1,7 +1,7 @@
 
-import React, { Component } from 'react'
-import { Text, TouchableOpacity, View } from 'react-native'
-import Modal from 'react-native-modal'
+import React, { Component } from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
+import Modal from 'react-native-modal';
 import AlbumDetail from '../screens/AlbumDetail'
 
 export default class DetailModal extends Component {
@@ -20,11 +20,11 @@ export default class DetailModal extends Component {
       source={require('../img/search.png')}
     />
   ),
-}
+};
 
 
   componentWillMount() {
-    console.log(this.props, "modal props bro!!")
+    console.log(this.props, "modal props bro!!");
   }
 
   _showModal = () => {

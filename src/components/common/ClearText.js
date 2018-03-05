@@ -1,21 +1,21 @@
-import React from 'react'
+import React from 'react';
 import {
   View,
   Image,
   TouchableOpacity
-} from 'react-native'
+} from 'react-native';
 
-const inputClearText = require('../../img/clear_text.png')
+const inputClearText = require('../../img/clear_text.png');
 
 const ClearText = ({ onPress }) => {
-  const { containerStyle, clearText } = styles
+  const { containerStyle, clearText } = styles;
 
   return (
     <TouchableOpacity onPress={ onPress } style={containerStyle}>
       <Image style={clearText} source={inputClearText} />
     </TouchableOpacity>
-  )
-}
+  );
+};
 
 const styles = {
   containerStyle: {
@@ -30,6 +30,6 @@ const styles = {
     alignSelf: 'flex-end',
     marginBottom: 15
   }
-}
+};
 
-export { ClearText }
+export { ClearText };

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Text, View, Linking } from 'react-native'
 import axios from 'axios'
 import DeepLinking from 'react-native-deep-linking'
-import * as Animatable from 'react-native-animatable'
+import * as Animatable from 'react-native-animatable';
 
 import {
   Button,
@@ -22,7 +22,7 @@ class LoginForm extends Component {
     cardStyle: {
       backgroundColor: '#000000'
     },
-  })
+  });
 
 
 
@@ -62,7 +62,7 @@ discogsRedirect = () => {
         </CardSection>
 
       </View>
-    )
+    );
   }
 }
 
@@ -106,6 +106,6 @@ const styles = {
     height: 20,
 
   },
-  }
+  };
 
-export default LoginForm
+export default LoginForm;

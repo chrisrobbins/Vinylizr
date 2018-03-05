@@ -13,7 +13,7 @@
 # and specify the fully qualified class name to the JavaScript interface
 # class:
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *
+#   public *;
 #}
 
 # Disabling obfuscation is useful if you collect stack traces from production crashes
@@ -32,21 +32,21 @@
 -keep @com.facebook.proguard.annotations.DoNotStrip class *
 -keep @com.facebook.common.internal.DoNotStrip class *
 -keepclassmembers class * {
-    @com.facebook.proguard.annotations.DoNotStrip *
-    @com.facebook.common.internal.DoNotStrip *
+    @com.facebook.proguard.annotations.DoNotStrip *;
+    @com.facebook.common.internal.DoNotStrip *;
 }
 
 -keepclassmembers @com.facebook.proguard.annotations.KeepGettersAndSetters class * {
-  void set*(***)
-  *** get*()
+  void set*(***);
+  *** get*();
 }
 
--keep class * extends com.facebook.react.bridge.JavaScriptModule { * }
--keep class * extends com.facebook.react.bridge.NativeModule { * }
--keepclassmembers,includedescriptorclasses class * { native <methods> }
--keepclassmembers class *  { @com.facebook.react.uimanager.UIProp <fields> }
--keepclassmembers class *  { @com.facebook.react.uimanager.annotations.ReactProp <methods> }
--keepclassmembers class *  { @com.facebook.react.uimanager.annotations.ReactPropGroup <methods> }
+-keep class * extends com.facebook.react.bridge.JavaScriptModule { *; }
+-keep class * extends com.facebook.react.bridge.NativeModule { *; }
+-keepclassmembers,includedescriptorclasses class * { native <methods>; }
+-keepclassmembers class *  { @com.facebook.react.uimanager.UIProp <fields>; }
+-keepclassmembers class *  { @com.facebook.react.uimanager.annotations.ReactProp <methods>; }
+-keepclassmembers class *  { @com.facebook.react.uimanager.annotations.ReactPropGroup <methods>; }
 
 -dontwarn com.facebook.react.**
 
@@ -58,13 +58,13 @@
 
 -keepattributes Signature
 -keepattributes *Annotation*
--keep class okhttp3.** { * }
--keep interface okhttp3.** { * }
+-keep class okhttp3.** { *; }
+-keep interface okhttp3.** { *; }
 -dontwarn okhttp3.**
 
 # okio
 
--keep class sun.misc.Unsafe { * }
+-keep class sun.misc.Unsafe { *; }
 -dontwarn java.nio.file.*
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
 -dontwarn okio.**

@@ -7,7 +7,7 @@ const config = {
   "projectId": "vinylizr-e5665",
   "storageBucket": "vinylizr-e5665.appspot.com",
   "messagingSenderId": "189276288673"
-}
+};
 
-const fire = firebase.initializeApp(config)
-export default fire
+const fire = firebase.initializeApp(config);
+export default fire;

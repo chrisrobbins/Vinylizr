@@ -24,6 +24,6 @@ const MainNav = StackNavigator({
     LoginForm: {screen: LoginForm },
 },
 { HeaderMode: 'screen' }
-)
+);
 
-export default MainNav
+export default MainNav;

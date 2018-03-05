@@ -1,13 +1,13 @@
-import React from 'react'
-import { View } from 'react-native'
+import React from 'react';
+import { View } from 'react-native';
 
 const InputCardSection = (props) => {
   return (
     <View style={styles.containerStyle}>
       {props.children}
     </View>
-  )
-}
+  );
+};
 
 const styles = {
   containerStyle: {
@@ -21,6 +21,6 @@ const styles = {
     borderBottomWidth: 1,
     borderBottomColor: 'white'
   }
-}
+};
 
-export { InputCardSection }
+export { InputCardSection };

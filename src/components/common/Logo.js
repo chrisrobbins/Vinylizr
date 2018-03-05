@@ -1,14 +1,14 @@
-import React from 'react'
+import React from 'react';
 import {
   View,
   Image,
   Text
-} from 'react-native'
+} from 'react-native';
 
-const vinylLogo = require('../../img/vinyl_logo.png')
+const vinylLogo = require('../../img/vinyl_logo.png');
 
 const Logo = () => {
-  const { containerStyle, logo, textStyle } = styles
+  const { containerStyle, logo, textStyle } = styles;
   return (
     <View style={containerStyle}>
       <Image style={logo} source={vinylLogo} />
@@ -16,8 +16,8 @@ const Logo = () => {
         Vinylizr
       </Text>
     </View>
-  )
-}
+  );
+};
 
 const styles = {
   containerStyle: {
@@ -33,6 +33,6 @@ const styles = {
     color: '#F42E4A',
     fontSize: 18
   }
-}
+};
 
-export { Logo }
+export { Logo };

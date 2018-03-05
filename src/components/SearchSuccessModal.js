@@ -74,4 +74,4 @@ const styles = {
     color: '#fff',
     fontSize: 20
   }
-}
+};
