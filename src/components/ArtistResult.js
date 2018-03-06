@@ -145,6 +145,19 @@ render() {
     wantlistSavedTextStyle
   } = styles
 
+let releaseArray = []
+let masterArray = []
+  records.map((record) => {
+    if(record.type === 'release') {
+      releaseArray.push(record)
+    }
+    if (record.type === 'master') {
+      masterArray.push(record)
+    }
+    return releaseArray
+  })
+
+
 
 
   const Header = ({ isOpen }) =>
@@ -169,7 +182,7 @@ render() {
 
   const Content = () =>
       <FlatList
-        data={records}
+        data={releaseArray}
         renderItem={({ item, index }) => (
           <SearchResultItem
            item={item}
