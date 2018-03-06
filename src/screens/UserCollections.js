@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   View,
   Text,
@@ -8,11 +8,11 @@ import {
   Linking,
   ActivityIndicator,
   AsyncStorage
-} from 'react-native';
-import { Header } from '../components/common';
-import { connect } from 'react-redux';
-import { fetchCollection } from '../actions/collection-action.js';
-import _ from 'lodash';
+} from 'react-native'
+import { Header } from '../components/common'
+import { connect } from 'react-redux'
+import { fetchCollection } from '../actions/collection-action.js'
+import _ from 'lodash'
 import { NavigationActions } from 'react-navigation'
 import axios from 'axios'
 
@@ -21,7 +21,7 @@ class UserCollections extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {userData: {}, records: [], refreshing: false}
+    this.state = {userData: {}, records: [], refreshing: false, page: 1}
   }
 
   static navigationOptions = ({ screenProps }) => ({
@@ -45,7 +45,7 @@ componentWillMount() {
       headers:{
       'Content-Type': 'application/x-www-form-urlencoded',
       'Authorization':`OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
-      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
+      'User-Agent': 'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
      }
     })
       .then((response) => {
@@ -56,41 +56,41 @@ componentWillMount() {
       this.getUserCollection()
     })
     .then(() => {
-      console.log(this.state.records, "COLLECTION RECORDS");
+      console.log(this.state.records, "COLLECTION RECORDS")
     })
       .catch( (error) => {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
+        console.log(error.response.data)
+        console.log(error.response.status)
+        console.log(error.response.headers)
       } else if (error.request) {
         // The request was made but no response was received
         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
         // http.ClientRequest in node.js
-        console.log(error.request);
+        console.log(error.request)
       } else {
         // Something happened in setting up the request that triggered an Error
-        console.log('Error', error.message);
+        console.log('Error', error.message)
       }
-      console.log(error.config);
+      console.log(error.config)
     })
   })
 }
 
 getUserCollection() {
-  const { userData } = this.state
+  const { userData, page } = this.state
   AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then((values) => {
     const user_token = values[0][1]
     const user_secret = values[1][1]
     const user_name = userData.username
 
-      axios({method:'GET', url:`https://api.discogs.com/users/${user_name}/collection/folders/0/releases`,
+      axios({method:'GET', url:`https://api.discogs.com/users/${user_name}/collection/folders/0/releases?page=${page}&per_page=100`,
       headers:{
       'Content-Type': 'application/x-www-form-urlencoded',
       'Authorization':`OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
-      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
+      'User-Agent': 'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
      }
     })
     .then((response) => {
@@ -103,19 +103,19 @@ getUserCollection() {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
+        console.log(error.response.data)
+        console.log(error.response.status)
+        console.log(error.response.headers)
       } else if (error.request) {
         // The request was made but no response was received
         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
         // http.ClientRequest in node.js
-        console.log(error.request);
+        console.log(error.request)
       } else {
         // Something happened in setting up the request that triggered an Error
-        console.log('Error', error.message);
+        console.log('Error', error.message)
       }
-      console.log(error.config);
+      console.log(error.config)
     })
   })
 }
@@ -128,22 +128,22 @@ handleRefresh = () => {
       refreshing: true
     },
     () => {
-      this.getUserCollection();
+      this.getUserCollection()
     }
-  );
-};
+  )
+}
 handleLoadMore = () => {
   this.setState(
     {
       page: this.state.page + 1
     },
     () => {
-      this.searchDiscogs;
+      this.getUserCollection()
     }
-  );
-};
+  )
+}
 renderFooter = () => {
-  if (!this.state.loading) return null;
+  if (!this.state.loading) return null
   return (
     <View
       style={{
@@ -154,11 +154,11 @@ renderFooter = () => {
     >
       <ActivityIndicator animating size="large" />
     </View>
-  );
-};
+  )
+}
 
 
-_keyExtractor = (item, index) => item.id + index;
+_keyExtractor = (item, index) => item.id + index
 
 
   render() {
@@ -202,7 +202,7 @@ _keyExtractor = (item, index) => item.id + index;
         />
         </View>
       </View>
-    );
+    )
   }
 }
 
@@ -234,7 +234,7 @@ const styles = {
     marginTop: .5,
     marginBottom: .5
   }
-};
+}
 
 const mapStateToProps = (state) => {
     return {
@@ -253,4 +253,4 @@ const mapDispatchToProps = (dispatch) => {
 
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserCollections);
+export default connect(mapStateToProps, mapDispatchToProps)(UserCollections)

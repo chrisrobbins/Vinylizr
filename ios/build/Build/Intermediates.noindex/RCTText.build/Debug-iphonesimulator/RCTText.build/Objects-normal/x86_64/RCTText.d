@@ -1,21 +1,21 @@
 dependencies: \
-  /Users/robbins/code/Vinylizr/node_modules/react-native/Libraries/Text/RCTText.m \
-  /Users/robbins/code/Vinylizr/node_modules/react-native/Libraries/Text/RCTText.h \
-  /Users/robbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTUtils.h \
-  /Users/robbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTAssert.h \
-  /Users/robbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTDefines.h \
-  /Users/robbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/React/UIView+React.h \
-  /Users/robbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTComponent.h \
-  /Users/robbins/code/Vinylizr/node_modules/react-native/Libraries/Text/RCTShadowText.h \
-  /Users/robbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTShadowView.h \
-  /Users/robbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTRootView.h \
-  /Users/robbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBridge.h \
-  /Users/robbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBridgeDelegate.h \
-  /Users/robbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTJavaScriptLoader.h \
-  /Users/robbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBridgeModule.h \
-  /Users/robbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTFrameUpdate.h \
-  /Users/robbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTInvalidating.h \
-  /Users/robbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/Yoga.h \
-  /Users/robbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/YGEnums.h \
-  /Users/robbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/YGMacros.h \
-  /Users/robbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTTextDecorationLineType.h
+  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/Libraries/Text/RCTText.m \
+  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/Libraries/Text/RCTText.h \
+  /Users/chrisrobbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTUtils.h \
+  /Users/chrisrobbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTAssert.h \
+  /Users/chrisrobbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTDefines.h \
+  /Users/chrisrobbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/React/UIView+React.h \
+  /Users/chrisrobbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTComponent.h \
+  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/Libraries/Text/RCTShadowText.h \
+  /Users/chrisrobbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTShadowView.h \
+  /Users/chrisrobbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTRootView.h \
+  /Users/chrisrobbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBridge.h \
+  /Users/chrisrobbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBridgeDelegate.h \
+  /Users/chrisrobbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTJavaScriptLoader.h \
+  /Users/chrisrobbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBridgeModule.h \
+  /Users/chrisrobbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTFrameUpdate.h \
+  /Users/chrisrobbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTInvalidating.h \
+  /Users/chrisrobbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/Yoga.h \
+  /Users/chrisrobbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/YGEnums.h \
+  /Users/chrisrobbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/YGMacros.h \
+  /Users/chrisrobbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTTextDecorationLineType.h

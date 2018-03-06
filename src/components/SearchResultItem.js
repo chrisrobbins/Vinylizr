@@ -7,21 +7,13 @@ import {
   TouchableHighlight,
   AsyncStorage
 } from 'react-native';
+
 import axios from 'axios'
-import { connect } from 'react-redux';
-import {
-  saveCollectionItem,
-} from '../actions/collection-action';
-import {
-  saveWantlistItem,
-} from '../actions/wantlist-action';
 
 import { CardSection } from '../components/common/CardSection';
 import { Button } from '../components/common/Button';
 import Swipeable from 'react-native-swipeable';
 import SearchSuccessModal from '../components/SearchSuccessModal';
-import { fetchUser } from '../actions/user-action.js';
-
 
 class SearchResultItem extends Component {
 constructor(props) {
@@ -33,6 +25,10 @@ constructor(props) {
     leftSwiped: false,
     rightSwiped: false
     }
+}
+
+componentWillMount() {
+  console.log(this.props.item, "FUCK BRUH");
 }
 
 saveToCollection = () => {
@@ -51,8 +47,7 @@ saveToCollection = () => {
      }
     })
     .then((response) => {
-      console.log(response, " SAVE TO COLLECTION RESPONSE");
-      this.setState({records: response.data.releases})
+      this.setState({items: response.data.releases})
 
   })
   .then(() => {
@@ -159,10 +154,10 @@ _showRightModal = () => {
 
 render() {
   const { item, onSwipeStart, onSwipeRelease } = this.props;
+  console.log(item, "THIS BETTER BE WILCO");
   let discogsRecord = item.thumb;
-  let discogsString = item.title.split('-');
-  const title = discogsString[1];
-  const artist = discogsString[0];
+  const title = item.title;
+  const artist = item.artist;
 
   const {
     imageView,
@@ -301,23 +296,5 @@ const styles = {
     }
 };
 
-const mapStateToProps = (state) => {
-    return {
-      ...state
-    }
-}
-// for click events so that dispatches can happen
-const mapDispatchToProps = (dispatch) => {
-    return {
-      saveCollectionItem: (item) => {
-          dispatch(saveCollectionItem(item))
-      },
-      saveWantlistItem: (item) => {
-          dispatch(saveWantlistItem(item))
-      },
-    }
-  }
 
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(SearchResultItem);
+export default SearchResultItem

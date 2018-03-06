@@ -1,3 +1,3 @@
 dependencies: \
-  /Users/robbins/code/Vinylizr/node_modules/react-native/Libraries/Text/RCTUITextView.m \
-  /Users/robbins/code/Vinylizr/node_modules/react-native/Libraries/Text/RCTUITextView.h
+  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/Libraries/Text/RCTUITextView.m \
+  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/Libraries/Text/RCTUITextView.h

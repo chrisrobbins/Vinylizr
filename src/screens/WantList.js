@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   View,
   Text,
   Image,
-  ScrollView,
+  FlatList,
   TouchableOpacity,
   Linking,
   AsyncStorage
-} from 'react-native';
-import { Header } from '../components/common';
-import { connect } from 'react-redux';
-import { fetchWantlist } from '../actions/wantlist-action.js';
-import _ from 'lodash';
+} from 'react-native'
+import { Header } from '../components/common'
+import { connect } from 'react-redux'
+import { fetchWantlist } from '../actions/wantlist-action.js'
+import _ from 'lodash'
 import { NavigationActions } from 'react-navigation'
 import axios from 'axios'
 
@@ -20,7 +20,7 @@ class Wantlist extends Component {
   constructor(props) {
     super(props)
 
-    this.state = { userData: {}, records: [] }
+    this.state = {userData: {}, records: [], refreshing: false}
   }
 
   static navigationOptions = ({screenProps}) => ({
@@ -43,7 +43,7 @@ componentWillMount() {
       headers:{
       'Content-Type': 'application/x-www-form-urlencoded',
       'Authorization':`OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
-      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
+      'User-Agent': 'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
      }
     })
       .then((response) => {
@@ -57,19 +57,19 @@ componentWillMount() {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
+        console.log(error.response.data)
+        console.log(error.response.status)
+        console.log(error.response.headers)
       } else if (error.request) {
         // The request was made but no response was received
         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
         // http.ClientRequest in node.js
-        console.log(error.request);
+        console.log(error.request)
       } else {
         // Something happened in setting up the request that triggered an Error
-        console.log('Error', error.message);
+        console.log('Error', error.message)
       }
-      console.log(error.config);
+      console.log(error.config)
     })
   })
 }
@@ -85,7 +85,7 @@ getUserWantlist() {
       headers:{
       'Content-Type': 'application/x-www-form-urlencoded',
       'Authorization':`OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
-      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
+      'User-Agent': 'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
      }
     })
     .then((response) => {
@@ -99,22 +99,63 @@ getUserWantlist() {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
+        console.log(error.response.data)
+        console.log(error.response.status)
+        console.log(error.response.headers)
       } else if (error.request) {
         // The request was made but no response was received
         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
         // http.ClientRequest in node.js
-        console.log(error.request);
+        console.log(error.request)
       } else {
         // Something happened in setting up the request that triggered an Error
-        console.log('Error', error.message);
+        console.log('Error', error.message)
       }
-      console.log(error.config);
+      console.log(error.config)
     })
   })
 }
+
+handleRefresh = () => {
+  this.setState(
+    {
+      page: 1,
+      seed: this.state.seed + 1,
+      refreshing: true
+    },
+    () => {
+      this.getUserWantlist()
+    }
+  )
+}
+handleLoadMore = () => {
+  this.setState(
+    {
+      page: this.state.page + 1
+    },
+    () => {
+      this.getUserWantlist()
+    }
+  )
+}
+renderFooter = () => {
+  if (!this.state.loading) return null
+  return (
+    <View
+      style={{
+        paddingVertical: 20,
+        borderTopWidth: 1,
+        borderColor: "#CED0CE"
+      }}
+    >
+      <ActivityIndicator animating size="large" />
+    </View>
+  )
+}
+
+
+_keyExtractor = (item, index) => item.id + index
+
 
 
 
@@ -127,64 +168,69 @@ getUserWantlist() {
       <Header headerText={"Wantlist"} />
     </View>
       <View style={styles.contentContainer}>
-      <ScrollView
-        automaticallyAdjustContentInsets={false}
-        contentContainerStyle={styles.textContainer}>
-        {records.map((album) => {
-          let newRecord = album
-          return (
-            <TouchableOpacity key={newRecord.id} onPress={() => {
+        <FlatList
+          data={records}
+          renderItem={({ item, index }) => (
+            <TouchableOpacity key={item.instance_id} onPress={() => {
             this.props.navigation.navigate('AlbumDetail', {
-            title: newRecord.basic_information.title,
-            thumb: newRecord.basic_information.thumb,
-            label: newRecord.basic_information.labels[0].name,
-            catno: newRecord.basic_information.catno,
-            year: newRecord.basic_information.year,
+            title: item.basic_information.title,
+            thumb: item.basic_information.thumb,
+            label: item.basic_information.labels[0].name,
+            catno: item.basic_information.labels[0].catno,
+            year: item.basic_information.year,
            })
          }}>
 
-
             <Image
               style={styles.albumCovers}
-              source={{ uri: newRecord.basic_information.thumb }}
+              source={{ uri: item.basic_information.thumb }}
             />
             </TouchableOpacity>
           )
-         })
-        }
+         }
+          keyExtractor={this._keyExtractor}
+          ListFooterComponent={this.renderFooter}
+          refreshing={this.state.refreshing}
+          onRefresh={this.handleRefresh}
+          onEndReachedThreshold={40}
+          style={styles.textContainer}
+          contentContainerStyle={styles.contentContainerStyle}
 
-        </ScrollView>
+        />
         </View>
       </View>
-    );
+    )
   }
-}
-
-const styles = {
-  textContainer: {
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    paddingBottom: 50,
-  },
-  contentContainer: {
-    flex: 1,
-    backgroundColor: '#000'
-
-  },
-  mainContainer: {
-    flex: 1,
-  },
-  albumCovers: {
-    height: 124,
-    width: 124,
-    marginLeft: .5,
-    marginRight: .5,
-    marginTop: .5,
-    marginBottom: .5
   }
-};
+  const styles = {
+    textContainer: {
+      flexDirection: 'column',
+      paddingBottom: 50,
+    },
+    contentContainer: {
+      flex: 1,
+      backgroundColor: '#000',
+
+    },
+    contentContainerStyle: {
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      flexWrap: 'wrap',
+
+
+    },
+    mainContainer: {
+      flex: 1,
+    },
+    albumCovers: {
+      height: 124,
+      width: 124,
+      marginLeft: .5,
+      marginRight: .5,
+      marginTop: .5,
+      marginBottom: .5
+    }
+  }
 
 const mapStateToProps = (state) => {
     return {
@@ -203,4 +249,4 @@ const mapDispatchToProps = (dispatch) => {
 
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Wantlist);
+export default connect(mapStateToProps, mapDispatchToProps)(Wantlist)

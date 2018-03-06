@@ -1,23 +1,23 @@
 dependencies: \
-  /Users/robbins/code/Vinylizr/node_modules/react-native/React/Modules/RCTDevSettings.mm \
-  /Users/robbins/code/Vinylizr/node_modules/react-native/React/Modules/RCTDevSettings.h \
-  /Users/robbins/code/Vinylizr/node_modules/react-native/React/Base/RCTBridge.h \
-  /Users/robbins/code/Vinylizr/node_modules/react-native/React/Base/RCTBridgeDelegate.h \
-  /Users/robbins/code/Vinylizr/node_modules/react-native/React/Base/RCTJavaScriptLoader.h \
-  /Users/robbins/code/Vinylizr/node_modules/react-native/React/Base/RCTDefines.h \
-  /Users/robbins/code/Vinylizr/node_modules/react-native/React/Base/RCTBridgeModule.h \
-  /Users/robbins/code/Vinylizr/node_modules/react-native/React/Base/RCTFrameUpdate.h \
-  /Users/robbins/code/Vinylizr/node_modules/react-native/React/Base/RCTInvalidating.h \
-  /Users/robbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/jschelpers/JavaScriptCore.h \
-  /Users/robbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/jschelpers/JSCWrapper.h \
-  /Users/robbins/code/Vinylizr/node_modules/react-native/React/Modules/JSCSamplingProfiler.h \
-  /Users/robbins/code/Vinylizr/node_modules/react-native/React/Base/RCTBridge+Private.h \
-  /Users/robbins/code/Vinylizr/node_modules/react-native/React/Base/RCTEventDispatcher.h \
-  /Users/robbins/code/Vinylizr/node_modules/react-native/React/Base/RCTLog.h \
-  /Users/robbins/code/Vinylizr/node_modules/react-native/React/Base/RCTAssert.h \
-  /Users/robbins/code/Vinylizr/node_modules/react-native/React/Base/RCTUtils.h \
-  /Users/robbins/code/Vinylizr/node_modules/react-native/React/Profiler/RCTProfile.h \
-  /Users/robbins/code/Vinylizr/node_modules/react-native/React/DevSupport/RCTPackagerClient.h \
-  /Users/robbins/code/Vinylizr/node_modules/react-native/React/DevSupport/RCTPackagerClientResponder.h \
-  /Users/robbins/code/Vinylizr/node_modules/react-native/React/DevSupport/RCTReloadPackagerMethod.h \
-  /Users/robbins/code/Vinylizr/node_modules/react-native/React/DevSupport/RCTSamplingProfilerPackagerMethod.h
+  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/React/Modules/RCTDevSettings.mm \
+  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/React/Modules/RCTDevSettings.h \
+  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/React/Base/RCTBridge.h \
+  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/React/Base/RCTBridgeDelegate.h \
+  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/React/Base/RCTJavaScriptLoader.h \
+  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/React/Base/RCTDefines.h \
+  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/React/Base/RCTBridgeModule.h \
+  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/React/Base/RCTFrameUpdate.h \
+  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/React/Base/RCTInvalidating.h \
+  /Users/chrisrobbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/jschelpers/JavaScriptCore.h \
+  /Users/chrisrobbins/code/Vinylizr/ios/build/Build/Products/Debug-iphonesimulator/include/jschelpers/JSCWrapper.h \
+  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/React/Modules/JSCSamplingProfiler.h \
+  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/React/Base/RCTBridge+Private.h \
+  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/React/Base/RCTEventDispatcher.h \
+  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/React/Base/RCTLog.h \
+  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/React/Base/RCTAssert.h \
+  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/React/Base/RCTUtils.h \
+  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/React/Profiler/RCTProfile.h \
+  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/React/DevSupport/RCTPackagerClient.h \
+  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/React/DevSupport/RCTPackagerClientResponder.h \
+  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/React/DevSupport/RCTReloadPackagerMethod.h \
+  /Users/chrisrobbins/code/Vinylizr/node_modules/react-native/React/DevSupport/RCTSamplingProfilerPackagerMethod.h

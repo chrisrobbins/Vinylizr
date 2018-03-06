@@ -1,20 +1,20 @@
-import React from 'react';
+import React from 'react'
 import {
   View,
   Image,
   TouchableOpacity
-} from 'react-native';
+} from 'react-native'
 
-const inputBarCode = require('../../img/barcode.png');
+const inputBarCode = require('../../img/barcode.png')
 
 const BarCode = () => {
-  const { containerStyle, barcode } = styles;
+  const { containerStyle, barcode } = styles
   return (
     <TouchableOpacity style={containerStyle}>
       <Image style={barcode} source={inputBarCode} />
     </TouchableOpacity>
-  );
-};
+  )
+}
 
 const styles = {
   containerStyle: {
@@ -29,6 +29,6 @@ const styles = {
     alignSelf: 'flex-end',
     marginBottom: 18
   }
-};
+}
 
-export { BarCode };
+export { BarCode }
