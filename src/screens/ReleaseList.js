@@ -3,6 +3,7 @@ import { Text, View, Image, FlatList, Dimensions, AsyncStorage } from 'react-nat
 const windowSize = Dimensions.get('window')
 import ReleaseResultItem from '../components/ReleaseResultItem'
 import axios from 'axios'
+import CollectionBadge from '../components/CollectionBadge'
 
 
 export default class ReleaseList extends Component {
@@ -16,6 +17,7 @@ constructor(props) {
     seed: 1,
     error: null,
     refreshing: false,
+    isSwiping: null
   }
 }
 
@@ -120,23 +122,11 @@ constructor(props) {
   render() {
     const { item, userData } = this.props.navigation.state.params
     const { records } = this.state
-    console.log(item, " DETAIL ITEM from release LIST")
     let discogsString = item.title.split('-')
     const title = discogsString[1]
     const artist = discogsString[0]
     const label = item.label
-    // let mainReleases = []
 
-    // this.state.records.map((record) => {
-    //   if (record.type === "artist") {
-    //     return;
-    //   } else {
-    //     mainReleases.push(record)
-    //   }
-    //   return mainReleases
-    // })
-
-    console.log("RECORDS FROM RELEASE LIST: ", records);
 
     return(
       <View style={styles.container}>
@@ -151,6 +141,7 @@ constructor(props) {
           <View style={styles.headerTitle}>
           <Text numberOfLines={1} ellipsifyMode={'tail'} style={styles.detailTitle}>{title}</Text>
           <Text style={styles.detailArtist}>{artist}</Text>
+          <CollectionBadge>{records.length} VERSIONS</CollectionBadge>
           </View>
           </View>
           <FlatList
@@ -160,6 +151,9 @@ constructor(props) {
                 userData={userData}
                 item={item}
                 key={item.id}
+                onSwipeStart={() => this.setState({isSwiping: true})}
+                onSwipeRelease={() => this.setState({isSwiping: false})}
+
                />
             )}
             keyExtractor={this._keyExtractor}

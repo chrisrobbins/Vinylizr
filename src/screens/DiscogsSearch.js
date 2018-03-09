@@ -36,7 +36,8 @@ class DiscogsSearch extends Component {
       error: null,
       refreshing: false,
       isModalVisible: false,
-      userData: {}
+      userData: {},
+      isSwiping: null
     }
 
     this.searchDiscogs = _.debounce(this.searchDiscogs, 210)
@@ -177,20 +178,18 @@ class DiscogsSearch extends Component {
          )
        }
        if (item.type === 'release') {
-         console.log("YO BITCH")
          return (
            <SearchResultItem
              records={albums}
              userData={userData}
              item={item}
              key={item.id}
+             onSwipeStart={() => this.setState({isSwiping: true})}
+             onSwipeRelease={() => this.setState({isSwiping: false})}
             />
          )
-       }
-       if (item.type === 'artist') {
-         return
        } else {
-         return
+         return;
        }
    }
 

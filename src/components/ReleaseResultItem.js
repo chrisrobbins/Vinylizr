@@ -23,7 +23,9 @@ constructor(props) {
     rightActionActivated: false,
     isModalVisible: false,
     leftSwiped: false,
-    rightSwiped: false
+    rightSwiped: false,
+    isSwiping: null,
+
     }
 }
 
@@ -88,7 +90,7 @@ saveToWantlist = () => {
      }
     })
     .then((response) => {
-      this.setState({records: response.data.wants})
+      this.setState({ records: response.data.wants })
       })
 
 

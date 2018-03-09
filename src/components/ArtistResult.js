@@ -153,8 +153,8 @@
 //          <SearchResultItem
 //           item={item}
 //           key={item.id + index}
-//           onSwipeStart={() => this.setState({isSwiping: true})}
-//           onSwipeRelease={() => this.setState({isSwiping: false})}
+          // onSwipeStart={() => this.setState({isSwiping: true})}
+          // onSwipeRelease={() => this.setState({isSwiping: false})}
 //         />
 //     )}
        // keyExtractor={this._keyExtractor}
