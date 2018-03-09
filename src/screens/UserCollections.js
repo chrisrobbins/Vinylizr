@@ -10,8 +10,6 @@ import {
   AsyncStorage
 } from 'react-native'
 import { Header } from '../components/common'
-import { connect } from 'react-redux'
-import { fetchCollection } from '../actions/collection-action.js'
 import _ from 'lodash'
 import { NavigationActions } from 'react-navigation'
 import axios from 'axios'
@@ -236,21 +234,6 @@ const styles = {
   }
 }
 
-const mapStateToProps = (state) => {
-    return {
-      ...state,
-    }
-}
-// for click events so that dispatches can happen
-const mapDispatchToProps = (dispatch) => {
-    return {
-        fetchCollection: () => {
-            dispatch(fetchCollection())
-        },
-
-      }
-    }
 
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(UserCollections)
+export default UserCollections

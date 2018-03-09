@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   Text,
   View,
@@ -6,18 +6,18 @@ import {
   Linking,
   TouchableHighlight,
   AsyncStorage
-} from 'react-native';
+} from 'react-native'
 
 import axios from 'axios'
 
-import { CardSection } from '../components/common/CardSection';
-import { Button } from '../components/common/Button';
-import Swipeable from 'react-native-swipeable';
-import SearchSuccessModal from '../components/SearchSuccessModal';
+import { CardSection } from '../components/common/CardSection'
+import { Button } from '../components/common/Button'
+import Swipeable from 'react-native-swipeable'
+import SearchSuccessModal from '../components/SearchSuccessModal'
 
-class SearchResultItem extends Component {
+class ReleaseResultItem extends Component {
 constructor(props) {
-	super(props);
+	super(props)
 	this.state = {
     leftActionActivated: false,
     rightActionActivated: false,
@@ -39,7 +39,7 @@ saveToCollection = () => {
       headers:{
       'Content-Type': 'application/x-www-form-urlencoded',
       'Authorization':`OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
-      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
+      'User-Agent': 'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
      }
     })
     .then((response) => {
@@ -101,36 +101,22 @@ saveToWantlist = () => {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
+        console.log(error.response.data)
+        console.log(error.response.status)
+        console.log(error.response.headers)
       } else if (error.request) {
         // The request was made but no response was received
         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
         // http.ClientRequest in node.js
-        console.log(error.request);
+        console.log(error.request)
       } else {
         // Something happened in setting up the request that triggered an Error
-        console.log('Error', error.message);
+        console.log('Error', error.message)
       }
-      console.log(error.config);
+      console.log(error.config)
     })
   })
 }
-
-// saveToCollection = () => {
-//   let discogsRecord = this.props.item;
-//   this.props.saveCollectionItem(discogsRecord);
-//   this.setState({ leftSwiped: true })
-//   setTimeout(() => this._hideModal(), 2000)
-//  }
-//
-// saveToWantlist = () => {
-//   let discogsRecord = this.props.item;
-//   this.props.saveWantlistItem(discogsRecord)
-//   this.setState({ rightSwiped: true })
-//   setTimeout(() => this._hideModal(), 2000)
-//  }
 
 _showLeftModal = () => {
   this.setState({leftSwiped: true})
@@ -149,10 +135,10 @@ _showRightModal = () => {
 
 
 render() {
-  const { item, onSwipeStart, onSwipeRelease } = this.props;
-  let discogsRecord = item.thumb;
-  const title = item.title;
-  const artist = item.artist;
+  const { item, onSwipeStart, onSwipeRelease } = this.props
+  let discogsRecord = item.thumb
+  const title = item.title
+  const artist = item.artist
 
   const {
     imageView,
@@ -162,22 +148,23 @@ render() {
     artistTextStyle,
     collectionSavedTextStyle,
     wantlistSavedTextStyle
-  } = styles;
-  const { leftActionActivated, rightActionActivated, toggle } = this.state;
-  const wantlistIcon = require('../img/wantlistButton.png');
-  const collectionIcon = require('../img/collectionButton.png');
-  const check = require('../img/checkmark.png');
+  } = styles
+
+  const { leftActionActivated, rightActionActivated, toggle } = this.state
+  const wantlistIcon = require('../img/wantlistButton.png')
+  const collectionIcon = require('../img/collectionButton.png')
+  const check = require('../img/checkmark.png')
 
   const leftContent = [
     <View key={item.id} style={[styles.leftSwipeItem, {backgroundColor: leftActionActivated ? '#2EF470' : '#000'}]}>
       <Image style={styles.leftIconStyles} source={collectionIcon} />
     </View>
-  ];
+  ]
   const rightContent = [
     <View key={item.id} style={[styles.rightSwipeItem, {backgroundColor: rightActionActivated ? '#F4702E' : '#000'}]}>
         <Image style={styles.rightIconStyles} source={wantlistIcon} />
     </View>
-  ];
+  ]
 
   return (
     <SearchSuccessModal
@@ -212,16 +199,6 @@ render() {
 
       >
       <CardSection>
-        <View style={imageView}>
-          {!discogsRecord ? <Image
-            style={imageStyle}
-            source={require('../img/n-a.png')}
-          /> : <Image
-            style={imageStyle}
-            source={{ uri: discogsRecord }}
-          />}
-        </View>
-
       <View style={textView}>
           <Text ellipsizeMode={'tail'} numberOfLines={1} style={titleTextStyle}>{title}</Text>
           <Text ellipsizeMode={'tail'} numberOfLines={1} style={artistTextStyle}>{artist}</Text>
@@ -230,9 +207,9 @@ render() {
     </Swipeable>
   </SearchSuccessModal>
 
-    );
+    )
   }
-};
+}
 
 const styles = {
   container: {
@@ -241,7 +218,8 @@ const styles = {
 
   textView: {
     justifyContent: 'center',
-    width: 250
+    width: 250,
+    height: 125
   },
   titleTextStyle: {
     fontSize: 20,
@@ -289,7 +267,7 @@ const styles = {
       height: 90,
       width: 90
     }
-};
+}
 
 
-export default SearchResultItem
+export default ReleaseResultItem

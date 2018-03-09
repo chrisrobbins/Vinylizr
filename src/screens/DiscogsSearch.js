@@ -5,8 +5,11 @@ import {
    BarCode,
    ClearText
 } from '../components/common'
-import ArtistResult from '../components/ArtistResult'
+import MasterReleaseResult from '../components/MasterReleaseResult'
+import SearchResultItem from '../components/SearchResultItem'
 import SearchSuccessModal from '../components/SearchSuccessModal'
+import { NavigationActions } from 'react-navigation'
+
 import _ from 'lodash'
 import {
   View,
@@ -16,9 +19,10 @@ import {
   ActivityIndicator,
   FlatList,
   StatusBar,
+  TouchableOpacity,
   AsyncStorage
 } from 'react-native'
-import Accordion from '@ercpereda/react-native-accordion';
+import collapsible from 'react-native-collapsible/Accordion'
 
 class DiscogsSearch extends Component {
   constructor(props) {
@@ -28,7 +32,6 @@ class DiscogsSearch extends Component {
       loading: false,
       albums: [],
       page: 1,
-      discogsRecord: '',
       seed: 1,
       error: null,
       refreshing: false,
@@ -83,7 +86,6 @@ class DiscogsSearch extends Component {
          console.log(error.config)
        })
      })
-   console.log(this.state, "Here's the state")
    }
   searchDiscogs = () => {
     const apiKey = "jbUTpFhLTiyyHgLRoBgq"
@@ -91,7 +93,7 @@ class DiscogsSearch extends Component {
     const { page } = this.state
     const apiSearch = this.state.newText
     const releaseType = 'master'
-    const url = `https://api.discogs.com/database/search?type=artist&q=${apiSearch}&page=${page}&per_page=1&key=${apiKey}&secret=${apiSecret}`
+    const url = `https://api.discogs.com/database/search?&q=${apiSearch}&page=${page}&per_page=25&key=${apiKey}&secret=${apiSecret}`
     this.setState({ loading: true })
     axios.get(url)
       .then(res => {
@@ -110,8 +112,86 @@ class DiscogsSearch extends Component {
      this._textInput.setNativeProps({ text: '' })
      this.setState({ text: '', albums: [] })
    }
+
+   handleRefresh = () => {
+     this.setState(
+       {
+         page: 1,
+         seed: this.state.seed + 1,
+         refreshing: true
+       },
+       () => {
+         this.searchDiscogs
+       }
+     )
+   }
+   handleLoadMore = () => {
+     this.setState(
+       {
+         page: this.state.page + 1
+       },
+       () => {
+         this.searchDiscogs
+       }
+     )
+   }
+   renderFooter = () => {
+     if (!this.state.loading) return null
+     return (
+       <View
+         style={{
+           paddingVertical: 20,
+           borderTopWidth: 1,
+           borderColor: "#CED0CE"
+         }}
+       >
+         <ActivityIndicator animating size="large" />
+       </View>
+     )
+   }
+
+
    renderInputButton = () => {
      return <ClearText onPress={this.clearTextInput.bind(this)} />
+   }
+
+   renderScrollContent = (item) => {
+     const { albums, userData } = this.state
+       if (item.type === 'master') {
+         return (
+           <TouchableOpacity onPress={() => {
+           this.props.navigation.navigate('ReleaseList', {
+           item: item,
+           records: this.state.records,
+           userData: userData
+          })
+        }}>
+           <MasterReleaseResult
+             item={item}
+             key={item.id}
+             records={albums}
+             userData={userData}
+            />
+          </TouchableOpacity>
+
+         )
+       }
+       if (item.type === 'release') {
+         console.log("YO BITCH")
+         return (
+           <SearchResultItem
+             records={albums}
+             userData={userData}
+             item={item}
+             key={item.id}
+            />
+         )
+       }
+       if (item.type === 'artist') {
+         return
+       } else {
+         return
+       }
    }
 
 
@@ -119,8 +199,8 @@ class DiscogsSearch extends Component {
 
   render() {
     const { userData, albums } = this.state
-    console.log(albums, "NEED UNIQUE ATTR");
-  let records = _.uniqBy(albums, 'thumb');
+    console.log(albums, " CAN YOU BELIEVE IN LIFE AFTER LOVE")
+  let records = _.uniqBy(albums, 'thumb')
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
@@ -143,15 +223,14 @@ class DiscogsSearch extends Component {
       </View>
         <FlatList
           data={records}
-          renderItem={({ item, index }) => (
-            <ArtistResult
-             item={item}
-             records={records}
-             key={item.id}
-             userData={userData}
-           />
-       )}
+          renderItem={({ item }) => this.renderScrollContent(item)}
           keyExtractor={this._keyExtractor}
+          ListFooterComponent={this.renderFooter}
+          refreshing={this.state.refreshing}
+          onEndReached={this.handleLoadMore}
+          onEndReachedThreshold={15}
+          style={styles.renderAlbums}
+          scrollEnabled={!this.state.isSwiping}
           style={styles.renderAlbums}
         />
     </View>

@@ -7,6 +7,7 @@ import {
 import TabBar from './TabBar'
 import AlbumDetail from '../screens/AlbumDetail'
 import LoginForm from './LoginForm'
+import ReleaseList from '../screens/ReleaseList'
 import app from './app'
 
 
@@ -22,6 +23,7 @@ const MainNav = StackNavigator({
      },
     AlbumDetail: { screen: AlbumDetail },
     LoginForm: {screen: LoginForm },
+    ReleaseList: { screen: ReleaseList }
 },
 { HeaderMode: 'screen' }
 )
