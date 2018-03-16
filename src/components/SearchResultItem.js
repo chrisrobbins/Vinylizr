@@ -99,18 +99,12 @@ saveToWantlist = () => {
 
       .catch( (error) => {
       if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
         console.log(error.response.data)
         console.log(error.response.status)
         console.log(error.response.headers)
       } else if (error.request) {
-        // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-        // http.ClientRequest in node.js
-        console.log(error.request)
+      console.log(error.request)
       } else {
-        // Something happened in setting up the request that triggered an Error
         console.log('Error', error.message)
       }
       console.log(error.config)
@@ -169,12 +163,12 @@ render() {
   const check = require('../img/checkmark.png')
 
   const leftContent = [
-    <View key={item.id} style={[styles.leftSwipeItem, {backgroundColor: leftActionActivated ? '#2EF470' : '#000'}]}>
+    <View key={item.id} style={[styles.leftSwipeItem, {backgroundColor: leftActionActivated ? '#0967EE' : '#000'}]}>
       <Image style={styles.leftIconStyles} source={collectionIcon} />
     </View>
   ]
   const rightContent = [
-    <View key={item.id} style={[styles.rightSwipeItem, {backgroundColor: rightActionActivated ? '#F4702E' : '#000'}]}>
+    <View key={item.id} style={[styles.rightSwipeItem, {backgroundColor: rightActionActivated ? '#D400FF' : '#000'}]}>
         <Image style={styles.rightIconStyles} source={wantlistIcon} />
     </View>
   ]
@@ -263,13 +257,13 @@ const styles = {
     paddingRight: 20
   },
   // collectionSavedTextStyle: {
-  //   color: '#2EF470',
+  //   color: '#0967EE',
   //   marginLeft: 12,
   //   marginTop: 9,
   //   fontSize: 10
   // },
   // wantlistSavedTextStyle: {
-  //   color: '#F4702E',
+  //   color: '#D400FF',
   //   marginLeft: 12,
   //   marginTop: 9,
   //   fontSize: 10

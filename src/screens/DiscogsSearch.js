@@ -37,7 +37,8 @@ class DiscogsSearch extends Component {
       refreshing: false,
       isModalVisible: false,
       userData: {},
-      isSwiping: null
+      isSwiping: null,
+      collectionRecords: []
     }
 
     this.searchDiscogs = _.debounce(this.searchDiscogs, 210)
@@ -70,24 +71,20 @@ class DiscogsSearch extends Component {
        })
          .catch( (error) => {
          if (error.response) {
-           // The request was made and the server responded with a status code
-           // that falls out of the range of 2xx
            console.log(error.response.data)
            console.log(error.response.status)
            console.log(error.response.headers)
          } else if (error.request) {
-           // The request was made but no response was received
-           // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-           // http.ClientRequest in node.js
            console.log(error.request)
          } else {
-           // Something happened in setting up the request that triggered an Error
            console.log('Error', error.message)
          }
          console.log(error.config)
        })
      })
    }
+
+   
   searchDiscogs = () => {
     const apiKey = "jbUTpFhLTiyyHgLRoBgq"
     const apiSecret = "LSQDaLpplgcCGlkzujkHyUkxImNlWVoI"
@@ -163,7 +160,6 @@ class DiscogsSearch extends Component {
            <TouchableOpacity onPress={() => {
            this.props.navigation.navigate('ReleaseList', {
            item: item,
-           records: this.state.records,
            userData: userData
           })
         }}>
@@ -194,11 +190,12 @@ class DiscogsSearch extends Component {
    }
 
 
+
+
    _keyExtractor = (item, index) => item.id + index
 
   render() {
     const { userData, albums } = this.state
-    console.log(albums, " CAN YOU BELIEVE IN LIFE AFTER LOVE")
   let records = _.uniqBy(albums, 'thumb')
     return (
       <View style={styles.container}>

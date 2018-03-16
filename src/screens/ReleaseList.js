@@ -3,6 +3,7 @@ import { Text, View, Image, FlatList, Dimensions, AsyncStorage } from 'react-nat
 const windowSize = Dimensions.get('window')
 import ReleaseResultItem from '../components/ReleaseResultItem'
 import axios from 'axios'
+import VersionsBadge from '../components/VersionsBadge'
 import CollectionBadge from '../components/CollectionBadge'
 
 
@@ -17,7 +18,9 @@ constructor(props) {
     seed: 1,
     error: null,
     refreshing: false,
-    isSwiping: null
+    isSwiping: null,
+    collectionRecords: [],
+    releasesOwned: []
   }
 }
 
@@ -30,6 +33,50 @@ constructor(props) {
 
   componentWillMount() {
     this.getMasterReleases()
+    this.getUserCollection()
+  }
+
+  componentDidMount() {
+    setTimeout(this.getReleasesOwned, 500)
+    this.getReleasesOwned()
+
+  }
+
+  getUserCollection() {
+    const { userData } = this.props.navigation.state.params
+    const { page } = this.state
+    AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then((values) => {
+      const user_token = values[0][1]
+      const user_secret = values[1][1]
+      const user_name = userData.username
+
+        axios({method:'GET', url:`https://api.discogs.com/users/${user_name}/collection/folders/0/releases?page=${page}&per_page=100`,
+        headers:{
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization':`OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
+        'User-Agent': 'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
+       }
+      })
+
+      .then((response) => {
+        this.setState({collectionRecords: response.data.releases})
+
+    })
+
+
+        .catch( (error) => {
+        if (error.response) {
+          console.log(error.response.data)
+          console.log(error.response.status)
+          console.log(error.response.headers)
+        } else if (error.request) {
+          console.log(error.request)
+        } else {
+          console.log('Error', error.message)
+        }
+        console.log(error.config)
+      })
+    })
   }
 
 
@@ -70,6 +117,23 @@ constructor(props) {
     )
   }
 
+getReleasesOwned = () => {
+  const { records, collectionRecords, releasesOwned } = this.state
+  let ownedReleases = []
+  collectionRecords.map((collectionRecord) => {
+    return (records.map((releaseItem) => {
+      if (collectionRecord.basic_information.id === releaseItem.id) {
+        console.log("Collection item: ", collectionRecord, "RElease Item: ", releaseItem);
+        return (
+          ownedReleases.push(collectionRecord)
+
+        )
+      }
+    })
+  )
+  })
+  this.setState({ releasesOwned: ownedReleases })
+}
 
   getMasterReleases = () => {
     const { userData, item } = this.props.navigation.state.params
@@ -95,18 +159,12 @@ constructor(props) {
 
         .catch( (error) => {
         if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
           console.log(error.response.data)
           console.log(error.response.status)
           console.log(error.response.headers)
         } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
           console.log(error.request)
         } else {
-          // Something happened in setting up the request that triggered an Error
           console.log('Error', error.message)
         }
         console.log(error.config)
@@ -119,13 +177,16 @@ constructor(props) {
 
 
 
+
+
   render() {
     const { item, userData } = this.props.navigation.state.params
-    const { records } = this.state
+    const { records, collectionRecords, releasesOwned } = this.state
     let discogsString = item.title.split('-')
     const title = discogsString[1]
     const artist = discogsString[0]
     const label = item.label
+
 
 
     return(
@@ -138,10 +199,13 @@ constructor(props) {
             style={styles.detailThumb}
           >
           </Image>
-          <View style={styles.headerTitle}>
+          <View style={styles.headerContainer}>
           <Text numberOfLines={1} ellipsifyMode={'tail'} style={styles.detailTitle}>{title}</Text>
           <Text style={styles.detailArtist}>{artist}</Text>
-          <CollectionBadge>{records.length} VERSIONS</CollectionBadge>
+          <View style={styles.badgeContainer}>
+          <VersionsBadge>{records.length} VERSIONS</VersionsBadge>
+          {!releasesOwned ? <Text></Text> : <CollectionBadge style={styles.badge}>{releasesOwned.length}</CollectionBadge>}
+          </View>
           </View>
           </View>
           <FlatList
@@ -151,6 +215,8 @@ constructor(props) {
                 userData={userData}
                 item={item}
                 key={item.id}
+                artist={artist}
+                collectionRecords={collectionRecords}
                 onSwipeStart={() => this.setState({isSwiping: true})}
                 onSwipeRelease={() => this.setState({isSwiping: false})}
 
@@ -176,6 +242,10 @@ const styles = {
     flex: 1,
     backgroundColor: '#000'
   },
+  badgeContainer: {
+    flexDirection: 'row',
+    marginBottom: 10
+  },
   imagesContainer: {
     width: windowSize.width,
     height: 145,
@@ -192,23 +262,21 @@ const styles = {
     marginLeft: 0,
 
   },
-  headerTitle: {
+  headerContainer: {
     justifyContent: 'center',
-    marginBottom: 35
   },
   detailTitle: {
     color: '#fff',
     fontSize: 20,
     marginLeft: 16,
-    fontWeight: 'bold',
     backgroundColor: 'transparent',
     fontFamily: 'Lato-Regular',
-    lineHeight: 28
+    lineHeight: 28,
   },
   detailArtist: {
     color: '#777777',
     marginLeft: 20,
-    marginBottom: 20,
+    marginBottom: 10,
     backgroundColor: 'transparent',
     fontFamily: 'Lato-Regular',
     lineHeight: 24,
@@ -225,12 +293,12 @@ const styles = {
   },
   btnCollText: {
     fontFamily: 'Lato-Regular',
-    color: '#7ED321',
+    color: '#0967EE',
     backgroundColor: 'transparent'
   },
   btnWantText: {
     fontFamily: 'Lato-Regular',
-    color: '#F4702E',
+    color: '#D400FF',
     backgroundColor: 'transparent'
 
   },
@@ -241,7 +309,7 @@ const styles = {
   },
   detailCollectionBtnFalse: {
     borderWidth: 1,
-    borderColor: '#7ED321',
+    borderColor: '#0967EE',
     borderRadius: 99,
     height: 44,
     width: 165,
@@ -250,7 +318,7 @@ const styles = {
   },
   detailWantlistBtnFalse: {
     borderWidth: 1,
-    borderColor: '#F4702E',
+    borderColor: '#D400FF',
     borderRadius: 99,
     height: 44,
     width: 165,

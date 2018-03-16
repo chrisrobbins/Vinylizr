@@ -245,13 +245,13 @@
 //     paddingRight: 20
 //   },
 //   // collectionSavedTextStyle: {
-//   //   color: '#2EF470',
+//   //   color: '#0967EE',
 //   //   marginLeft: 12,
 //   //   marginTop: 9,
 //   //   fontSize: 10
 //   // },
 //   // wantlistSavedTextStyle: {
-//   //   color: '#F4702E',
+//   //   color: '#D400FF',
 //   //   marginLeft: 12,
 //   //   marginTop: 9,
 //   //   fontSize: 10

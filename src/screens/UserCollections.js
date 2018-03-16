@@ -53,23 +53,14 @@ componentWillMount() {
     .then((response) => {
       this.getUserCollection()
     })
-    .then(() => {
-      console.log(this.state.records, "COLLECTION RECORDS")
-    })
-      .catch( (error) => {
+      .catch((error) => {
       if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
         console.log(error.response.data)
         console.log(error.response.status)
         console.log(error.response.headers)
       } else if (error.request) {
-        // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-        // http.ClientRequest in node.js
         console.log(error.request)
       } else {
-        // Something happened in setting up the request that triggered an Error
         console.log('Error', error.message)
       }
       console.log(error.config)
@@ -99,18 +90,12 @@ getUserCollection() {
 
       .catch( (error) => {
       if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
         console.log(error.response.data)
         console.log(error.response.status)
         console.log(error.response.headers)
       } else if (error.request) {
-        // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-        // http.ClientRequest in node.js
         console.log(error.request)
       } else {
-        // Something happened in setting up the request that triggered an Error
         console.log('Error', error.message)
       }
       console.log(error.config)
@@ -171,12 +156,9 @@ _keyExtractor = (item, index) => item.id + index
           data={records}
           renderItem={({ item, index }) => (
             <TouchableOpacity key={item.intance_id} onPress={() => {
+              console.log(item,"FLATLIST ITEM FROM ALBUM DETAIL");
             this.props.navigation.navigate('AlbumDetail', {
-            title: item.basic_information.title,
-            thumb: item.basic_information.thumb,
-            label: item.basic_information.labels[0].name,
-            catno: item.basic_information.labels[0].catno,
-            year: item.basic_information.year,
+            item: item
            })
          }}>
 

@@ -6,7 +6,7 @@ import Modal from 'react-native-modal'
 export default class SearchSuccessModal extends Component {
 
 
-renderText() {
+renderText = () => {
   if(this.props.leftSwiped === true) {
     return <Text style={styles.text}>Added to collection!</Text>
   }

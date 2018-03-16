@@ -4,8 +4,7 @@ import { DetailButton } from '../components/common'
 import Stars from 'react-native-stars-rating'
 const windowSize = Dimensions.get('window')
 
-
-export default class AlbumDetail extends Component {
+class AlbumDetail extends Component {
   static navigationOptions = {
     drawerLabel: 'AlbumDetail',
     header: null
@@ -13,12 +12,13 @@ export default class AlbumDetail extends Component {
 
 
   render() {
-    const item = this.props.navigation.state.params
+    const { item } = this.props.navigation.state.params
     console.log(item, " DETAIL ITEM")
-    let discogsString = item.title.split('-')
-    const title = discogsString[1]
-    const artist = discogsString[0]
-    const label = item.label
+    const title = item.basic_information.title
+    const artist = item.basic_information.artists[0].name
+    const label = item.basic_information.labels[0].name
+    const year = item.basic_information.year
+
     return(
       <View style={styles.detailScrollView}>
 
@@ -26,7 +26,7 @@ export default class AlbumDetail extends Component {
         <View style={styles.imagesContainer}>
          <Image
           style={styles.backgroundImage}
-          source={{ uri: item.thumb }}
+          source={{ uri: item.basic_information.cover_image }}
           blurRadius={1}
           resizeMode='cover'
          >
@@ -36,59 +36,30 @@ export default class AlbumDetail extends Component {
             style={styles.album_gradient}>
           <View style={styles.infoContainer}>
           <Image
-            source={{ uri: item.thumb }}
+            source={{ uri: item.basic_information.cover_image }}
             style={styles.detailThumb}
           >
           </Image>
           <View style={{width: 350}}>
           <Text numberOfLines={1} ellipsifyMode={'tail'} style={styles.detailTitle}>{title}</Text>
           <Text style={styles.detailArtist}>{artist}</Text>
+          <Text style={styles.detailLabel}>{label}</Text>
+          <Text style={styles.detailYear}>{year}</Text>
           </View>
           </View>
         <View style={styles.btnContainer}>
-          <DetailButton btnStyle={styles.detailCollectionBtnFalse} txtStyle={styles.btnCollText}><Image source={require('../img/detail-collection-icon-inactive.png')}/> in collection</DetailButton>
-          <DetailButton btnStyle={styles.detailWantlistBtnFalse} txtStyle={styles.btnWantText}><Image source={require('../img/detail-wantlist-icon-inactive.png')}/> in wantlist</DetailButton>
+          <DetailButton
+            btnStyle={styles.detailCollectionBtnFalse}
+            txtStyle={styles.btnCollText}>Add to Collection</DetailButton>
+          <DetailButton
+            btnStyle={styles.detailWantlistBtnFalse}
+            txtStyle={styles.btnWantText}>in wantlist</DetailButton>
         </View>
         </Image>
       </Image>
       </View>
           <View>
-            <View style={styles.detailContain}>
-            <Text
-              style={styles.detailStaticTxt}>
-              Label
-            </Text>
-            <Text style={styles.detailDynTxt}>
-              {label}
-            </Text>
-          </View>
-            <View style={styles.detailContain}>
-            <Text
-              style={styles.detailStaticTxt}>
-              Catalog #
-            </Text>
-            <Text style={styles.detailDynTxt}>
-              {item.catno}
-            </Text>
-          </View>
-            <View style={styles.detailContain}>
-            <Text
-              style={styles.detailStaticTxt}>
-              Year
-            </Text>
-            <Text style={styles.detailDynTxt}>
-              {item.year}
-            </Text>
-          </View>
-            <View style={styles.detailContain}>
-            <Text
-              style={styles.detailStaticTxt}>
-              Genre
-            </Text>
-            <Text style={styles.detailDynTxt}>
-              {item.genre}
-            </Text>
-            </View>
+            
           </View>
           <View style={styles.starContainer}>
             <Text style={styles.starTxt}>Rate this Record:</Text>
@@ -143,28 +114,52 @@ const styles = {
     justifyContent: 'flex-end',
   },
   detailThumb: {
-    height: 180,
-    width: 180,
+    height: 208,
+    width: 208,
     marginBottom: 5,
     marginLeft: 20,
   },
   detailTitle: {
     color: '#fff',
-    fontSize: 20,
-    marginLeft: 16,
-    fontWeight: 'bold',
+    fontSize: 24,
+    marginLeft: 20,
     backgroundColor: 'transparent',
-    fontFamily: 'Lato-Regular',
-    lineHeight: 28
+    fontFamily: 'Lato-Bold',
+    lineHeight: 29
   },
   detailArtist: {
+    color: '#777777',
+    marginLeft: 20,
+    backgroundColor: 'transparent',
+    fontFamily: 'Lato-Regular',
+    lineHeight: 29,
+    fontSize: 16,
+    letterSpacing: 1
+
+
+  },
+  detailLabel: {
+    color: '#777777',
+    marginLeft: 20,
+    backgroundColor: 'transparent',
+    fontFamily: 'Lato-Regular',
+    lineHeight: 29,
+    fontSize: 16,
+    letterSpacing: 1
+
+
+
+  },
+  detailYear: {
     color: '#777777',
     marginLeft: 20,
     marginBottom: 20,
     backgroundColor: 'transparent',
     fontFamily: 'Lato-Regular',
-    lineHeight: 24,
-    fontSize: 16
+    lineHeight: 29,
+    fontSize: 16,
+    letterSpacing: 1
+
 
 
   },
@@ -177,28 +172,33 @@ const styles = {
   },
   btnCollText: {
     fontFamily: 'Lato-Regular',
-    color: '#7ED321',
-    backgroundColor: 'transparent'
+    color: '#fff',
+    backgroundColor: 'transparent',
+    fontSize: 14,
+    lineHeight: 15
+
   },
   btnWantText: {
     fontFamily: 'Lato-Regular',
-    color: '#F4702E',
-    backgroundColor: 'transparent'
+    color: '#ffffff',
+    backgroundColor: 'transparent',
+    fontSize: 14,
+    lineHeight: 15
 
   },
   detailCollectionBtnFalse: {
-    borderWidth: 1,
-    borderColor: '#7ED321',
-    borderRadius: 99,
+    borderWidth: 2,
+    borderColor: '#0967EE',
+    borderRadius: 1,
     height: 44,
     width: 165,
     justifyContent: 'center',
     alignItems: 'center'
   },
   detailWantlistBtnFalse: {
-    borderWidth: 1,
-    borderColor: '#F4702E',
-    borderRadius: 99,
+    borderWidth: 2,
+    borderColor: '#D400FF',
+    borderRadius: 1,
     height: 44,
     width: 165,
     justifyContent: 'center',
@@ -245,3 +245,5 @@ const styles = {
     marginBottom: 25
   }
 }
+
+export default AlbumDetail

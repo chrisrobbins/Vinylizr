@@ -8,6 +8,8 @@ import {
   AsyncStorage
 } from 'react-native'
 
+import CollectionBadge from './CollectionBadge'
+
 import axios from 'axios'
 
 import { CardSection } from '../components/common/CardSection'
@@ -25,9 +27,11 @@ constructor(props) {
     leftSwiped: false,
     rightSwiped: false,
     isSwiping: null,
-
+    releasesOwned: [],
+    page: 1
     }
 }
+
 
 saveToCollection = () => {
   const { userData } = this.props
@@ -51,28 +55,21 @@ saveToCollection = () => {
   .then(() => {
     this._showLeftModal()
   })
-
-
       .catch( (error) => {
       if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
         console.log(error.response.data)
         console.log(error.response.status)
         console.log(error.response.headers)
       } else if (error.request) {
-        // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-        // http.ClientRequest in node.js
         console.log(error.request)
       } else {
-        // Something happened in setting up the request that triggered an Error
         console.log('Error', error.message)
       }
       console.log(error.config)
     })
   })
 }
+
 saveToWantlist = () => {
   const { userData, item } = this.props
   value = AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then((values) => {
@@ -89,10 +86,6 @@ saveToWantlist = () => {
       'User-Agent': 'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
      }
     })
-    .then((response) => {
-      this.setState({ records: response.data.wants })
-      })
-
 
   .then(() => {
     this._showRightModal()
@@ -101,18 +94,12 @@ saveToWantlist = () => {
 
       .catch( (error) => {
       if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
         console.log(error.response.data)
         console.log(error.response.status)
         console.log(error.response.headers)
       } else if (error.request) {
-        // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-        // http.ClientRequest in node.js
         console.log(error.request)
       } else {
-        // Something happened in setting up the request that triggered an Error
         console.log('Error', error.message)
       }
       console.log(error.config)
@@ -121,26 +108,26 @@ saveToWantlist = () => {
 }
 
 _showLeftModal = () => {
-  this.setState({leftSwiped: true})
+  this.setState({ leftSwiped: true })
   setTimeout(() => this.setState({ isModalVisible: true }), 300 )
-  setTimeout(() => this._hideModal(), 2000)
+  setTimeout(() => this.setState({ isModalVisible: false }), 2000)
 }
 _showRightModal = () => {
-  this.setState({rightSwiped: true })
+  this.setState({ rightSwiped: true })
   setTimeout(() => this.setState({ isModalVisible: true }), 300 )
-  setTimeout(() => this._hideModal(), 2000)
+  setTimeout(() => this.setState({ isModalVisible: false }), 2000)
 }
 
-  _hideModal = () => {
-     this.setState({ isModalVisible: false })
-}
+
+
 
 
 render() {
-  const { item, onSwipeStart, onSwipeRelease } = this.props
+  const { item, onSwipeStart, onSwipeRelease, collectionRecords, artist } = this.props
+  console.log(item, "rlease itme");
   let discogsRecord = item.thumb
   const title = item.title
-  const artist = item.artist
+
 
   const {
     imageView,
@@ -152,27 +139,43 @@ render() {
     wantlistSavedTextStyle
   } = styles
 
-  const { leftActionActivated, rightActionActivated, toggle } = this.state
+  const {
+    leftActionActivated,
+    rightActionActivated,
+    toggle,
+    isModalVisible,
+    leftSwiped,
+    rightSwiped,
+    releasesOwned
+  } = this.state
   const wantlistIcon = require('../img/wantlistButton.png')
   const collectionIcon = require('../img/collectionButton.png')
   const check = require('../img/checkmark.png')
 
   const leftContent = [
-    <View key={item.id} style={[styles.leftSwipeItem, {backgroundColor: leftActionActivated ? '#2EF470' : '#000'}]}>
+    <View key={item.id} style={[styles.leftSwipeItem, {backgroundColor: leftActionActivated ? '#0967EE' : '#000'}]}>
       <Image style={styles.leftIconStyles} source={collectionIcon} />
     </View>
   ]
   const rightContent = [
-    <View key={item.id} style={[styles.rightSwipeItem, {backgroundColor: rightActionActivated ? '#F4702E' : '#000'}]}>
+    <View key={item.id} style={[styles.rightSwipeItem, {backgroundColor: rightActionActivated ? '#D400FF' : '#000'}]}>
         <Image style={styles.rightIconStyles} source={wantlistIcon} />
     </View>
-  ]
+]
+  let recordReleased = item.released
+if (recordReleased && recordReleased.includes('-')) {
+  const releaseSplit = recordReleased.split('-')
+  recordReleased = releaseSplit[0]
+}
+
+
 
   return (
     <SearchSuccessModal
-       isModalVisible={this.state.isModalVisible}
-       leftSwiped={this.state.leftSwiped}
-       rightSwiped={this.state.rightSwiped}
+       isModalVisible={isModalVisible}
+       leftSwiped={leftSwiped}
+       rightSwiped={rightSwiped}
+       key={item.id}
     >
     <Swipeable
       key={item.id}
@@ -200,11 +203,23 @@ render() {
       onSwipeRelease={onSwipeRelease}
 
       >
-      <CardSection>
+      <CardSection key={item.id}>
       <View style={textView}>
           <Text ellipsizeMode={'tail'} numberOfLines={1} style={titleTextStyle}>{title}</Text>
           <Text ellipsizeMode={'tail'} numberOfLines={1} style={artistTextStyle}>{artist}</Text>
+          <View style={styles.badgeContainer} key={item.id}>
+          <Text key={item.id} style={styles.labelTextStyle}>{item.label} - {!item.released ? '' : recordReleased}</Text>
+          {collectionRecords.map((record) => {
+            if (record.id === item.id) {
+              releasesOwned.push(record)
+              return (
+                <CollectionBadge key={record.id}>1</CollectionBadge>
+              )
+            }
+          })}
+          </View>
         </View>
+
       </CardSection>
     </Swipeable>
   </SearchSuccessModal>
@@ -217,24 +232,39 @@ const styles = {
   container: {
     flexDirection: 'column'
   },
+  badgeContainer: {
+    flexDirection: 'row',
+  },
 
   textView: {
     justifyContent: 'center',
     width: 250,
-    height: 125
+    height: 125,
+    marginLeft: 15
   },
   titleTextStyle: {
-    fontSize: 20,
-    color: "#DADADA",
+    fontSize: 18,
+    color: "#ffffff",
     marginLeft: 5,
-    fontFamily: 'Lato-Regular'
+    fontFamily: 'Lato-Regular',
+    lineHeight: 22,
+    letterSpacing: 1
+  },
+  labelTextStyle: {
+    fontSize: 16.5,
+    fontFamily: 'Lato-Regular',
+    marginLeft: 5,
+    marginTop: 3,
+    color: "rgba(217,217,217,.6)"
   },
   artistTextStyle: {
-    fontSize: 16,
+    fontSize: 16.5,
     color: "rgba(217,217,217,.6)",
-    marginLeft: 10,
+    marginLeft: 5,
     marginTop: 1,
-    fontFamily: 'Lato-Regular'
+    marginBottom: 15,
+    fontFamily: 'Lato-Regular',
+
   },
   leftSwipeItem: {
     flex: 1,
@@ -243,13 +273,13 @@ const styles = {
     paddingRight: 20
   },
   // collectionSavedTextStyle: {
-  //   color: '#2EF470',
+  //   color: '#0967EE',
   //   marginLeft: 12,
   //   marginTop: 9,
   //   fontSize: 10
   // },
   // wantlistSavedTextStyle: {
-  //   color: '#F4702E',
+  //   color: '#D400FF',
   //   marginLeft: 12,
   //   marginTop: 9,
   //   fontSize: 10
