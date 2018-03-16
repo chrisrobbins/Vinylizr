@@ -15,7 +15,9 @@ const styles = {
     justifyContent: 'flex-start',
     flexDirection: 'row',
     flex:1,
-    backgroundColor: '#000000'
+    backgroundColor: '#000000',
+    borderBottomWidth: 1,
+    borderBottomColor: "rgba(217,217,217,.6)"
 
   }
 }

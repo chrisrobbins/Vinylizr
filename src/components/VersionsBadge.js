@@ -18,12 +18,9 @@ const styles = {
     height: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingLeft: 8,
-    paddingRight: 8,
     borderWidth: 1,
     borderRadius: 2,
     borderColor: "rgba(217,217,217,.6)",
-    marginLeft: 20
   },
   text: {
     color: "rgba(217,217,217,.6)",

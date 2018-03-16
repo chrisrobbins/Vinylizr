@@ -53,18 +53,12 @@ saveToCollection = () => {
 
       .catch( (error) => {
       if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.log(error.response.data)
+      console.log(error.response.data)
         console.log(error.response.status)
         console.log(error.response.headers)
       } else if (error.request) {
-        // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-        // http.ClientRequest in node.js
-        console.log(error.request)
+      console.log(error.request)
       } else {
-        // Something happened in setting up the request that triggered an Error
         console.log('Error', error.message)
       }
       console.log(error.config)
@@ -144,9 +138,11 @@ _showRightModal = () => {
 
 render() {
   const { item, onSwipeStart, onSwipeRelease } = this.props
+  console.log(item, "SEARCH ITEM");
   let discogsRecord = item.thumb
   const title = item.title
   const artist = item.artist
+  const label = item.label[0]
 
   const {
     imageView,
@@ -219,6 +215,8 @@ render() {
       <View style={textView}>
           <Text ellipsizeMode={'tail'} numberOfLines={1} style={titleTextStyle}>{title}</Text>
           <Text ellipsizeMode={'tail'} numberOfLines={1} style={artistTextStyle}>{artist}</Text>
+          <Text key={item.id} style={styles.artistTextStyle}>{item.label[0]} -
+             {item.country || ''} - {item.year || ''}</Text>
         </View>
       </CardSection>
     </Swipeable>
@@ -230,7 +228,9 @@ render() {
 
 const styles = {
   container: {
-    flexDirection: 'column'
+    flexDirection: 'column',
+    borderBottomWidth: 1,
+    borderBottomColor: "rgba(217,217,217,.6)"
   },
 
   textView: {

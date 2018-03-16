@@ -230,7 +230,9 @@ if (recordReleased && recordReleased.includes('-')) {
 
 const styles = {
   container: {
-    flexDirection: 'column'
+    flexDirection: 'column',
+    borderBottomWidth: 1,
+    borderBottomColor: "rgba(217,217,217,.6)"
   },
   badgeContainer: {
     flexDirection: 'row',

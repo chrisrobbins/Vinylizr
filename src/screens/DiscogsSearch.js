@@ -41,7 +41,7 @@ class DiscogsSearch extends Component {
       collectionRecords: []
     }
 
-    this.searchDiscogs = _.debounce(this.searchDiscogs, 210)
+    this.searchDiscogs = _.debounce(this.searchDiscogs, 218)
   }
    static navigationOptions = ({screenProps}) => ({
      header: null,
@@ -84,7 +84,7 @@ class DiscogsSearch extends Component {
      })
    }
 
-   
+
   searchDiscogs = () => {
     const apiKey = "jbUTpFhLTiyyHgLRoBgq"
     const apiSecret = "LSQDaLpplgcCGlkzujkHyUkxImNlWVoI"

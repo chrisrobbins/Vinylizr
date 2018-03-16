@@ -37,7 +37,7 @@ constructor(props) {
   }
 
   componentDidMount() {
-    setTimeout(this.getReleasesOwned, 500)
+    setTimeout(this.getReleasesOwned, 1000)
     this.getReleasesOwned()
 
   }
@@ -50,7 +50,7 @@ constructor(props) {
       const user_secret = values[1][1]
       const user_name = userData.username
 
-        axios({method:'GET', url:`https://api.discogs.com/users/${user_name}/collection/folders/0/releases?page=${page}&per_page=100`,
+        axios({method:'GET', url:`https://api.discogs.com/users/${user_name}/collection/folders/0/releases?page=${page}&per_page=25`,
         headers:{
         'Content-Type': 'application/x-www-form-urlencoded',
         'Authorization':`OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
@@ -143,7 +143,7 @@ getReleasesOwned = () => {
       const user_secret = values[1][1]
       const master_id = item.id
 
-      axios({method:'GET', url:`https://api.discogs.com/masters/${master_id}/versions?sort=year&sort_order=asc&page=${page}&per_page=100`,
+      axios({method:'GET', url:`https://api.discogs.com/masters/${master_id}/versions?format=vinyl&sort=year&sort_order=asc&page=${page}&per_page=30`,
       headers:{
       'Content-Type': 'application/x-www-form-urlencoded',
       'Authorization':`OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
@@ -151,7 +151,6 @@ getReleasesOwned = () => {
      }
     })
     .then((response) => {
-      console.log(response, " MASTER RESPONSE")
       this.setState({records: response.data.versions})
 
   })
@@ -260,6 +259,7 @@ const styles = {
     width: 100,
     marginBottom: 0,
     marginLeft: 0,
+    marginRight: 20
 
   },
   headerContainer: {
@@ -268,14 +268,12 @@ const styles = {
   detailTitle: {
     color: '#fff',
     fontSize: 20,
-    marginLeft: 16,
     backgroundColor: 'transparent',
     fontFamily: 'Lato-Regular',
     lineHeight: 28,
   },
   detailArtist: {
     color: '#777777',
-    marginLeft: 20,
     marginBottom: 10,
     backgroundColor: 'transparent',
     fontFamily: 'Lato-Regular',
@@ -345,8 +343,6 @@ const styles = {
     flexDirection: 'row',
     justifyContent: 'space-around', borderBottomWidth: .5,
     borderColor: 'rgba(217,217,217,.35)', justifyContent: 'flex-start',
-    marginLeft: 17,
-    marginRight: 17,
     marginBottom: 10
 
   },
