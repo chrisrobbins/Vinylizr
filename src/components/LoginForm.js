@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { Text, View, Linking } from 'react-native'
+import { Text, View, Linking, Image, Dimensions } from 'react-native'
 import axios from 'axios'
 import DeepLinking from 'react-native-deep-linking'
 import * as Animatable from 'react-native-animatable'
+const windowSize = Dimensions.get('window')
 
 import {
   Button,
@@ -19,9 +20,7 @@ class LoginForm extends Component {
   static navigationOptions = () => ({
     drawerLabel: 'LoginForm',
     header: null,
-    cardStyle: {
-      backgroundColor: '#000000'
-    },
+
   })
 
 
@@ -37,75 +36,88 @@ discogsRedirect = () => {
 
 
   render() {
+    const backgroundImg = require('../img/vinyl-record-player.png')
+    const power = require('../img/power.png')
+
+
     return (
       <View
-        style={styles.sectionContainer}>
+        style={styles.imagesContainer}>
 
-        <View style={styles.containerLogo}>
-          <Animatable.View animation="fadeIn">
-              <Logo />
+        <Image style={styles.backgroundImage} source={backgroundImg}>
 
-          </Animatable.View>
-        </View>
+          <View style={styles.headingContainer}>
+            <Text style={styles.title}>Powered by Discogs</Text>
+              <Image style={styles.logo} source={power} />
+              <Text style={styles.subText}>
+                Vinylizr is a  companion tool that uses the cataloging features of Discgos.
+              </Text>
+          </View>
 
-
-
-        <CardSection>
           <Animatable.View animation="fadeIn" style={styles.animateStyles}>
             <Button
               onPress={this.discogsRedirect}>
-              Log in
+              Get Started
             </Button>
 
           </Animatable.View>
 
-        </CardSection>
-
+      </Image>
       </View>
     )
   }
 }
 
 const styles = {
-  sectionContainer: {
-    flex: 1,
-    backgroundColor: '#000000',
-
-  },
-  containerLogo: {
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'column'
-  },
   animateStyles: {
     flex: 1,
     justifyContent: 'flex-end',
-    marginBottom: 75
+    marginBottom: 40
   },
-
-
-  errorTextStyle: {
-    fontSize: 20,
-    alignSelf: 'center',
-    color: 'red'
+  headingContainer: {
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    marginTop: 100,
+    width: 295
   },
-  sectionContainer: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#000000',
-    paddingLeft: 20,
-    paddingRight: 20
-
-
-  },
-
-  createButton: {
-    flex:1,
-    alignSelf: 'stretch',
+  title: {
     backgroundColor: 'transparent',
-    height: 20,
+    fontSize: 24,
+    fontFamily: 'Lato-Bold',
+    color: '#ffffff',
+    lineHeight: 29,
+    marginBottom: 10
 
   },
+  subText: {
+    backgroundColor: 'transparent',
+    fontFamily: 'Lato-Regular',
+    color: '#ffffff',
+    fontSize: 16,
+    lineHeight: 29,
+    marginTop: 10,
+    textAlign: 'center'
+  },
+  logo: {
+    width: 24,
+    height: 28
+
+  },
+  imagesContainer: {
+    width: windowSize.width,
+    height: windowSize.height,
+    justifyContent: 'flex-end',
+    alignItems: 'center'
+  },
+  backgroundImage: {
+    flex: 1,
+    width: windowSize.width,
+    height: windowSize.height,
+    backgroundColor: '#000',
+    justifyContent: 'flex-end',
+    alignItems: 'center'
+
+  }
   }
 
 export default LoginForm

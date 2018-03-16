@@ -25,8 +25,9 @@ const styles = {
   buttonStyle: {
     alignSelf: 'stretch',
     backgroundColor: '#F42E4A',
-    borderRadius: 20,
-    height: 40,
+    borderRadius: 7,
+    height: 44,
+    width: 295
 
   }
 }

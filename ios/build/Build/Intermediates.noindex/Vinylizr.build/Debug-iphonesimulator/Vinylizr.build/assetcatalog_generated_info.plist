@@ -17,6 +17,8 @@
 			<string>AppIcon</string>
 		</dict>
 	</dict>
+	<key>UILaunchImageFile</key>
+	<string>LaunchImage</string>
 	<key>UILaunchImages</key>
 	<array>
 		<dict>
@@ -28,6 +30,26 @@
 			<string>Portrait</string>
 			<key>UILaunchImageSize</key>
 			<string>{375, 667}</string>
+		</dict>
+		<dict>
+			<key>UILaunchImageMinimumOSVersion</key>
+			<string>7.0</string>
+			<key>UILaunchImageName</key>
+			<string>LaunchImage-700</string>
+			<key>UILaunchImageOrientation</key>
+			<string>Portrait</string>
+			<key>UILaunchImageSize</key>
+			<string>{320, 480}</string>
+		</dict>
+		<dict>
+			<key>UILaunchImageMinimumOSVersion</key>
+			<string>7.0</string>
+			<key>UILaunchImageName</key>
+			<string>LaunchImage-700-568h</string>
+			<key>UILaunchImageOrientation</key>
+			<string>Portrait</string>
+			<key>UILaunchImageSize</key>
+			<string>{320, 568}</string>
 		</dict>
 	</array>
 </dict>

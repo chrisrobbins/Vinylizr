@@ -38,7 +38,7 @@
 		</data>
 		<key>Assets.car</key>
 		<data>
-		X3WvH2a3MSgmr3e2BwmM47bESfk=
+		paQioDmDBQrrtgtruRapihGFV/w=
 		</data>
 		<key>Entypo.ttf</key>
 		<data>
@@ -103,7 +103,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		PKXbcfhmhWUGyd8D2uP67xE64rQ=
+		jWJx0bI3bPtVaI869EKTKRYMluk=
 		</data>
 		<key>Ionicons.ttf</key>
 		<data>
@@ -125,9 +125,25 @@
 		<data>
 		En8kGHGp/kLNjQc6CDVBDzgk1Xw=
 		</data>
+		<key>LaunchImage-568h@2x.png</key>
+		<data>
+		3aH6LyDO2zhWs4PQvyHYI/e75+o=
+		</data>
+		<key>LaunchImage-700-568h@2x.png</key>
+		<data>
+		3aH6LyDO2zhWs4PQvyHYI/e75+o=
+		</data>
+		<key>LaunchImage-700@2x.png</key>
+		<data>
+		MPPEyPzmHel6ZI3OVqJZtVv9j1Y=
+		</data>
 		<key>LaunchImage-800-667h@2x.png</key>
 		<data>
 		gJSexB6v0S7S0MH1Nt82JfTzy1s=
+		</data>
+		<key>LaunchImage.png</key>
+		<data>
+		9COoWWH7B1sdTZX9YIZcnD4ohxQ=
 		</data>
 		<key>MaterialCommunityIcons.ttf</key>
 		<data>
@@ -268,11 +284,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			X3WvH2a3MSgmr3e2BwmM47bESfk=
+			paQioDmDBQrrtgtruRapihGFV/w=
 			</data>
 			<key>hash2</key>
 			<data>
-			HBGRmFDvsQyBVIWobHy7oNFdTD82b3/E5B5hwfoy9eM=
+			IOnzw1Pf7lt4/7Yz1nf8INVgVCr5IVT2BRtTTFiobws=
 			</data>
 		</dict>
 		<key>Entypo.ttf</key>
@@ -486,6 +502,39 @@
 			eucUtjwsi5QL3SEaDMZ48BFoo07qiqE8DfJTZPKSOKc=
 			</data>
 		</dict>
+		<key>LaunchImage-568h@2x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			3aH6LyDO2zhWs4PQvyHYI/e75+o=
+			</data>
+			<key>hash2</key>
+			<data>
+			gvA2XiBjREwuz/Zbp750zztJIPaiPOa2xLBO0VuKO6M=
+			</data>
+		</dict>
+		<key>LaunchImage-700-568h@2x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			3aH6LyDO2zhWs4PQvyHYI/e75+o=
+			</data>
+			<key>hash2</key>
+			<data>
+			gvA2XiBjREwuz/Zbp750zztJIPaiPOa2xLBO0VuKO6M=
+			</data>
+		</dict>
+		<key>LaunchImage-700@2x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			MPPEyPzmHel6ZI3OVqJZtVv9j1Y=
+			</data>
+			<key>hash2</key>
+			<data>
+			MYLM4K5GuYkj9mmk0n6GKRylIdkGYC5cZC26Ex/PN7w=
+			</data>
+		</dict>
 		<key>LaunchImage-800-667h@2x.png</key>
 		<dict>
 			<key>hash</key>
@@ -495,6 +544,17 @@
 			<key>hash2</key>
 			<data>
 			oWNYPJuTQ881RZx/5S5G8MYTj4veyfBgMxwJAQJ8Y5U=
+			</data>
+		</dict>
+		<key>LaunchImage.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			9COoWWH7B1sdTZX9YIZcnD4ohxQ=
+			</data>
+			<key>hash2</key>
+			<data>
+			JM/s3NXjz8aYlQ+2WBrjUZ/+mF1OQI+m+U5ZosvB7Yc=
 			</data>
 		</dict>
 		<key>MaterialCommunityIcons.ttf</key>

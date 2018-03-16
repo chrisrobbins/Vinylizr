@@ -213,9 +213,7 @@ getAccessToken() {
 const styles = {
   container: {
     flex: 1,
-    backgroundColor: '#000000'
   },
   status: {
-    backgroundColor: '#000000'
   }
 }
