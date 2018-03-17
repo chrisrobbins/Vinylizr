@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Text, View } from 'react-native'
 
-class CollectionBadge extends Component {
+class WantlistBadge extends Component {
 
   render() {
     return(
@@ -20,9 +20,9 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#005EFF',
+    borderColor: '#D400FF',
     marginLeft: 8,
-    backgroundColor: '#005EFF',
+    backgroundColor: '#D400FF',
     borderRadius: 2,
     marginBottom: 1,
     alignSelf: 'flex-end'
@@ -35,4 +35,4 @@ const styles = {
 
 
 
-export default CollectionBadge
+export default WantlistBadge

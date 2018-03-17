@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 
 import CollectionBadge from './CollectionBadge'
+import WantlistBadge from './WantlistBadge'
 
 import axios from 'axios'
 
@@ -28,6 +29,7 @@ constructor(props) {
     rightSwiped: false,
     isSwiping: null,
     releasesOwned: [],
+    releasesWanted: [],
     page: 1
     }
 }
@@ -123,7 +125,7 @@ _showRightModal = () => {
 
 
 render() {
-  const { item, onSwipeStart, onSwipeRelease, collectionRecords, artist } = this.props
+  const { item, onSwipeStart, onSwipeRelease, collectionRecords, wantlistRecords, artist } = this.props
   console.log(item, "rlease itme");
   let discogsRecord = item.thumb
   const title = item.title
@@ -146,7 +148,8 @@ render() {
     isModalVisible,
     leftSwiped,
     rightSwiped,
-    releasesOwned
+    releasesOwned,
+    releasesWanted
   } = this.state
   const wantlistIcon = require('../img/wantlistButton.png')
   const collectionIcon = require('../img/collectionButton.png')
@@ -214,6 +217,14 @@ if (recordReleased && recordReleased.includes('-')) {
               releasesOwned.push(record)
               return (
                 <CollectionBadge key={record.id}>1</CollectionBadge>
+              )
+            }
+          })}
+          {wantlistRecords.map((record) => {
+            if (record.id === item.id) {
+              releasesWanted.push(record)
+              return (
+                <WantlistBadge key={record.id}>1</WantlistBadge>
               )
             }
           })}

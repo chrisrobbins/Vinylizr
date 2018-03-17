@@ -5,6 +5,8 @@ import ReleaseResultItem from '../components/ReleaseResultItem'
 import axios from 'axios'
 import VersionsBadge from '../components/VersionsBadge'
 import CollectionBadge from '../components/CollectionBadge'
+import WantlistBadge from '../components/WantlistBadge'
+
 
 
 export default class ReleaseList extends Component {
@@ -20,7 +22,9 @@ constructor(props) {
     refreshing: false,
     isSwiping: null,
     collectionRecords: [],
-    releasesOwned: []
+    wantlistRecords: [],
+    releasesOwned: [],
+    releasesWanted: []
   }
 }
 
@@ -34,11 +38,12 @@ constructor(props) {
   componentWillMount() {
     this.getMasterReleases()
     this.getUserCollection()
+    this.getUserWantlist()
   }
 
   componentDidMount() {
     setTimeout(this.getReleasesOwned, 1000)
-    this.getReleasesOwned()
+    setTimeout(this.getReleasesWanted, 1000)
 
   }
 
@@ -60,6 +65,42 @@ constructor(props) {
 
       .then((response) => {
         this.setState({collectionRecords: response.data.releases})
+
+    })
+
+
+        .catch( (error) => {
+        if (error.response) {
+          console.log(error.response.data)
+          console.log(error.response.status)
+          console.log(error.response.headers)
+        } else if (error.request) {
+          console.log(error.request)
+        } else {
+          console.log('Error', error.message)
+        }
+        console.log(error.config)
+      })
+    })
+  }
+
+  getUserWantlist() {
+    const { userData } = this.props.navigation.state.params
+    value = AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then((values) => {
+      const user_token = values[0][1]
+      const user_secret = values[1][1]
+      const user_name = userData.username
+
+        axios({method:'GET', url:`https://api.discogs.com/users/${user_name}/wants`,
+        headers:{
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization':`OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
+        'User-Agent': 'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
+       }
+      })
+      .then((response) => {
+        // console.log(response, "WANTLIST RESPONSE")
+        this.setState({ wantlistRecords: response.data.wants })
 
     })
 
@@ -135,6 +176,24 @@ getReleasesOwned = () => {
   this.setState({ releasesOwned: ownedReleases })
 }
 
+getReleasesWanted = () => {
+  const { records, wantlistRecords, releasesWanted } = this.state
+  let wantedReleases = []
+  wantlistRecords.map((wantlistRecord) => {
+    return (records.map((releaseItem) => {
+      if (wantlistRecord.basic_information.id === releaseItem.id) {
+        console.log("Collection item: ", wantlistRecord, "RElease Item: ", releaseItem);
+        return (
+          wantedReleases.push(wantlistRecord)
+
+        )
+      }
+    })
+  )
+  })
+  this.setState({ releasesWanted: wantedReleases })
+}
+
   getMasterReleases = () => {
     const { userData, item } = this.props.navigation.state.params
     const { page } = this.state
@@ -180,13 +239,13 @@ getReleasesOwned = () => {
 
   render() {
     const { item, userData } = this.props.navigation.state.params
-    const { records, collectionRecords, releasesOwned } = this.state
+    const { records, collectionRecords, releasesOwned, releasesWanted, wantlistRecords } = this.state
     let discogsString = item.title.split('-')
     const title = discogsString[1]
     const artist = discogsString[0]
     const label = item.label
 
-
+    console.log(wantlistRecords, "RECS FROM WANTS");
 
     return(
       <View style={styles.container}>
@@ -203,7 +262,8 @@ getReleasesOwned = () => {
           <Text style={styles.detailArtist}>{artist}</Text>
           <View style={styles.badgeContainer}>
           <VersionsBadge>{records.length} VERSIONS</VersionsBadge>
-          {!releasesOwned ? <Text></Text> : <CollectionBadge style={styles.badge}>{releasesOwned.length}</CollectionBadge>}
+          {releasesOwned.length <= 0 ? <Text></Text> : <CollectionBadge style={styles.badge}>{releasesOwned.length}</CollectionBadge>}
+          {releasesWanted.length <= 0 ? <Text></Text> : <WantlistBadge style={styles.badge}>{releasesWanted.length}</WantlistBadge>}
           </View>
           </View>
           </View>
@@ -216,6 +276,7 @@ getReleasesOwned = () => {
                 key={item.id}
                 artist={artist}
                 collectionRecords={collectionRecords}
+                wantlistRecords={wantlistRecords}
                 onSwipeStart={() => this.setState({isSwiping: true})}
                 onSwipeRelease={() => this.setState({isSwiping: false})}
 
@@ -243,7 +304,8 @@ const styles = {
   },
   badgeContainer: {
     flexDirection: 'row',
-    marginBottom: 10
+    marginBottom: 10,
+    marginLeft: 6
   },
   imagesContainer: {
     width: windowSize.width,
@@ -259,7 +321,7 @@ const styles = {
     width: 100,
     marginBottom: 0,
     marginLeft: 0,
-    marginRight: 20
+    marginRight: 15
 
   },
   headerContainer: {
@@ -278,7 +340,8 @@ const styles = {
     backgroundColor: 'transparent',
     fontFamily: 'Lato-Regular',
     lineHeight: 24,
-    fontSize: 16
+    fontSize: 16,
+    marginLeft: 6
 
 
   },
