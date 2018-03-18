@@ -258,14 +258,14 @@ getReleasesWanted = () => {
           >
           </Image>
           <View style={styles.headerContainer}>
-          <Text numberOfLines={1} ellipsifyMode={'tail'} style={styles.detailTitle}>{title}</Text>
-          <Text style={styles.detailArtist}>{artist}</Text>
-          <View style={styles.badgeContainer}>
-          <VersionsBadge>{records.length} VERSIONS</VersionsBadge>
-          {releasesOwned.length <= 0 ? <Text></Text> : <CollectionBadge style={styles.badge}>{releasesOwned.length}</CollectionBadge>}
-          {releasesWanted.length <= 0 ? <Text></Text> : <WantlistBadge style={styles.badge}>{releasesWanted.length}</WantlistBadge>}
-          </View>
-          </View>
+            <Text numberOfLines={1} ellipsifyMode={'tail'} style={styles.detailTitle}>{title}</Text>
+              <Text style={styles.detailArtist}>{artist}</Text>
+                <View style={styles.badgeContainer}>
+                  <VersionsBadge>{records.length} VERSIONS</VersionsBadge>
+                  {releasesOwned.length <= 0 ? <Text></Text> : <CollectionBadge style={styles.badge}>{releasesOwned.length}</CollectionBadge>}
+                  {releasesWanted.length <= 0 ? <Text></Text> : <WantlistBadge style={styles.badge}>{releasesWanted.length}</WantlistBadge>}
+                </View>
+            </View>
           </View>
           <FlatList
             data={records}

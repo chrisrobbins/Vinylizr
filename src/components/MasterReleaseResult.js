@@ -75,6 +75,7 @@ getMasterReleases = () => {
 
 
 render() {
+  
   const {
     item,
   } = this.props

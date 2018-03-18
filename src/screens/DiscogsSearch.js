@@ -11,6 +11,7 @@ import SearchSuccessModal from '../components/SearchSuccessModal'
 import { NavigationActions } from 'react-navigation'
 
 import _ from 'lodash'
+
 import {
   View,
   Text,
@@ -22,6 +23,7 @@ import {
   TouchableOpacity,
   AsyncStorage
 } from 'react-native'
+
 import collapsible from 'react-native-collapsible/Accordion'
 
 class DiscogsSearch extends Component {
@@ -204,7 +206,7 @@ class DiscogsSearch extends Component {
         <TextInput
           ref={text => this._textInput = text}
           style={styles.inputStyle}
-          autoFocus={true}
+          autoFocus={false}
           type="search"
           value={this.state.newText}
           onKeyPress={this.searchDiscogs}
