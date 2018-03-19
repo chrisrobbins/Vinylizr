@@ -210,6 +210,7 @@ getReleasesWanted = () => {
      }
     })
     .then((response) => {
+      console.log(response.data.versions, "VERSIONS VINYL");
       this.setState({records: response.data.versions})
 
   })

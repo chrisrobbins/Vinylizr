@@ -158,7 +158,8 @@ _keyExtractor = (item, index) => item.id + index
             <TouchableOpacity key={item.intance_id} onPress={() => {
               console.log(item,"FLATLIST ITEM FROM ALBUM DETAIL");
             this.props.navigation.navigate('AlbumDetail', {
-            item: item
+            item: item,
+            inCollection: true
            })
          }}>
 

@@ -173,11 +173,8 @@ _keyExtractor = (item, index) => item.id + index
           renderItem={({ item, index }) => (
             <TouchableOpacity key={item.instance_id} onPress={() => {
             this.props.navigation.navigate('AlbumDetail', {
-            title: item.basic_information.title,
-            thumb: item.basic_information.thumb,
-            label: item.basic_information.labels[0].name,
-            catno: item.basic_information.labels[0].catno,
-            year: item.basic_information.year,
+            item: item,
+            inWantlist: true
            })
          }}>
 
