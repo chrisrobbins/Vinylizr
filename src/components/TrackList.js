@@ -8,55 +8,58 @@ class TrackList extends Component {
     let letter
     switch (track.position) {
     case "1":
-        letter = "A";
+        letter = "A1";
         break;
     case "2":
-        letter = "A";
+        letter = "A2";
         break;
     case "3":
-        letter = "A";
+        letter = "A3";
         break;
     case "4":
-        letter = "B";
+        letter = "B1";
         break;
     case "5":
-        letter = "B";
+        letter = "B2";
         break;
     case "6":
-        letter = "B";
+        letter = "B3";
+        break;
     case "7":
-        letter = "C";
+        letter = "C1";
         break;
     case "8":
-        letter = "C";
+        letter = "C2";
         break;
     case "9":
-        letter = "C";
+        letter = "C3";
+        break;
     case "10":
-        letter = "D";
+        letter = "D1";
         break;
     case "11":
-        letter = "D";
+        letter = "D2";
         break;
     case "12":
-        letter = "D";
+        letter = "D3";
+        break;
     case "13":
-        letter = "E";
+        letter = "E1";
         break;
     case "14":
-        letter = "E";
+        letter = "E2";
         break;
     case "15":
-        letter = "E";
+        letter = "E3";
         break;
     case "16":
-        letter = "F";
+        letter = "F1";
         break;
     case "17":
-        letter = "F";
+        letter = "F2";
         break;
     case "18":
-        letter = "F";
+        letter = "F3";
       default:
       return letter
 
@@ -74,7 +77,7 @@ class TrackList extends Component {
           return (
             <View key={track.position} style={styles.trackTextContainer}>
               <View style={styles.textStart}>
-                <Text style={styles.posText}>{this.getTrackLetter(track)}{track.position}</Text>
+                <Text style={styles.posText}>{this.getTrackLetter(track)}</Text>
                 <Text style={styles.text}>{track.title}</Text>
               </View>
               <View style={styles.duratContainer}>
@@ -98,7 +101,7 @@ const styles = {
     marginTop: 35,
     alignSelf: 'center',
     flexDirection: 'column',
-    marginBottom: 35
+    marginBottom: 45
   },
   trackTitle: {
     fontSize: 14,
@@ -119,7 +122,9 @@ const styles = {
   text: {
     color: '#ffffff',
     fontSize: 16,
-    marginTop: 8
+    marginTop: 8,
+    fontFamily: 'Lato-Regular',
+    lineHeight: 18
 
   },
   posText: {
@@ -127,7 +132,11 @@ const styles = {
     fontSize: 14,
     marginTop: 8,
     width: 30,
-    marginRight: 5
+    marginRight: 5,
+    fontFamily: 'Lato-Regular',
+    lineHeight: 18
+
+
   },
   duratContainer: {
     flex: 1,
@@ -137,7 +146,10 @@ const styles = {
     color: '#9D9D9D',
     flexDirection: 'row',
     marginTop: 10,
-    fontSize: 14
+    fontSize: 14,
+    fontFamily: 'Lato-Regular',
+    lineHeight: 18
+
   }
 }
 
