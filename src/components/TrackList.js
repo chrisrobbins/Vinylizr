@@ -3,14 +3,84 @@ import { Text, View } from 'react-native'
 
 class TrackList extends Component {
 
+
+  getTrackLetter = (track) => {
+    let letter
+    switch (track.position) {
+    case "1":
+        letter = "A";
+        break;
+    case "2":
+        letter = "A";
+        break;
+    case "3":
+        letter = "A";
+        break;
+    case "4":
+        letter = "B";
+        break;
+    case "5":
+        letter = "B";
+        break;
+    case "6":
+        letter = "B";
+    case "7":
+        letter = "C";
+        break;
+    case "8":
+        letter = "C";
+        break;
+    case "9":
+        letter = "C";
+    case "10":
+        letter = "D";
+        break;
+    case "11":
+        letter = "D";
+        break;
+    case "12":
+        letter = "D";
+    case "13":
+        letter = "E";
+        break;
+    case "14":
+        letter = "E";
+        break;
+    case "15":
+        letter = "E";
+        break;
+    case "16":
+        letter = "F";
+        break;
+    case "17":
+        letter = "F";
+        break;
+    case "18":
+        letter = "F";
+      default:
+      return letter
+
+    }
+    return letter
+  }
+
+
   render() {
     const { tracklist } = this.props
-    console.log(tracklist, "THIS IS THE TRACK LIST NOT GETTING PROPS");
     return(
       <View style={styles.container}>
+        <Text style={styles.trackTitle}>Tracklist:</Text>
         {tracklist.map((track) => {
           return (
-            <Text style={styles.text}>{track.title}</Text>
+            <View key={track.position} style={styles.trackTextContainer}>
+              <View style={styles.textStart}>
+                <Text style={styles.posText}>{this.getTrackLetter(track)}{track.position}</Text>
+                <Text style={styles.text}>{track.title}</Text>
+              </View>
+              <View style={styles.duratContainer}>
+              <Text style={styles.duration}>{track.duration}</Text>
+              </View>
+            </View>
           )
         })}
       </View>
@@ -21,19 +91,53 @@ class TrackList extends Component {
 
 const styles = {
   container: {
+    flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#D400FF',
-    marginLeft: 8,
-    backgroundColor: '#D400FF',
-    borderRadius: 2,
-    marginBottom: 1,
-    alignSelf: 'flex-end'
+    alignItems: 'flex-start',
+    backgroundColor: 'transparent',
+    marginTop: 35,
+    alignSelf: 'center',
+    flexDirection: 'column',
+    marginBottom: 35
+  },
+  trackTitle: {
+    fontSize: 14,
+    color: '#9D9D9D'
+  },
+  textStart: {
+    alignSelf: 'flex-start',
+    flexDirection: 'row',
+  },
+  trackTextContainer: {
+    borderBottomWidth: 1,
+    borderColor: '#979797',
+    height: 32,
+    width: 327,
+    flex: 1,
+    flexDirection: 'row',
   },
   text: {
     color: '#ffffff',
-    fontSize: 16
+    fontSize: 16,
+    marginTop: 8
+
+  },
+  posText: {
+    color: '#9D9D9D',
+    fontSize: 14,
+    marginTop: 8,
+    width: 30,
+    marginRight: 5
+  },
+  duratContainer: {
+    flex: 1,
+    alignItems: 'flex-end'
+  },
+  duration: {
+    color: '#9D9D9D',
+    flexDirection: 'row',
+    marginTop: 10,
+    fontSize: 14
   }
 }
 

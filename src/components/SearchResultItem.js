@@ -138,7 +138,6 @@ _showRightModal = () => {
 
 render() {
   const { item, onSwipeStart, onSwipeRelease } = this.props
-  console.log(item, "SEARCH ITEM");
   let discogsRecord = item.thumb
   const title = item.title
   const artist = item.artist

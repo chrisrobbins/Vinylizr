@@ -1,6 +1,6 @@
-import React, {Component} from 'react'
-import {Text, View, Image, ScrollView, Dimensions, TouchableOpacity, AsyncStorage } from 'react-native'
-import {DetailButton} from '../components/common'
+import React, { Component } from 'react'
+import { Text, View, Image, ScrollView, Dimensions, TouchableOpacity, AsyncStorage } from 'react-native'
+import { DetailButton } from '../components/common'
 import TrackList from '../components/TrackList'
 import Stars from 'react-native-stars-rating'
 const windowSize = Dimensions.get('window')
@@ -64,7 +64,6 @@ class AlbumDetail extends Component {
        }
       })
       .then((response) => {
-        console.log(response, "PRICES");
         this.setState({
           low: response.data['Good Plus (G+)'].value,
           median: response.data['Very Good Plus (VG+)'].value,
@@ -102,7 +101,6 @@ class AlbumDetail extends Component {
     const label = item.basic_information.labels[0].name
     const year = item.basic_information.year
 
-    console.log(tracklist, "TRackLIST IN ALBUM DETAIL");
     return (
       <View style={styles.detailScrollView}>
 
@@ -168,6 +166,9 @@ class AlbumDetail extends Component {
           </View>
         </View>
         <View style={styles.endDivider}></View>
+          <TrackList
+           tracklist={tracklist}
+          />
       </ScrollView>
     </View>
   )
