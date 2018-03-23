@@ -43,6 +43,7 @@ saveToCollection = () => {
      }
     })
     .then((response) => {
+      console.log(response, " post response");
       this.setState({items: response.data.releases})
 
   })

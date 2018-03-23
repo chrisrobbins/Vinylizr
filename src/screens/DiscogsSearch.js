@@ -9,7 +9,6 @@ import MasterReleaseResult from '../components/MasterReleaseResult'
 import SearchResultItem from '../components/SearchResultItem'
 import SearchSuccessModal from '../components/SearchSuccessModal'
 import { NavigationActions } from 'react-navigation'
-
 import _ from 'lodash'
 
 import {
@@ -64,7 +63,7 @@ class DiscogsSearch extends Component {
          axios({method:'GET', url:`https://api.discogs.com/oauth/identity`,
          headers:{
          'Content-Type': 'application/x-www-form-urlencoded',
-         'Authorization':`OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
+         'Authorization':`OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}`,
          'User-Agent': 'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
         }
        })
@@ -93,7 +92,7 @@ class DiscogsSearch extends Component {
     const { page } = this.state
     const apiSearch = this.state.newText
     const releaseType = 'master'
-    const url = `https://api.discogs.com/database/search?&q=${apiSearch}&page=${page}&per_page=25&key=${apiKey}&secret=${apiSecret}`
+    const url = `https://api.discogs.com/database/search?&q=${apiSearch}&page=${page}&per_page=80&key=${apiKey}&secret=${apiSecret}`
     this.setState({ loading: true })
     axios.get(url)
       .then(res => {
@@ -121,11 +120,12 @@ class DiscogsSearch extends Component {
          refreshing: true
        },
        () => {
-         this.searchDiscogs
+         this.searchDiscogs()
        }
      )
    }
    handleLoadMore = () => {
+     console.log("IM LOADING MORE THINGS FROM THE SEARCH");
      this.setState(
        {
          page: this.state.page + 1
@@ -134,6 +134,7 @@ class DiscogsSearch extends Component {
          this.searchDiscogs
        }
      )
+     console.log("PAGE: ", this.state.page);
    }
    renderFooter = () => {
      if (!this.state.loading) return null
@@ -194,6 +195,8 @@ class DiscogsSearch extends Component {
 
 
 
+
+
    _keyExtractor = (item, index) => item.id + index
 
   render() {
@@ -226,7 +229,7 @@ class DiscogsSearch extends Component {
           ListFooterComponent={this.renderFooter}
           refreshing={this.state.refreshing}
           onEndReached={this.handleLoadMore}
-          onEndReachedThreshold={15}
+          onEndReachedThreshold={.2}
           style={styles.renderAlbums}
           scrollEnabled={!this.state.isSwiping}
           style={styles.renderAlbums}

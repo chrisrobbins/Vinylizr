@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Text, View, Image, ScrollView, Dimensions, TouchableOpacity, AsyncStorage } from 'react-native'
 import { DetailButton } from '../components/common'
 import TrackList from '../components/TrackList'
-import Stars from 'react-native-stars-rating'
+import Stars from 'react-native-stars'
 const windowSize = Dimensions.get('window')
 import axios from 'axios'
 
@@ -16,6 +16,7 @@ class AlbumDetail extends Component {
       low: '',
       median: '',
       high: '',
+      userRating: ''
     }
   }
 
@@ -27,6 +28,7 @@ class AlbumDetail extends Component {
   componentWillMount() {
     this.getPrices()
     this.getTrackList()
+    this.getUserRating()
   }
 
 
@@ -71,8 +73,42 @@ class AlbumDetail extends Component {
         })
 
     })
+    .catch( (error) => {
+    if (error.response) {
+      console.log(error.response.data)
+      console.log(error.response.status)
+      console.log(error.response.headers)
+    } else if (error.request) {
+      console.log(error.request)
+    } else {
+      console.log('Error', error.message)
+    }
+    console.log(error.config)
+  })
+})
+}
 
+    changeRating = (val) => {
+      const { item, userData } = this.props.navigation.state.params
+      const release_id = item.id
+      const user_name = userData.username
+      AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then((values) => {
+        const user_token = values[0][1]
+        const user_secret = values[1][1]
+        const instance_id = item.instance_id
+        const folder_id = item.folder_id
 
+        axios({method:'POST', url:`https://api.discogs.com//users/${user_name}/collection/folders/${folder_id}/releases/${release_id}/instances/${instance_id}`,
+        headers:{
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization':`OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
+        'User-Agent': 'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+      },
+        'rating': `'${rating}'`
+      })
+        .then((response) => {
+          console.log(response, rating,  "CHANGE RATING");
+      })
         .catch( (error) => {
         if (error.response) {
           console.log(error.response.data)
@@ -88,10 +124,26 @@ class AlbumDetail extends Component {
     })
   }
 
+  getUserRating = () => {
+    const { item, userData } = this.props.navigation.state.params
+    const release_id = item.id
+    const user_name = userData.username
+
+    const url = `https://api.discogs.com//releases/${release_id}/rating/${user_name}`
+    axios.get(url)
+      .then(res => {
+        console.log(res, "user rating");
+        this.setState({ userRating: res.data.rating })
+      })
+      .catch(error => {
+        this.setState({ error })
+      })
+  }
+
 
   render() {
-    const {item, inCollection, inWantlist} = this.props.navigation.state.params
-    const { avgRating, low, median, high, numForSale, tracklist } = this.state
+    const { item, inCollection, inWantlist } = this.props.navigation.state.params
+    const { avgRating, low, median, high, numForSale, tracklist, userRating } = this.state
     const roundedRating = Math.round( avgRating * 10 ) / 10
     const roundedMedian = !median ? 0 : median.toFixed(2)
     const roundedLow = !low ? 0 : low.toFixed(2)
@@ -100,6 +152,10 @@ class AlbumDetail extends Component {
     const artist = item.basic_information.artists[0].name
     const label = item.basic_information.labels[0].name
     const year = item.basic_information.year
+
+    userRatingNum = parseInt(userRating)
+
+    console.log(userRating, "fuk");
 
     return (
       <View style={styles.detailScrollView}>
@@ -140,7 +196,17 @@ class AlbumDetail extends Component {
             </View>
             <View style={styles.starContainer}>
               <Text style={styles.rateAlbumTitle}>Rate Album</Text>
-            <Stars isActive={true} rateMax={5} isHalfStarEnabled={true} onStarPress={(rating) => console.log(rating, roundedRating)} rate={!roundedRating ? 3 : roundedRating} size={30} color={'#F8E71C'}/>
+              <Stars
+    half={false}
+    rating={3}
+    update={(val) => this.changeRating(val)}
+    spacing={4}
+    starSize={30}
+    count={5}
+    fullStar={require('../img/star-full.png')}
+    emptyStar={require('../img/empty-star.png')}
+    />
+
             </View>
           </View>
           <View style={styles.midDivider}></View>

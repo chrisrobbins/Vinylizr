@@ -61,7 +61,7 @@ class TrackList extends Component {
     case "18":
         letter = "F3";
       default:
-      return letter
+      return track.position
 
     }
     return letter

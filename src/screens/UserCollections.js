@@ -159,7 +159,8 @@ _keyExtractor = (item, index) => item.id + index
               console.log(item,"FLATLIST ITEM FROM ALBUM DETAIL");
             this.props.navigation.navigate('AlbumDetail', {
             item: item,
-            inCollection: true
+            inCollection: true,
+            userData: userData
            })
          }}>
 
