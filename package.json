@@ -1,51 +1,38 @@
 {
-  "name": "Vinylizr",
-  "version": "0.0.1",
-  "private": true,
+  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "react-native start",
-    "test": "jest",
-    "purge": "./node_modules/.bin/react-native-clean-project"
-  },
-  "dependencies": {
-    "@ercpereda/react-native-accordion": "^2.0.6",
-    "axios": "^0.16.2",
-    "class-autobind": "^0.1.4",
-    "firebase": "^4.3.0",
-    "fsevents": "^1.1.3",
-    "lodash": "^4.17.4",
-    "react": "16.0.0-alpha.6",
-    "react-icons": "^2.2.5",
-    "react-native": "^0.44.0",
-    "react-native-animatable": "^1.2.4",
-    "react-native-blur-image": "^1.0.6",
-    "react-native-collapsible": "^0.10.0",
-    "react-native-deep-linking": "^2.1.0",
-    "react-native-linear-gradient": "^2.3.0",
-    "react-native-modal": "^3.1.0",
-    "react-native-stars": "^1.1.3",
-    "react-native-swipeable": "^0.6.0",
-    "react-native-swipeable-flat-list": "0.0.4",
-    "react-native-vector-icons": "^4.4.0",
-    "react-navigation": "^1.0.0-beta.11",
-    "react-redux": "^5.0.6",
-    "redux": "^3.7.2",
-    "redux-thunk": "^2.2.0"
-  },
-  "devDependencies": {
-    "babel-jest": "21.0.0",
-    "babel-preset-react-native": "3.0.2",
-    "jest": "21.0.1",
-    "react-native-clean-project": "^1.0.7",
-    "react-test-renderer": "16.0.0-alpha.12",
-    "reactotron-react-native": "^1.13.2"
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "eject": "expo eject",
+    "test": "node ./node_modules/jest/bin/jest.js --watchAll"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "jest-expo"
   },
-  "rnpm": {
-    "assets": [
-      "./assets/fonts"
-    ]
-  }
+  "dependencies": {
+    "@expo/samples": "2.1.1",
+    "axios": "^0.18.0",
+    "babel-preset-react-native": "^4.0.1",
+    "expo": "^32.0.0",
+    "firebase": "^5.8.5",
+    "lodash": "^4.17.11",
+    "react": "16.5.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
+    "react-native-animatable": "^1.3.1",
+    "react-native-deep-linking": "^2.2.0",
+    "react-native-dotenv": "^0.2.0",
+    "react-native-modal": "^9.0.0",
+    "react-native-stars": "^1.1.5",
+    "react-native-swipeable": "^0.6.0",
+    "react-navigation": "^3.0.9",
+    "react-redux": "^6.0.1",
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0"
+  },
+  "devDependencies": {
+    "babel-preset-expo": "^5.0.0",
+    "jest-expo": "^32.0.0"
+  },
+  "private": true
 }
