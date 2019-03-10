@@ -155,22 +155,6 @@ class SignInScreen extends Component {
       </View>
     );
   }
-
-  discogsRedirect = () => {
-    const { Token } = this.state;
-    Linking.openURL(`https://discogs.com/oauth/authorize?oauth_token=${Token}`);
-  };
-
-  _signInAsync = () => {
-    const { Token, Secret } = this.state;
-    if (Token.length && Secret.length) {
-      this._handlePressAsync();
-    }
-  };
-
-  _signOutAsync = async () => {
-    await AsyncStorage.clear();
-  };
 }
 
 const styles = {
@@ -219,24 +203,5 @@ const styles = {
     alignItems: "center"
   }
 };
-
-// class HomeScreen extends React.Component {
-//   static navigationOptions = {
-//     title: "Welcome to the app!"
-//   };
-
-//   render() {
-//     return (
-//       <View>
-//         <Button title="Show me more of the app" onPress={this._showMoreApp} />
-//         <Button title="Actually, sign me out :)" onPress={this._signOutAsync} />
-//       </View>
-//     );
-//   }
-
-//   _showMoreApp = () => {
-//     this.props.navigation.navigate("Other");
-//   };
-// }
 
 export default SignInScreen;

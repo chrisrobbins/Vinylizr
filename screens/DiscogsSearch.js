@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Button, BarCode, ClearText } from "../components/common";
+import { debounce, uniqBy } from "lodash";
+
+import { ClearText } from "../components/common";
 import MasterReleaseResult from "../components/MasterReleaseResult";
 import SearchResultItem from "../components/SearchResultItem";
-import _ from "lodash";
 
 import {
   View,
@@ -34,9 +35,9 @@ class DiscogsSearch extends Component {
       collectionRecords: []
     };
 
-    this.searchDiscogs = _.debounce(this.searchDiscogs, 218);
+    this.searchDiscogs = debounce(this.searchDiscogs, 218);
   }
-  static navigationOptions = ({ screenProps }) => ({
+  static navigationOptions = () => ({
     header: null,
     cardStyle: {
       backgroundColor: "#000000"
@@ -48,7 +49,7 @@ class DiscogsSearch extends Component {
         <Image source={require("../assets/images/search.png")} />
       )
   });
-  componentWillMount() {
+  componentDidMount() {
     value = AsyncStorage.multiGet(["oauth_token", "oauth_secret"]).then(
       values => {
         const user_token = values[0][1];
@@ -83,12 +84,10 @@ class DiscogsSearch extends Component {
   }
 
   searchDiscogs = () => {
-    const apiKey = "jbUTpFhLTiyyHgLRoBgq";
-    const apiSecret = "LSQDaLpplgcCGlkzujkHyUkxImNlWVoI";
     const { page } = this.state;
     const apiSearch = this.state.newText;
     const releaseType = "master";
-    const url = `https://api.discogs.com/database/search?&q=${apiSearch}&page=${page}&per_page=80&key=${apiKey}&secret=${apiSecret}`;
+    const url = `https://api.discogs.com/database/search?&q=${apiSearch}&page=${page}&per_page=80&key=jbUTpFhLTiyyHgLRoBgq&secret=LSQDaLpplgcCGlkzujkHyUkxImNlWVoI`;
     this.setState({ loading: true });
     axios
       .get(url)
@@ -196,7 +195,7 @@ class DiscogsSearch extends Component {
 
   render() {
     const { userData, albums } = this.state;
-    let records = _.uniqBy(albums, "thumb");
+    let records = uniqBy(albums, "thumb");
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
