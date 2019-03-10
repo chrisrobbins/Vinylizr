@@ -7,9 +7,7 @@ import {
   AsyncStorage
 } from "react-native";
 import { Header } from "../components/common";
-import { connect } from "react-redux";
-import { fetchWantlist } from "../modules/actions/wantlist-action.js";
-import _ from "lodash";
+// import _ from "lodash";
 import axios from "axios";
 
 class Wantlist extends Component {
@@ -190,6 +188,7 @@ class Wantlist extends Component {
             onEndReachedThreshold={40}
             style={styles.textContainer}
             contentContainerStyle={styles.contentContainerStyle}
+            numColumns={3}
           />
         </View>
       </View>
@@ -198,7 +197,6 @@ class Wantlist extends Component {
 }
 const styles = {
   textContainer: {
-    flexDirection: "column",
     paddingBottom: 50
   },
   contentContainer: {
@@ -206,9 +204,7 @@ const styles = {
     backgroundColor: "#000"
   },
   contentContainerStyle: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    flexWrap: "wrap"
+    flexDirection: "column"
   },
   mainContainer: {
     flex: 1
@@ -223,21 +219,4 @@ const styles = {
   }
 };
 
-const mapStateToProps = state => {
-  return {
-    ...state
-  };
-};
-// for click events so that dispatches can happen
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchWantlist: () => {
-      dispatch(fetchWantlist());
-    }
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Wantlist);
+export default Wantlist;

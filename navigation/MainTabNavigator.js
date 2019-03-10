@@ -1,74 +1,84 @@
 import React from "react";
-import { Platform } from "react-native";
 import {
   createStackNavigator,
   createBottomTabNavigator
 } from "react-navigation";
 
-import TabBarIcon from "../components/TabBarIcon";
 import UserCollections from "../screens/UserCollections";
 import WantList from "../screens/WantList";
 import UserProfile from "../screens/UserProfile";
 import DiscogsSearch from "../screens/DiscogsSearch";
-
+import {
+  CollectionFocused,
+  CollectionRested,
+  WantlistFocused,
+  WantlistRested,
+  ProfileFocused,
+  ProfileRested,
+  SearchFocused,
+  SearchRested
+} from "./TabBarIcons";
 const Collection = createStackNavigator({
-  Home: UserCollections
+  UserCollections
 });
 
 Collection.navigationOptions = {
-  tabBarLabel: "Collection",
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === "ios"
-          ? `ios-information-circle${focused ? "" : "-outline"}`
-          : "md-information-circle"
-      }
-    />
-  )
+  tabBarOptions: {
+    showLabel: false,
+
+    style: {
+      backgroundColor: "#121212"
+    }
+  },
+  tabBarIcon: ({ focused }) =>
+    focused ? <CollectionFocused /> : <CollectionRested />
 };
 
 const UserWantlist = createStackNavigator({
-  Links: WantList
+  WantList
 });
 
 UserWantlist.navigationOptions = {
-  tabBarLabel: "Wantlist",
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === "ios" ? "ios-link" : "md-link"}
-    />
-  )
+  tabBarOptions: {
+    showLabel: false,
+
+    style: {
+      backgroundColor: "#121212"
+    }
+  },
+  tabBarIcon: ({ focused }) =>
+    focused ? <WantlistFocused /> : <WantlistRested />
 };
 
 const Profile = createStackNavigator({
-  Settings: UserProfile
+  UserProfile
 });
 
 Profile.navigationOptions = {
-  tabBarLabel: "Profile",
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === "ios" ? "ios-options" : "md-options"}
-    />
-  )
+  tabBarOptions: {
+    showLabel: false,
+
+    style: {
+      backgroundColor: "#121212"
+    }
+  },
+  tabBarIcon: ({ focused }) =>
+    focused ? <ProfileFocused /> : <ProfileRested />
 };
 
 const SearchAlbums = createStackNavigator({
-  Settings: DiscogsSearch
+  DiscogsSearch
 });
 
 SearchAlbums.navigationOptions = {
-  tabBarLabel: "Search",
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === "ios" ? "ios-options" : "md-options"}
-    />
-  )
+  tabBarOptions: {
+    showLabel: false,
+
+    style: {
+      backgroundColor: "#121212"
+    }
+  },
+  tabBarIcon: ({ focused }) => (focused ? <SearchFocused /> : <SearchRested />)
 };
 
 export default createBottomTabNavigator({

@@ -10,6 +10,8 @@ import {
 import { Header } from "../components/common";
 import axios from "axios";
 
+// ApiClient.init(DISCOGS_CONSUMER_KEY, DISCOGS_CONSUMER_SECRET);
+
 class UserCollections extends Component {
   static navigationOptions = {
     header: null
@@ -168,6 +170,7 @@ class UserCollections extends Component {
             onEndReachedThreshold={40}
             style={styles.textContainer}
             contentContainerStyle={styles.contentContainerStyle}
+            numColumns={3}
           />
         </View>
       </View>
@@ -177,18 +180,16 @@ class UserCollections extends Component {
 
 const styles = {
   textContainer: {
-    flexDirection: "column",
     paddingBottom: 50
   },
   contentContainer: {
     flex: 1,
-    backgroundColor: "#000"
+    backgroundColor: "#000",
+    alignItems: "center",
+    justifyContent: "space-around"
   },
   contentContainerStyle: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "Space-around",
-    alignItems: "center"
+    flexDirection: "column"
   },
   mainContainer: {
     flex: 1
