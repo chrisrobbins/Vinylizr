@@ -1,21 +1,21 @@
 import React, { Component } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import Modal from "react-native-modal";
-import AlbumDetail from "../screens/AlbumDetail";
+import AlbumDetail from "../../screens/AlbumDetail";
 
 export default class DetailModal extends Component {
   state = {
     isModalVisible: false
   };
 
-  static navigationOptions = {
-    tabBarIcon: ({ tintColor }) =>
-      tintColor == "#e91e63" ? (
-        <Image source={require("../assets/images/search_select.png")} />
-      ) : (
-        <Image source={require("../assets/images/search.png")} />
-      )
-  };
+  // static navigationOptions = {
+  //   tabBarIcon: ({ tintColor }) =>
+  //     tintColor == "#e91e63" ? (
+  //       <Image source={require("../assets/images/search_select.png")} />
+  //     ) : (
+  //       <Image source={require("../assets/images/search.png")} />
+  //     )
+  // };
 
   componentWillMount() {
     console.log(this.props, "modal props bro!!");

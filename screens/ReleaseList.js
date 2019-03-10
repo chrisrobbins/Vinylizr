@@ -8,12 +8,14 @@ import {
   AsyncStorage
 } from "react-native";
 const windowSize = Dimensions.get("window");
-import ReleaseResultItem from "../components/ReleaseResultItem";
+import ReleaseResultItem from "../components/SearchResults/ReleaseResultItem";
 
 import axios from "axios";
-import VersionsBadge from "../components/VersionsBadge";
-import CollectionBadge from "../components/CollectionBadge";
-import WantlistBadge from "../components/WantlistBadge";
+import {
+  VersionsBadge,
+  CollectionBadge,
+  WantlistBadge
+} from "../src/components/badges/VersionsBadge";
 
 export default class ReleaseList extends Component {
   constructor(props) {

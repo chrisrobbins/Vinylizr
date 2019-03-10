@@ -1,24 +1,13 @@
 import React, { Component } from "react";
-import {
-  Text,
-  View,
-  Image,
-  Linking,
-  TouchableHighlight,
-  AsyncStorage
-} from "react-native";
-
-import CollectionBadge from "./CollectionBadge";
-import WantlistBadge from "./WantlistBadge";
+import { Text, View, Image, AsyncStorage } from "react-native";
 
 import axios from "axios";
 
-import { CardSection } from "../components/common/CardSection";
-import { Button } from "../components/common/Button";
+import { CardSection } from "../common/CardSection";
 import Swipeable from "react-native-swipeable";
-import SearchSuccessModal from "../components/SearchSuccessModal";
+import SearchSuccessModal from "../Modals/SearchSuccessModal";
 
-class ReleaseResultItem extends Component {
+class SearchResultItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -26,11 +15,7 @@ class ReleaseResultItem extends Component {
       rightActionActivated: false,
       isModalVisible: false,
       leftSwiped: false,
-      rightSwiped: false,
-      isSwiping: null,
-      releasesOwned: [],
-      releasesWanted: [],
-      page: 1
+      rightSwiped: false
     };
   }
 
@@ -54,11 +39,13 @@ class ReleaseResultItem extends Component {
           }
         })
           .then(response => {
+            console.log(response, " post response");
             this.setState({ items: response.data.releases });
           })
           .then(() => {
             this._showLeftModal();
           })
+
           .catch(error => {
             if (error.response) {
               console.log(error.response.data);
@@ -74,7 +61,6 @@ class ReleaseResultItem extends Component {
       }
     );
   };
-
   saveToWantlist = () => {
     const { userData, item } = this.props;
     value = AsyncStorage.multiGet(["oauth_token", "oauth_secret"]).then(
@@ -94,6 +80,10 @@ class ReleaseResultItem extends Component {
               "Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
           }
         })
+          .then(response => {
+            this.setState({ records: response.data.wants });
+          })
+
           .then(() => {
             this._showRightModal();
           })
@@ -117,26 +107,24 @@ class ReleaseResultItem extends Component {
   _showLeftModal = () => {
     this.setState({ leftSwiped: true });
     setTimeout(() => this.setState({ isModalVisible: true }), 300);
-    setTimeout(() => this.setState({ isModalVisible: false }), 2000);
+    setTimeout(() => this._hideModal(), 2000);
   };
   _showRightModal = () => {
     this.setState({ rightSwiped: true });
     setTimeout(() => this.setState({ isModalVisible: true }), 300);
-    setTimeout(() => this.setState({ isModalVisible: false }), 2000);
+    setTimeout(() => this._hideModal(), 2000);
+  };
+
+  _hideModal = () => {
+    this.setState({ isModalVisible: false });
   };
 
   render() {
-    const {
-      item,
-      onSwipeStart,
-      onSwipeRelease,
-      collectionRecords,
-      wantlistRecords,
-      artist
-    } = this.props;
-    console.log(item, "rlease itme");
+    const { item, onSwipeStart, onSwipeRelease } = this.props;
     let discogsRecord = item.thumb;
     const title = item.title;
+    const artist = item.artist;
+    const label = item.label[0];
 
     const {
       imageView,
@@ -147,20 +135,10 @@ class ReleaseResultItem extends Component {
       collectionSavedTextStyle,
       wantlistSavedTextStyle
     } = styles;
-
-    const {
-      leftActionActivated,
-      rightActionActivated,
-      toggle,
-      isModalVisible,
-      leftSwiped,
-      rightSwiped,
-      releasesOwned,
-      releasesWanted
-    } = this.state;
-    const wantlistIcon = require("../assets/images/wantlistButton.png");
-    const collectionIcon = require("../assets/images/collectionButton.png");
-    const check = require("../assets/images/checkmark.png");
+    const { leftActionActivated, rightActionActivated, toggle } = this.state;
+    const wantlistIcon = require("../../assets/images/wantlistButton.png");
+    const collectionIcon = require("../../assets/images/collectionButton.png");
+    const check = require("../../assets/images/checkmark.png");
 
     const leftContent = [
       <View
@@ -184,18 +162,12 @@ class ReleaseResultItem extends Component {
         <Image style={styles.rightIconStyles} source={wantlistIcon} />
       </View>
     ];
-    let recordReleased = item.released;
-    if (recordReleased && recordReleased.includes("-")) {
-      const releaseSplit = recordReleased.split("-");
-      recordReleased = releaseSplit[0];
-    }
 
     return (
       <SearchSuccessModal
-        isModalVisible={isModalVisible}
-        leftSwiped={leftSwiped}
-        rightSwiped={rightSwiped}
-        key={item.id}
+        isModalVisible={this.state.isModalVisible}
+        leftSwiped={this.state.leftSwiped}
+        rightSwiped={this.state.rightSwiped}
       >
         <Swipeable
           key={item.id}
@@ -222,7 +194,18 @@ class ReleaseResultItem extends Component {
           onSwipeStart={onSwipeStart}
           onSwipeRelease={onSwipeRelease}
         >
-          <CardSection key={item.id}>
+          <CardSection>
+            <View style={imageView}>
+              {!discogsRecord ? (
+                <Image
+                  style={imageStyle}
+                  source={require("../assets/images/n-a.png")}
+                />
+              ) : (
+                <Image style={imageStyle} source={{ uri: discogsRecord }} />
+              )}
+            </View>
+
             <View style={textView}>
               <Text
                 ellipsizeMode={"tail"}
@@ -238,23 +221,9 @@ class ReleaseResultItem extends Component {
               >
                 {artist}
               </Text>
-              <View style={styles.badgeContainer} key={item.id}>
-                <Text key={item.id} style={styles.labelTextStyle}>
-                  {item.label} - {!item.released ? "" : recordReleased}
-                </Text>
-                {collectionRecords.map(record => {
-                  if (record.id === item.id) {
-                    releasesOwned.push(record);
-                    return <CollectionBadge key={record.id}>1</CollectionBadge>;
-                  }
-                })}
-                {wantlistRecords.map(record => {
-                  if (record.id === item.id) {
-                    releasesWanted.push(record);
-                    return <WantlistBadge key={record.id}>1</WantlistBadge>;
-                  }
-                })}
-              </View>
+              <Text key={item.id} style={styles.artistTextStyle}>
+                {item.label[0]} -{item.country || ""} - {item.year || ""}
+              </Text>
             </View>
           </CardSection>
         </Swipeable>
@@ -269,37 +238,22 @@ const styles = {
     borderBottomWidth: 1,
     borderBottomColor: "rgba(217,217,217,.6)"
   },
-  badgeContainer: {
-    flexDirection: "row"
-  },
 
   textView: {
     justifyContent: "center",
-    width: 250,
-    height: 125,
-    marginLeft: 15
+    width: 250
   },
   titleTextStyle: {
-    fontSize: 18,
-    color: "#ffffff",
+    fontSize: 20,
+    color: "#DADADA",
     marginLeft: 5,
-    fontFamily: "Lato-Regular",
-    lineHeight: 22,
-    letterSpacing: 1
-  },
-  labelTextStyle: {
-    fontSize: 16.5,
-    fontFamily: "Lato-Regular",
-    marginLeft: 5,
-    marginTop: 3,
-    color: "rgba(217,217,217,.6)"
+    fontFamily: "Lato-Regular"
   },
   artistTextStyle: {
-    fontSize: 16.5,
+    fontSize: 16,
     color: "rgba(217,217,217,.6)",
-    marginLeft: 5,
+    marginLeft: 10,
     marginTop: 1,
-    marginBottom: 15,
     fontFamily: "Lato-Regular"
   },
   leftSwipeItem: {
@@ -308,18 +262,6 @@ const styles = {
     justifyContent: "center",
     paddingRight: 20
   },
-  // collectionSavedTextStyle: {
-  //   color: '#0967EE',
-  //   marginLeft: 12,
-  //   marginTop: 9,
-  //   fontSize: 10
-  // },
-  // wantlistSavedTextStyle: {
-  //   color: '#D400FF',
-  //   marginLeft: 12,
-  //   marginTop: 9,
-  //   fontSize: 10
-  // },
   imageStyle: {
     height: 85,
     width: 85
@@ -337,4 +279,4 @@ const styles = {
   }
 };
 
-export default ReleaseResultItem;
+export default SearchResultItem;

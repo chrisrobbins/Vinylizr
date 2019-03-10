@@ -9,8 +9,8 @@ import {
   TouchableOpacity,
   AsyncStorage
 } from "react-native";
-import { DetailButton } from "../components/common";
-import TrackList from "../components/TrackList";
+import { DetailButton } from "../src/components/common";
+import TrackList from "../src/components/TrackList/TrackList";
 import Stars from "react-native-stars";
 const windowSize = Dimensions.get("window");
 import axios from "axios";

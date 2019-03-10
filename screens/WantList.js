@@ -6,28 +6,16 @@ import {
   TouchableOpacity,
   AsyncStorage
 } from "react-native";
-import { Header } from "../components/common";
-// import _ from "lodash";
+import { Header } from "../src/components/common";
 import axios from "axios";
 
 class Wantlist extends Component {
-  constructor(props) {
-    super(props);
+  static navigationOptions = {
+    header: null
+  };
+  state = { userData: {}, records: [], refreshing: false };
 
-    this.state = { userData: {}, records: [], refreshing: false };
-  }
-
-  static navigationOptions = ({ screenProps }) => ({
-    header: null,
-    tabBarIcon: ({ tintColor }) =>
-      tintColor == "#e91e63" ? (
-        <Image source={require("../assets/images/wantlistIcon_select.png")} />
-      ) : (
-        <Image source={require("../assets/images/wantlistIcon.png")} />
-      )
-  });
-
-  componentWillMount() {
+  componentDidMount() {
     value = AsyncStorage.multiGet(["oauth_token", "oauth_secret"]).then(
       values => {
         const user_token = values[0][1];
