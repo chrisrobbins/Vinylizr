@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, StatusBar } from "react-native";
-import AppNavigator from "./navigation/AppNavigator";
+import AppNavigator from "./src/navigation/AppNavigator";
 import { Font } from "expo";
 
 console.disableYellowBox = true;

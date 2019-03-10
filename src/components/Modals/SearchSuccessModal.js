@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, TouchableOpacity, View, Image } from "react-native";
+import { Text, View, Image } from "react-native";
 import Modal from "react-native-modal";
 
 export default class SearchSuccessModal extends Component {

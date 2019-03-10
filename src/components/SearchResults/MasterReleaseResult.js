@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import { Text, View, Image, AsyncStorage } from "react-native";
-import _ from "lodash";
-
-import { CardSection } from "../components/common/CardSection";
+import { CardSection } from "../common/CardSection";
 import axios from "axios";
-import VersionsBadge from "./VersionsBadge";
+import VersionsBadge from "../Badges/VersionsBadge";
 
 class MasterReleaseResult extends Component {
   constructor(props) {
@@ -89,7 +87,7 @@ class MasterReleaseResult extends Component {
             {!discogsRecord ? (
               <Image
                 style={imageStyle}
-                source={require("../assets/images/n-a.png")}
+                source={require("../../../assets/images/n-a.png")}
               />
             ) : (
               <Image style={imageStyle} source={{ uri: discogsRecord }} />

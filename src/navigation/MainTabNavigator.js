@@ -4,10 +4,10 @@ import {
   createBottomTabNavigator
 } from "react-navigation";
 
-import UserCollections from "../screens/UserCollections";
-import WantList from "../screens/WantList";
-import UserProfile from "../screens/UserProfile";
-import DiscogsSearch from "../screens/DiscogsSearch";
+import UserCollections from "../../screens/UserCollections";
+import WantList from "../../screens/WantList";
+import UserProfile from "../../screens/UserProfile";
+import DiscogsSearch from "../../screens/DiscogsSearch";
 import {
   CollectionFocused,
   CollectionRested,

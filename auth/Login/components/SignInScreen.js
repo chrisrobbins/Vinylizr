@@ -13,7 +13,7 @@ import axios from "axios";
 import * as Animatable from "react-native-animatable";
 const windowSize = Dimensions.get("window");
 
-import { Button } from "../../../components/common";
+import { Button } from "../../../src/components/common";
 
 const backgroundImg = require("../../../assets/images/vinyl-record-player.png");
 const power = require("../../../assets/images/power.png");

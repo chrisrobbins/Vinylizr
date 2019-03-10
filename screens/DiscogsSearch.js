@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { ClearText } from "../src/components/common";
+import {
+  MasterReleaseResult,
+  SearchResultItem
+} from "../src/components/SearchResults/MasterReleaseResult";
 import { debounce, uniqBy } from "lodash";
-
-import { ClearText } from "../components/common";
-import MasterReleaseResult from "../components/MasterReleaseResult";
-import SearchResultItem from "../components/SearchResultItem";
 
 import {
   View,
@@ -19,36 +20,23 @@ import {
 } from "react-native";
 
 class DiscogsSearch extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      text: "",
-      loading: false,
-      albums: [],
-      page: 1,
-      seed: 1,
-      error: null,
-      refreshing: false,
-      isModalVisible: false,
-      userData: {},
-      isSwiping: null,
-      collectionRecords: []
-    };
+  static navigationOptions = {
+    header: null
+  };
+  state = {
+    text: "",
+    loading: false,
+    albums: [],
+    page: 1,
+    seed: 1,
+    error: null,
+    refreshing: false,
+    isModalVisible: false,
+    userData: {},
+    isSwiping: null,
+    collectionRecords: []
+  };
 
-    this.searchDiscogs = debounce(this.searchDiscogs, 218);
-  }
-  static navigationOptions = () => ({
-    header: null,
-    cardStyle: {
-      backgroundColor: "#000000"
-    },
-    tabBarIcon: ({ tintColor }) =>
-      tintColor == "#e91e63" ? (
-        <Image source={require("../assets/images/search_select.png")} />
-      ) : (
-        <Image source={require("../assets/images/search.png")} />
-      )
-  });
   componentDidMount() {
     value = AsyncStorage.multiGet(["oauth_token", "oauth_secret"]).then(
       values => {
@@ -84,10 +72,12 @@ class DiscogsSearch extends Component {
   }
 
   searchDiscogs = () => {
+    const apiKey = "jbUTpFhLTiyyHgLRoBgq";
+    const apiSecret = "LSQDaLpplgcCGlkzujkHyUkxImNlWVoI";
     const { page } = this.state;
     const apiSearch = this.state.newText;
     const releaseType = "master";
-    const url = `https://api.discogs.com/database/search?&q=${apiSearch}&page=${page}&per_page=80&key=jbUTpFhLTiyyHgLRoBgq&secret=LSQDaLpplgcCGlkzujkHyUkxImNlWVoI`;
+    const url = `https://api.discogs.com/database/search?&q=${apiSearch}&page=${page}&per_page=80&key=${apiKey}&secret=${apiSecret}`;
     this.setState({ loading: true });
     axios
       .get(url)
@@ -119,7 +109,7 @@ class DiscogsSearch extends Component {
         refreshing: true
       },
       () => {
-        this.searchDiscogs();
+        debounce(this.searchDiscogs());
       }
     );
   };
@@ -130,7 +120,7 @@ class DiscogsSearch extends Component {
         page: this.state.page + 1
       },
       () => {
-        this.searchDiscogs;
+        debounce(this.searchDiscogs());
       }
     );
     console.log("PAGE: ", this.state.page);
@@ -151,7 +141,7 @@ class DiscogsSearch extends Component {
   };
 
   renderInputButton = () => {
-    return <ClearText onPress={this.clearTextInput.bind(this)} />;
+    return <ClearText onPress={this.clearTextInput} />;
   };
 
   renderScrollContent = item => {

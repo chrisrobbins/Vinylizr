@@ -6,9 +6,9 @@ import {
 } from "react-navigation";
 
 import createBottomTabNavigator from "./MainTabNavigator";
-import AlbumDetail from "../screens/AlbumDetail";
-import SignInScreen from "../auth/Login/components/SignInScreen";
-import AuthLoadingScreen from "../auth/Login/components/AuthLoadingScreen";
+import AlbumDetail from "../../screens/AlbumDetail";
+import SignInScreen from "../../auth/Login/components/SignInScreen";
+import AuthLoadingScreen from "../../auth/Login/components/AuthLoadingScreen";
 const AuthStack = createStackNavigator({ SignIn: SignInScreen });
 
 const DiscogsOauthFlow = createAppContainer(

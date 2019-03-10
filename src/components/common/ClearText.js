@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Image, TouchableOpacity } from "react-native";
 
-const inputClearText = require("../../assets/images/clear_text.png");
+const inputClearText = require("../../../assets/images/clear_text.png");
 
 const ClearText = ({ onPress }) => {
   const { containerStyle, clearText } = styles;

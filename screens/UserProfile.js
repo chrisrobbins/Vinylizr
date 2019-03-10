@@ -2,23 +2,12 @@ import React, { Component } from "react";
 
 import { View, Image, AsyncStorage } from "react-native";
 
-import { Button, Header } from "../components/common";
+import { Button, Header } from "../src/components/common";
 
 export default class UserProfile extends Component {
-  componentDidMount() {
-    console.log(this.props, "Navigator props");
-  }
-
-  static navigationOptions = ({ screenProps }) => ({
-    header: null,
-    tabBarIcon: ({ tintColor }) =>
-      tintColor == "#e91e63" ? (
-        <Image source={require("../assets/images/profile_select.png")} />
-      ) : (
-        <Image source={require("../assets/images/profile.png")} />
-      )
-  });
-
+  static navigationOptions = {
+    header: null
+  };
   signOut() {
     AsyncStorage.removeItem("oauth_token").then(() => {
       console.log("Token Removed");

@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
   AsyncStorage
 } from "react-native";
-import { Header } from "../components/common";
+import { Header } from "../src/components/common";
 import axios from "axios";
 
 // ApiClient.init(DISCOGS_CONSUMER_KEY, DISCOGS_CONSUMER_SECRET);
