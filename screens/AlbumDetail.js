@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -7,31 +7,31 @@ import {
   ScrollView,
   Dimensions,
   TouchableOpacity,
-  AsyncStorage
-} from "react-native";
-import { DetailButton } from "../src/components/common";
-import TrackList from "../src/components/TrackList/TrackList";
-import Stars from "react-native-stars";
-const windowSize = Dimensions.get("window");
-import axios from "axios";
+  AsyncStorage,
+} from 'react-native';
+import { DetailButton } from '#common';
+import TrackList from '#views/TrackList/TrackList';
+import Stars from 'react-native-stars';
+const windowSize = Dimensions.get('window');
+import axios from 'axios';
 
 class AlbumDetail extends Component {
   state = {
-    avgRating: "",
+    avgRating: '',
     tracklist: [],
-    low: "",
-    median: "",
-    high: "",
-    userRating: ""
+    low: '',
+    median: '',
+    high: '',
+    userRating: '',
   };
 
   static navigationOptions = {
-    drawerLabel: "AlbumDetail",
-    header: null
+    drawerLabel: 'AlbumDetail',
+    header: null,
   };
 
   componentDidMount() {
-    console.log("ALBUM DETAIL", this.props);
+    console.log('ALBUM DETAIL', this.props);
 
     this.getPrices();
     this.getTrackList();
@@ -46,11 +46,11 @@ class AlbumDetail extends Component {
     axios
       .get(url)
       .then(res => {
-        console.log(res.data.tracklist, "Track list RESULT");
+        console.log(res.data.tracklist, 'Track list RESULT');
         this.setState({
           tracklist: res.data.tracklist,
           avgRating: res.data.community.rating.average,
-          numForSale: res.data.num_for_sale
+          numForSale: res.data.num_for_sale,
         });
       })
       .catch(error => {
@@ -61,25 +61,25 @@ class AlbumDetail extends Component {
   getPrices = () => {
     const { item, userData } = this.props.navigation.state.params;
     const release_id = item.id;
-    AsyncStorage.multiGet(["oauth_token", "oauth_secret"]).then(values => {
+    AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then(values => {
       const user_token = values[0][1];
       const user_secret = values[1][1];
 
       axios({
-        method: "GET",
+        method: 'GET',
         url: `https://api.discogs.com/marketplace/price_suggestions/${release_id}`,
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          'Content-Type': 'application/x-www-form-urlencoded',
           Authorization: `OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
-          "User-Agent":
-            "Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
-        }
+          'User-Agent':
+            'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+        },
       })
         .then(response => {
           this.setState({
-            low: response.data["Good Plus (G+)"].value,
-            median: response.data["Very Good Plus (VG+)"].value,
-            high: response.data["Mint (M)"].value
+            low: response.data['Good Plus (G+)'].value,
+            median: response.data['Very Good Plus (VG+)'].value,
+            high: response.data['Mint (M)'].value,
           });
         })
         .catch(error => {
@@ -90,7 +90,7 @@ class AlbumDetail extends Component {
           } else if (error.request) {
             console.log(error.request);
           } else {
-            console.log("Error", error.message);
+            console.log('Error', error.message);
           }
           console.log(error.config);
         });
@@ -101,25 +101,25 @@ class AlbumDetail extends Component {
     const { item, userData } = this.props.navigation.state.params;
     const release_id = item.id;
     const user_name = userData.username;
-    AsyncStorage.multiGet(["oauth_token", "oauth_secret"]).then(values => {
+    AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then(values => {
       const user_token = values[0][1];
       const user_secret = values[1][1];
       const instance_id = item.instance_id;
       const folder_id = item.folder_id;
 
       axios({
-        method: "POST",
+        method: 'POST',
         url: `https://api.discogs.com//users/${user_name}/collection/folders/${folder_id}/releases/${release_id}/instances/${instance_id}`,
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          'Content-Type': 'application/x-www-form-urlencoded',
           Authorization: `OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
-          "User-Agent":
-            "Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
+          'User-Agent':
+            'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
         },
-        rating: `'${rating}'`
+        rating: `'${rating}'`,
       })
         .then(response => {
-          console.log(response, rating, "CHANGE RATING");
+          console.log(response, rating, 'CHANGE RATING');
         })
         .catch(error => {
           if (error.response) {
@@ -129,7 +129,7 @@ class AlbumDetail extends Component {
           } else if (error.request) {
             console.log(error.request);
           } else {
-            console.log("Error", error.message);
+            console.log('Error', error.message);
           }
           console.log(error.config);
         });
@@ -145,7 +145,7 @@ class AlbumDetail extends Component {
     axios
       .get(url)
       .then(res => {
-        console.log(res, "user rating");
+        console.log(res, 'user rating');
         this.setState({ userRating: res.data.rating });
       })
       .catch(error => {
@@ -157,7 +157,7 @@ class AlbumDetail extends Component {
     const {
       item,
       inCollection,
-      inWantlist
+      inWantlist,
     } = this.props.navigation.state.params;
     const {
       avgRating,
@@ -166,7 +166,7 @@ class AlbumDetail extends Component {
       high,
       numForSale,
       tracklist,
-      userRating
+      userRating,
     } = this.state;
     const roundedRating = Math.round(avgRating * 10) / 10;
     const roundedMedian = !median ? 0 : median.toFixed(2);
@@ -179,7 +179,7 @@ class AlbumDetail extends Component {
 
     userRatingNum = parseInt(userRating);
 
-    console.log(userRating, "fuk");
+    console.log(userRating, 'fuk');
 
     return (
       <View style={styles.detailScrollView}>
@@ -188,32 +188,32 @@ class AlbumDetail extends Component {
             <ImageBackground
               style={styles.backgroundImage}
               source={{
-                uri: item.basic_information.cover_image
+                uri: item.basic_information.cover_image,
               }}
               blurRadius={1}
               resizeMode="cover"
             >
               <ImageBackground
-                source={require("../assets/images/album_gradient_BG.png")}
+                source={require('../assets/images/album_gradient_BG.png')}
                 resizeMode="cover"
                 style={styles.album_gradient}
               >
                 <View style={styles.infoContainer}>
                   <Image
                     source={{
-                      uri: item.basic_information.cover_image
+                      uri: item.basic_information.cover_image,
                     }}
                     style={styles.detailThumb}
                   />
                   <View
                     style={{
                       width: 350,
-                      marginBottom: 80
+                      marginBottom: 80,
                     }}
                   >
                     <Text
                       numberOfLines={1}
-                      ellipsifyMode={"tail"}
+                      ellipsifyMode={'tail'}
                       style={styles.detailTitle}
                     >
                       {title}
@@ -233,8 +233,8 @@ class AlbumDetail extends Component {
                     txtStyle={styles.btnCollText}
                   >
                     {inCollection === true
-                      ? "In Collection"
-                      : "Add to Collection"}
+                      ? 'In Collection'
+                      : 'Add to Collection'}
                   </DetailButton>
                   <DetailButton
                     btnStyle={
@@ -244,7 +244,7 @@ class AlbumDetail extends Component {
                     }
                     txtStyle={styles.btnWantText}
                   >
-                    {inWantlist === true ? "In Wantlist" : "Add to Wantlist"}
+                    {inWantlist === true ? 'In Wantlist' : 'Add to Wantlist'}
                   </DetailButton>
                 </View>
               </ImageBackground>
@@ -266,8 +266,8 @@ class AlbumDetail extends Component {
                   spacing={4}
                   starSize={30}
                   count={5}
-                  fullStar={require("../assets/images/star-full.png")}
-                  emptyStar={require("../assets/images/empty-star.png")}
+                  fullStar={require('../assets/images/star-full.png')}
+                  emptyStar={require('../assets/images/empty-star.png')}
                 />
               </View>
             </View>
@@ -288,7 +288,7 @@ class AlbumDetail extends Component {
               <View>
                 <TouchableOpacity style={styles.buyLinkContainer}>
                   <Text style={styles.buyLink}>{numForSale} for sale</Text>
-                  <Image source={require("../assets/images/goto-icon.png")} />
+                  <Image source={require('../assets/images/goto-icon.png')} />
                 </TouchableOpacity>
               </View>
             </View>
@@ -303,258 +303,258 @@ class AlbumDetail extends Component {
 
 const styles = {
   detailScrollView: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: "#000",
-    flexDirection: "column"
+    backgroundColor: '#000',
+    flexDirection: 'column',
   },
   midContainer: {
-    flexDirection: "row",
-    justifyContent: "center"
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   lowContainer: {
-    flexDirection: "row"
+    flexDirection: 'row',
   },
   lowHiContainer: {
-    flexDirection: "row",
-    marginTop: 10
+    flexDirection: 'row',
+    marginTop: 10,
   },
   ratingContainer: {
-    flexDirection: "row"
+    flexDirection: 'row',
   },
   avgRatingContainer: {
     flex: 1,
-    flexDirection: "column",
-    alignItems: "center"
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   valueContainer: {
     flex: 1,
-    flexDirection: "column",
-    alignItems: "center"
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   median: {
-    fontFamily: "Lato-Regular",
+    fontFamily: 'Lato-Regular',
     fontSize: 36,
-    color: "#ffffff",
+    color: '#ffffff',
     lineHeight: 44,
-    marginTop: 10
+    marginTop: 10,
   },
   imagesContainer: {
     width: windowSize.width,
     height: windowSize.height,
-    justifyContent: "flex-end"
+    justifyContent: 'flex-end',
   },
   scrollViewChild: {},
   backgroundImage: {
     flex: 1,
-    backgroundColor: "#000",
-    justifyContent: "flex-end"
+    backgroundColor: '#000',
+    justifyContent: 'flex-end',
   },
   album_gradient: {
     flex: 1,
     width: null,
-    alignSelf: "stretch",
-    justifyContent: "flex-end"
+    alignSelf: 'stretch',
+    justifyContent: 'flex-end',
   },
   bigRate: {
-    fontFamily: "Lato-Light",
+    fontFamily: 'Lato-Light',
     fontSize: 64,
-    color: "#ffffff",
-    lineHeight: 77
+    color: '#ffffff',
+    lineHeight: 77,
   },
   littleRate: {
-    fontFamily: "Lato-Light",
+    fontFamily: 'Lato-Light',
     fontSize: 24,
-    color: "#666666",
+    color: '#666666',
     lineHeight: 77,
     marginTop: 16,
-    marginLeft: 4
+    marginLeft: 4,
   },
   buyLink: {
-    fontFamily: "Lato-Regular",
+    fontFamily: 'Lato-Regular',
     fontSize: 16,
-    color: "#F42E4A",
+    color: '#F42E4A',
     lineHeight: 19,
-    marginRight: 5
+    marginRight: 5,
   },
   buyLinkContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 25
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 25,
   },
   rateAlbumTitle: {
-    fontFamily: "Lato-Regular",
+    fontFamily: 'Lato-Regular',
     fontSize: 12,
-    color: "#666666",
+    color: '#666666',
     lineHeight: 15,
-    marginBottom: 5
+    marginBottom: 5,
   },
   lowTitle: {
-    fontFamily: "Lato-Regular",
+    fontFamily: 'Lato-Regular',
     fontSize: 12,
-    color: "#666666",
+    color: '#666666',
     lineHeight: 15,
-    marginBottom: 2
+    marginBottom: 2,
   },
   loHiPrice: {
-    fontFamily: "Lato-Regular",
+    fontFamily: 'Lato-Regular',
     fontSize: 16,
-    color: "#ffffff",
-    lineHeight: 19
+    color: '#ffffff',
+    lineHeight: 19,
   },
   lowContainer: {
     flex: 1,
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    marginLeft: 19
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 19,
   },
   hiContainer: {
     flex: 1,
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 19
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 19,
   },
   starContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 3
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 3,
   },
   midDivider: {
     height: 204,
     width: 1,
-    backgroundColor: "#666666",
-    marginTop: -10
+    backgroundColor: '#666666',
+    marginTop: -10,
   },
   endDivider: {
     height: 1,
     width: 343,
-    backgroundColor: "#666666",
-    alignSelf: "center",
-    marginTop: 10
+    backgroundColor: '#666666',
+    alignSelf: 'center',
+    marginTop: 10,
   },
 
   infoContainer: {
-    justifyContent: "flex-end"
+    justifyContent: 'flex-end',
   },
   detailThumb: {
     height: 208,
     width: 208,
     marginBottom: 5,
-    marginLeft: 20
+    marginLeft: 20,
   },
   detailTitle: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 24,
     marginLeft: 20,
-    backgroundColor: "transparent",
-    fontFamily: "Lato-Bold",
-    lineHeight: 29
+    backgroundColor: 'transparent',
+    fontFamily: 'Lato-Bold',
+    lineHeight: 29,
   },
   midTitle: {
-    fontFamily: "Lato-Bold",
+    fontFamily: 'Lato-Bold',
     fontSize: 16,
-    color: "#9B9B9B",
+    color: '#9B9B9B',
     lineHeight: 19,
-    marginBottom: 5
+    marginBottom: 5,
   },
   detailText: {
-    color: "#9B9B9B",
+    color: '#9B9B9B',
     marginLeft: 20,
-    backgroundColor: "transparent",
-    fontFamily: "Lato-Regular",
+    backgroundColor: 'transparent',
+    fontFamily: 'Lato-Regular',
     fontSize: 16,
     letterSpacing: 1,
-    lineHeight: 24
+    lineHeight: 24,
   },
   btnContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignSelf: "stretch",
-    marginBottom: 45
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignSelf: 'stretch',
+    marginBottom: 45,
   },
   btnCollText: {
-    fontFamily: "Lato-Regular",
-    color: "#fff",
-    backgroundColor: "transparent",
+    fontFamily: 'Lato-Regular',
+    color: '#fff',
+    backgroundColor: 'transparent',
     fontSize: 14,
-    lineHeight: 15
+    lineHeight: 15,
   },
   btnWantText: {
-    fontFamily: "Lato-Regular",
-    color: "#ffffff",
-    backgroundColor: "transparent",
+    fontFamily: 'Lato-Regular',
+    color: '#ffffff',
+    backgroundColor: 'transparent',
     fontSize: 14,
-    lineHeight: 15
+    lineHeight: 15,
   },
   detailCollectionBtnFalse: {
     borderWidth: 2,
-    borderColor: "#0967EE",
+    borderColor: '#0967EE',
     borderRadius: 1,
     height: 44,
     width: 165,
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   detailCollectionTrue: {
     borderWidth: 2,
-    borderColor: "#0967EE",
+    borderColor: '#0967EE',
     borderRadius: 1,
     height: 44,
     width: 165,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#0967EE"
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#0967EE',
   },
   detailWantlistBtnFalse: {
     borderWidth: 2,
-    borderColor: "#D400FF",
+    borderColor: '#D400FF',
     borderRadius: 1,
     height: 44,
     width: 165,
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   detailWantlistBtnTrue: {
     borderWidth: 2,
-    borderColor: "#D400FF",
+    borderColor: '#D400FF',
     borderRadius: 1,
     height: 44,
     width: 165,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#D400FF"
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#D400FF',
   },
   detailStaticTxt: {
-    color: "rgba(217,217,217,.35)",
+    color: 'rgba(217,217,217,.35)',
     width: 90,
-    fontFamily: "Lato-Regular",
+    fontFamily: 'Lato-Regular',
     fontSize: 14,
-    lineHeight: 18
+    lineHeight: 18,
   },
   detailDynTxt: {
-    color: "#fff",
-    fontFamily: "Lato-Bold",
+    color: '#fff',
+    fontFamily: 'Lato-Bold',
     fontSize: 14,
-    lineHeight: 18
+    lineHeight: 18,
   },
   detailContain: {
     height: 32,
-    alignSelf: "stretch",
-    flexDirection: "row",
-    justifyContent: "space-around",
+    alignSelf: 'stretch',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     borderBottomWidth: 0.5,
-    borderColor: "rgba(217,217,217,.35)",
-    justifyContent: "flex-start",
+    borderColor: 'rgba(217,217,217,.35)',
+    justifyContent: 'flex-start',
     marginLeft: 17,
     marginRight: 17,
-    marginBottom: 10
-  }
+    marginBottom: 10,
+  },
 };
 
 export default AlbumDetail;

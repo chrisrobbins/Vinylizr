@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
-import Modal from "react-native-modal";
-import AlbumDetail from "../../screens/AlbumDetail";
+import React, { Component } from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
+import Modal from 'react-native-modal';
+import AlbumDetail from '#screens/AlbumDetail';
 
 export default class DetailModal extends Component {
   state = {
-    isModalVisible: false
+    isModalVisible: false,
   };
 
   // static navigationOptions = {
@@ -18,7 +18,7 @@ export default class DetailModal extends Component {
   // };
 
   componentWillMount() {
-    console.log(this.props, "modal props bro!!");
+    console.log(this.props, 'modal props bro!!');
   }
 
   _showModal = () => {
@@ -35,8 +35,8 @@ export default class DetailModal extends Component {
         </TouchableOpacity>
         <Modal
           isVisible={this.state.isModalVisible}
-          animationIn={"zoomInUp"}
-          animationOut={"zoomOutDown"}
+          animationIn={'zoomInUp'}
+          animationOut={'zoomOutDown'}
           animationInTiming={800}
           onBackdropPress={() => this._hideModal()}
         >
@@ -48,5 +48,5 @@ export default class DetailModal extends Component {
 }
 
 const styles = {
-  detailModalContainer: {}
+  detailModalContainer: {},
 };

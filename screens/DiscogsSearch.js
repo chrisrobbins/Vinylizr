@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import axios from "axios";
-import { ClearText } from "../src/components/common";
+import React, { Component } from 'react';
+import axios from 'axios';
+import { ClearText } from '#common/';
 import {
   MasterReleaseResult,
-  SearchResultItem
-} from "../src/components/SearchResults/MasterReleaseResult";
-import { debounce, uniqBy } from "lodash";
+  SearchResultItem,
+} from '#views/SearchResults/MasterReleaseResult';
+import { debounce, uniqBy } from 'lodash';
 
 import {
   View,
@@ -16,15 +16,15 @@ import {
   FlatList,
   StatusBar,
   TouchableOpacity,
-  AsyncStorage
-} from "react-native";
+  AsyncStorage,
+} from 'react-native';
 
 class DiscogsSearch extends Component {
   static navigationOptions = {
-    header: null
+    header: null,
   };
   state = {
-    text: "",
+    text: '',
     loading: false,
     albums: [],
     page: 1,
@@ -34,23 +34,23 @@ class DiscogsSearch extends Component {
     isModalVisible: false,
     userData: {},
     isSwiping: null,
-    collectionRecords: []
+    collectionRecords: [],
   };
 
   componentDidMount() {
-    value = AsyncStorage.multiGet(["oauth_token", "oauth_secret"]).then(
+    value = AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then(
       values => {
         const user_token = values[0][1];
         const user_secret = values[1][1];
         axios({
-          method: "GET",
+          method: 'GET',
           url: `https://api.discogs.com/oauth/identity`,
           headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
+            'Content-Type': 'application/x-www-form-urlencoded',
             Authorization: `OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}`,
-            "User-Agent":
-              "Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
-          }
+            'User-Agent':
+              'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+          },
         })
           .then(response => {
             this.setState({ userData: response.data });
@@ -63,7 +63,7 @@ class DiscogsSearch extends Component {
             } else if (error.request) {
               console.log(error.request);
             } else {
-              console.log("Error", error.message);
+              console.log('Error', error.message);
             }
             console.log(error.config);
           });
@@ -72,11 +72,11 @@ class DiscogsSearch extends Component {
   }
 
   searchDiscogs = () => {
-    const apiKey = "jbUTpFhLTiyyHgLRoBgq";
-    const apiSecret = "LSQDaLpplgcCGlkzujkHyUkxImNlWVoI";
+    const apiKey = 'jbUTpFhLTiyyHgLRoBgq';
+    const apiSecret = 'LSQDaLpplgcCGlkzujkHyUkxImNlWVoI';
     const { page } = this.state;
     const apiSearch = this.state.newText;
-    const releaseType = "master";
+    const releaseType = 'master';
     const url = `https://api.discogs.com/database/search?&q=${apiSearch}&page=${page}&per_page=80&key=${apiKey}&secret=${apiSecret}`;
     this.setState({ loading: true });
     axios
@@ -89,7 +89,7 @@ class DiscogsSearch extends Component {
               : [...this.state.albums, ...res.data.results],
           error: res.error || null,
           loading: false,
-          refreshing: false
+          refreshing: false,
         });
       })
       .catch(error => {
@@ -97,8 +97,8 @@ class DiscogsSearch extends Component {
       });
   };
   clearTextInput = () => {
-    this._textInput.setNativeProps({ text: "" });
-    this.setState({ text: "", albums: [] });
+    this._textInput.setNativeProps({ text: '' });
+    this.setState({ text: '', albums: [] });
   };
 
   handleRefresh = () => {
@@ -106,7 +106,7 @@ class DiscogsSearch extends Component {
       {
         page: 1,
         seed: this.state.seed + 1,
-        refreshing: true
+        refreshing: true,
       },
       () => {
         debounce(this.searchDiscogs());
@@ -114,16 +114,16 @@ class DiscogsSearch extends Component {
     );
   };
   handleLoadMore = () => {
-    console.log("IM LOADING MORE THINGS FROM THE SEARCH");
+    console.log('IM LOADING MORE THINGS FROM THE SEARCH');
     this.setState(
       {
-        page: this.state.page + 1
+        page: this.state.page + 1,
       },
       () => {
         debounce(this.searchDiscogs());
       }
     );
-    console.log("PAGE: ", this.state.page);
+    console.log('PAGE: ', this.state.page);
   };
   renderFooter = () => {
     if (!this.state.loading) return null;
@@ -132,7 +132,7 @@ class DiscogsSearch extends Component {
         style={{
           paddingVertical: 20,
           borderTopWidth: 1,
-          borderColor: "#CED0CE"
+          borderColor: '#CED0CE',
         }}
       >
         <ActivityIndicator animating size="large" />
@@ -146,13 +146,13 @@ class DiscogsSearch extends Component {
 
   renderScrollContent = item => {
     const { albums, userData } = this.state;
-    if (item.type === "master") {
+    if (item.type === 'master') {
       return (
         <TouchableOpacity
           onPress={() => {
-            this.props.navigation.navigate("ReleaseList", {
+            this.props.navigation.navigate('ReleaseList', {
               item: item,
-              userData: userData
+              userData: userData,
             });
           }}
         >
@@ -165,7 +165,7 @@ class DiscogsSearch extends Component {
         </TouchableOpacity>
       );
     }
-    if (item.type === "release") {
+    if (item.type === 'release') {
       return (
         <SearchResultItem
           records={albums}
@@ -185,7 +185,7 @@ class DiscogsSearch extends Component {
 
   render() {
     const { userData, albums } = this.state;
-    let records = uniqBy(albums, "thumb");
+    let records = uniqBy(albums, 'thumb');
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
@@ -202,7 +202,7 @@ class DiscogsSearch extends Component {
             }
             placeholder="Artist or Album"
             placeholderTextColor="#D9D9D9"
-            selectionColor={"#F42E4A"}
+            selectionColor={'#F42E4A'}
           />
         </View>
         <View style={styles.inputContainer}>{this.renderInputButton()}</View>
@@ -226,41 +226,41 @@ const styles = {
   renderAlbums: {
     flex: 1,
     marginTop: -3,
-    backgroundColor: "#000"
+    backgroundColor: '#000',
   },
   inputContainer: {
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
     height: 5,
     marginRight: 10,
-    marginBottom: 0
+    marginBottom: 0,
   },
   container: {
     flex: 1,
-    backgroundColor: "#000"
+    backgroundColor: '#000',
   },
   inputStyleContainer: {
-    flexDirection: "column",
-    alignItems: "flex-start",
+    flexDirection: 'column',
+    alignItems: 'flex-start',
     height: 40,
     borderBottomWidth: 1,
-    borderBottomColor: "#ffffff",
+    borderBottomColor: '#ffffff',
     marginBottom: 0,
     marginTop: 40,
-    backgroundColor: "#000"
+    backgroundColor: '#000',
   },
   inputStyle: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 18,
     lineHeight: 23,
-    backgroundColor: "#000",
-    justifyContent: "flex-start",
+    backgroundColor: '#000',
+    justifyContent: 'flex-start',
     flex: 1,
     paddingLeft: 7,
     paddingRight: 7,
     paddingBottom: 0,
-    marginBottom: 0
-  }
+    marginBottom: 0,
+  },
 };
 
 export default DiscogsSearch;

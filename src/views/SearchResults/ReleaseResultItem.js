@@ -1,14 +1,14 @@
-import React, { Component } from "react";
-import { Text, View, Image, AsyncStorage } from "react-native";
+import React, { Component } from 'react';
+import { Text, View, Image, AsyncStorage } from 'react-native';
 
-import CollectionBadge from "../Badges/CollectionBadge";
-import WantlistBadge from "../Badges/WantlistBadge";
+import CollectionBadge from '#commpn/Badges/CollectionBadge';
+import WantlistBadge from '#commpn/Badges/WantlistBadge';
 
-import axios from "axios";
+import axios from 'axios';
 
-import { CardSection } from "../common/CardSection";
-import Swipeable from "react-native-swipeable";
-import SearchSuccessModal from "../Modals/SearchSuccessModal";
+import { CardSection } from '#common/CardSection';
+import Swipeable from 'react-native-swipeable';
+import SearchSuccessModal from '../Modals/SearchSuccessModal';
 
 class ReleaseResultItem extends Component {
   constructor(props) {
@@ -22,13 +22,13 @@ class ReleaseResultItem extends Component {
       isSwiping: null,
       releasesOwned: [],
       releasesWanted: [],
-      page: 1
+      page: 1,
     };
   }
 
   saveToCollection = () => {
     const { userData } = this.props;
-    value = AsyncStorage.multiGet(["oauth_token", "oauth_secret"]).then(
+    value = AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then(
       values => {
         const user_token = values[0][1];
         const user_secret = values[1][1];
@@ -36,14 +36,14 @@ class ReleaseResultItem extends Component {
         const release_id = this.props.item.id;
 
         axios({
-          method: "POST",
+          method: 'POST',
           url: `https://api.discogs.com/users/${user_name}/collection/folders/1/releases/${release_id}`,
           headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
+            'Content-Type': 'application/x-www-form-urlencoded',
             Authorization: `OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
-            "User-Agent":
-              "Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
-          }
+            'User-Agent':
+              'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+          },
         })
           .then(response => {
             this.setState({ items: response.data.releases });
@@ -59,7 +59,7 @@ class ReleaseResultItem extends Component {
             } else if (error.request) {
               console.log(error.request);
             } else {
-              console.log("Error", error.message);
+              console.log('Error', error.message);
             }
             console.log(error.config);
           });
@@ -69,7 +69,7 @@ class ReleaseResultItem extends Component {
 
   saveToWantlist = () => {
     const { userData, item } = this.props;
-    value = AsyncStorage.multiGet(["oauth_token", "oauth_secret"]).then(
+    value = AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then(
       values => {
         const user_token = values[0][1];
         const user_secret = values[1][1];
@@ -77,14 +77,14 @@ class ReleaseResultItem extends Component {
         const release_id = item.id;
 
         axios({
-          method: "PUT",
+          method: 'PUT',
           url: `https://api.discogs.com/users/${user_name}/wants/${release_id}`,
           headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
+            'Content-Type': 'application/x-www-form-urlencoded',
             Authorization: `OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
-            "User-Agent":
-              "Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
-          }
+            'User-Agent':
+              'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+          },
         })
           .then(() => {
             this._showRightModal();
@@ -98,7 +98,7 @@ class ReleaseResultItem extends Component {
             } else if (error.request) {
               console.log(error.request);
             } else {
-              console.log("Error", error.message);
+              console.log('Error', error.message);
             }
             console.log(error.config);
           });
@@ -124,9 +124,9 @@ class ReleaseResultItem extends Component {
       onSwipeRelease,
       collectionRecords,
       wantlistRecords,
-      artist
+      artist,
     } = this.props;
-    console.log(item, "rlease itme");
+    console.log(item, 'rlease itme');
     let discogsRecord = item.thumb;
     const title = item.title;
 
@@ -137,7 +137,7 @@ class ReleaseResultItem extends Component {
       titleTextStyle,
       artistTextStyle,
       collectionSavedTextStyle,
-      wantlistSavedTextStyle
+      wantlistSavedTextStyle,
     } = styles;
 
     const {
@@ -148,36 +148,36 @@ class ReleaseResultItem extends Component {
       leftSwiped,
       rightSwiped,
       releasesOwned,
-      releasesWanted
+      releasesWanted,
     } = this.state;
-    const wantlistIcon = require("../assets/images/wantlistButton.png");
-    const collectionIcon = require("../assets/images/collectionButton.png");
+    const wantlistIcon = require('../assets/images/wantlistButton.png');
+    const collectionIcon = require('../assets/images/collectionButton.png');
 
     const leftContent = [
       <View
         key={item.id}
         style={[
           styles.leftSwipeItem,
-          { backgroundColor: leftActionActivated ? "#0967EE" : "#000" }
+          { backgroundColor: leftActionActivated ? '#0967EE' : '#000' },
         ]}
       >
         <Image style={styles.leftIconStyles} source={collectionIcon} />
-      </View>
+      </View>,
     ];
     const rightContent = [
       <View
         key={item.id}
         style={[
           styles.rightSwipeItem,
-          { backgroundColor: rightActionActivated ? "#D400FF" : "#000" }
+          { backgroundColor: rightActionActivated ? '#D400FF' : '#000' },
         ]}
       >
         <Image style={styles.rightIconStyles} source={wantlistIcon} />
-      </View>
+      </View>,
     ];
     let recordReleased = item.released;
-    if (recordReleased && recordReleased.includes("-")) {
-      const releaseSplit = recordReleased.split("-");
+    if (recordReleased && recordReleased.includes('-')) {
+      const releaseSplit = recordReleased.split('-');
       recordReleased = releaseSplit[0];
     }
 
@@ -216,14 +216,14 @@ class ReleaseResultItem extends Component {
           <CardSection key={item.id}>
             <View style={textView}>
               <Text
-                ellipsizeMode={"tail"}
+                ellipsizeMode={'tail'}
                 numberOfLines={1}
                 style={titleTextStyle}
               >
                 {title}
               </Text>
               <Text
-                ellipsizeMode={"tail"}
+                ellipsizeMode={'tail'}
                 numberOfLines={1}
                 style={artistTextStyle}
               >
@@ -231,7 +231,7 @@ class ReleaseResultItem extends Component {
               </Text>
               <View style={styles.badgeContainer} key={item.id}>
                 <Text key={item.id} style={styles.labelTextStyle}>
-                  {item.label} - {!item.released ? "" : recordReleased}
+                  {item.label} - {!item.released ? '' : recordReleased}
                 </Text>
                 {collectionRecords.map(record => {
                   if (record.id === item.id) {
@@ -256,48 +256,48 @@ class ReleaseResultItem extends Component {
 
 const styles = {
   container: {
-    flexDirection: "column",
+    flexDirection: 'column',
     borderBottomWidth: 1,
-    borderBottomColor: "rgba(217,217,217,.6)"
+    borderBottomColor: 'rgba(217,217,217,.6)',
   },
   badgeContainer: {
-    flexDirection: "row"
+    flexDirection: 'row',
   },
 
   textView: {
-    justifyContent: "center",
+    justifyContent: 'center',
     width: 250,
     height: 125,
-    marginLeft: 15
+    marginLeft: 15,
   },
   titleTextStyle: {
     fontSize: 18,
-    color: "#ffffff",
+    color: '#ffffff',
     marginLeft: 5,
-    fontFamily: "Lato-Regular",
+    fontFamily: 'Lato-Regular',
     lineHeight: 22,
-    letterSpacing: 1
+    letterSpacing: 1,
   },
   labelTextStyle: {
     fontSize: 16.5,
-    fontFamily: "Lato-Regular",
+    fontFamily: 'Lato-Regular',
     marginLeft: 5,
     marginTop: 3,
-    color: "rgba(217,217,217,.6)"
+    color: 'rgba(217,217,217,.6)',
   },
   artistTextStyle: {
     fontSize: 16.5,
-    color: "rgba(217,217,217,.6)",
+    color: 'rgba(217,217,217,.6)',
     marginLeft: 5,
     marginTop: 1,
     marginBottom: 15,
-    fontFamily: "Lato-Regular"
+    fontFamily: 'Lato-Regular',
   },
   leftSwipeItem: {
     flex: 1,
-    alignItems: "flex-end",
-    justifyContent: "center",
-    paddingRight: 20
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    paddingRight: 20,
   },
   // collectionSavedTextStyle: {
   //   color: '#0967EE',
@@ -313,19 +313,19 @@ const styles = {
   // },
   imageStyle: {
     height: 85,
-    width: 85
+    width: 85,
   },
   rightSwipeItem: {
     flex: 1,
-    alignItems: "flex-start",
-    justifyContent: "center",
-    paddingLeft: 20
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    paddingLeft: 20,
   },
   searchModal: {
-    justifyContent: "center",
+    justifyContent: 'center',
     height: 90,
-    width: 90
-  }
+    width: 90,
+  },
 };
 
 export default ReleaseResultItem;

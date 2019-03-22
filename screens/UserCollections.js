@@ -1,81 +1,39 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
+import { shape, func } from 'prop-types';
 import {
   View,
   Image,
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
-  AsyncStorage
-} from "react-native";
-import { Header } from "../src/components/common";
-import axios from "axios";
-
+  AsyncStorage,
+} from 'react-native';
+import { Header } from '#common/';
+import axios from 'axios';
+import { withUser } from '#contexts/';
 // ApiClient.init(DISCOGS_CONSUMER_KEY, DISCOGS_CONSUMER_SECRET);
 
 class UserCollections extends Component {
   static navigationOptions = {
-    header: null
+    header: null,
   };
   state = { records: [], refreshing: false, userData: {}, page: 1 };
 
-  componentDidMount() {
-    this.getDiscogsIdentity();
-  }
-
-  getDiscogsIdentity = async () => {
-    await AsyncStorage.multiGet(["oauth_token", "oauth_secret"]).then(
-      values => {
-        const user_token = values[0][1];
-        const user_secret = values[1][1];
-
-        axios({
-          method: "GET",
-          url: `https://api.discogs.com/oauth/identity`,
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            Authorization: `OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
-            "User-Agent":
-              "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36"
-          }
-        })
-          .then(response => {
-            console.log("IDENTITY RESPONSE USER COLLEC", response);
-            this.setState({ userData: response.data });
-            const { username } = response.data;
-            this.getUserCollection(username);
-          })
-
-          .catch(error => {
-            if (error.response) {
-              console.log(error.response.data);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-            } else if (error.request) {
-              console.log(error.request);
-            } else {
-              console.log("Error", error.message);
-            }
-            console.log(error.config);
-          });
-      }
-    );
-  };
-
   getUserCollection(username) {
     const { page } = this.state;
-    AsyncStorage.multiGet(["oauth_token", "oauth_secret"]).then(values => {
+    AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then(values => {
       const user_token = values[0][1];
       const user_secret = values[1][1];
 
       axios({
-        method: "GET",
+        method: 'GET',
         url: `https://api.discogs.com/users/${username}/collection/folders/0/releases?page=${page}&per_page=100`,
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          'Content-Type': 'application/x-www-form-urlencoded',
           Authorization: `OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
-          "User-Agent":
-            "Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
-        }
+          'User-Agent':
+            'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+        },
       })
         .then(response => {
           this.setState({ records: response.data.releases, refreshing: false });
@@ -89,7 +47,7 @@ class UserCollections extends Component {
           } else if (error.request) {
             console.log(error.request);
           } else {
-            console.log("Error", error.message);
+            console.log('Error', error.message);
           }
           console.log(error.config);
         });
@@ -101,7 +59,7 @@ class UserCollections extends Component {
       {
         page: 1,
         seed: this.state.seed + 1,
-        refreshing: true
+        refreshing: true,
       },
       () => {
         this.getUserCollection();
@@ -111,7 +69,7 @@ class UserCollections extends Component {
   handleLoadMore = () => {
     this.setState(
       {
-        page: this.state.page + 1
+        page: this.state.page + 1,
       },
       () => {
         this.getUserCollection();
@@ -125,7 +83,7 @@ class UserCollections extends Component {
         style={{
           paddingVertical: 20,
           borderTopWidth: 1,
-          borderColor: "#CED0CE"
+          borderColor: '#CED0CE',
         }}
       >
         <ActivityIndicator animating size="large" />
@@ -136,11 +94,13 @@ class UserCollections extends Component {
   _keyExtractor = (item, index) => item.id + index;
 
   render() {
+    console.log('USER CONTEXT IN COLLECTION', this.props);
+
     const { records, userData } = this.state;
     return (
       <View style={styles.mainContainer}>
         <View style={styles.headerContainer}>
-          <Header headerText={"Collection"} />
+          <Header headerText={'Collection'} />
         </View>
         <View style={styles.contentContainer}>
           <FlatList
@@ -149,10 +109,10 @@ class UserCollections extends Component {
               <TouchableOpacity
                 key={item.intance_id}
                 onPress={() => {
-                  this.props.navigation.navigate("AlbumDetail", {
+                  this.props.navigation.navigate('AlbumDetail', {
                     item: item,
                     inCollection: true,
-                    userData: userData
+                    userData: userData,
                   });
                 }}
               >
@@ -180,19 +140,19 @@ class UserCollections extends Component {
 
 const styles = {
   textContainer: {
-    paddingBottom: 50
+    paddingBottom: 50,
   },
   contentContainer: {
     flex: 1,
-    backgroundColor: "#000",
-    alignItems: "center",
-    justifyContent: "space-around"
+    backgroundColor: '#000',
+    alignItems: 'center',
+    justifyContent: 'space-around',
   },
   contentContainerStyle: {
-    flexDirection: "column"
+    flexDirection: 'column',
   },
   mainContainer: {
-    flex: 1
+    flex: 1,
   },
   albumCovers: {
     height: 124,
@@ -200,8 +160,8 @@ const styles = {
     marginLeft: 0.5,
     marginRight: 0.5,
     marginTop: 0.5,
-    marginBottom: 0.5
-  }
+    marginBottom: 0.5,
+  },
 };
 
-export default UserCollections;
+export default withUser(UserCollections);

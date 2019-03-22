@@ -1,35 +1,35 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   View,
   Image,
   FlatList,
   TouchableOpacity,
-  AsyncStorage
-} from "react-native";
-import { Header } from "../src/components/common";
-import axios from "axios";
+  AsyncStorage,
+} from 'react-native';
+import { Header } from '#common/';
+import axios from 'axios';
 
 class Wantlist extends Component {
   static navigationOptions = {
-    header: null
+    header: null,
   };
   state = { userData: {}, records: [], refreshing: false };
 
   componentDidMount() {
-    value = AsyncStorage.multiGet(["oauth_token", "oauth_secret"]).then(
+    value = AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then(
       values => {
         const user_token = values[0][1];
         const user_secret = values[1][1];
 
         axios({
-          method: "GET",
+          method: 'GET',
           url: `https://api.discogs.com/oauth/identity`,
           headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
+            'Content-Type': 'application/x-www-form-urlencoded',
             Authorization: `OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
-            "User-Agent":
-              "Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
-          }
+            'User-Agent':
+              'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+          },
         })
           .then(response => {
             this.setState({ userData: response.data });
@@ -51,7 +51,7 @@ class Wantlist extends Component {
               console.log(error.request);
             } else {
               // Something happened in setting up the request that triggered an Error
-              console.log("Error", error.message);
+              console.log('Error', error.message);
             }
             console.log(error.config);
           });
@@ -61,21 +61,21 @@ class Wantlist extends Component {
 
   getUserWantlist() {
     const { userData } = this.state;
-    value = AsyncStorage.multiGet(["oauth_token", "oauth_secret"]).then(
+    value = AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then(
       values => {
         const user_token = values[0][1];
         const user_secret = values[1][1];
         const user_name = userData.username;
 
         axios({
-          method: "GET",
+          method: 'GET',
           url: `https://api.discogs.com/users/${user_name}/wants`,
           headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
+            'Content-Type': 'application/x-www-form-urlencoded',
             Authorization: `OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
-            "User-Agent":
-              "Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
-          }
+            'User-Agent':
+              'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+          },
         })
           .then(response => {
             // console.log(response, "WANTLIST RESPONSE")
@@ -96,7 +96,7 @@ class Wantlist extends Component {
               console.log(error.request);
             } else {
               // Something happened in setting up the request that triggered an Error
-              console.log("Error", error.message);
+              console.log('Error', error.message);
             }
             console.log(error.config);
           });
@@ -109,7 +109,7 @@ class Wantlist extends Component {
       {
         page: 1,
         seed: this.state.seed + 1,
-        refreshing: true
+        refreshing: true,
       },
       () => {
         this.getUserWantlist();
@@ -119,7 +119,7 @@ class Wantlist extends Component {
   handleLoadMore = () => {
     this.setState(
       {
-        page: this.state.page + 1
+        page: this.state.page + 1,
       },
       () => {
         this.getUserWantlist();
@@ -133,7 +133,7 @@ class Wantlist extends Component {
         style={{
           paddingVertical: 20,
           borderTopWidth: 1,
-          borderColor: "#CED0CE"
+          borderColor: '#CED0CE',
         }}
       >
         <ActivityIndicator animating size="large" />
@@ -148,7 +148,7 @@ class Wantlist extends Component {
     return (
       <View style={styles.mainContainer}>
         <View style={styles.headerContainer}>
-          <Header headerText={"Wantlist"} />
+          <Header headerText={'Wantlist'} />
         </View>
         <View style={styles.contentContainer}>
           <FlatList
@@ -157,9 +157,9 @@ class Wantlist extends Component {
               <TouchableOpacity
                 key={item.instance_id}
                 onPress={() => {
-                  this.props.navigation.navigate("AlbumDetail", {
+                  this.props.navigation.navigate('AlbumDetail', {
                     item: item,
-                    inWantlist: true
+                    inWantlist: true,
                   });
                 }}
               >
@@ -185,17 +185,17 @@ class Wantlist extends Component {
 }
 const styles = {
   textContainer: {
-    paddingBottom: 50
+    paddingBottom: 50,
   },
   contentContainer: {
     flex: 1,
-    backgroundColor: "#000"
+    backgroundColor: '#000',
   },
   contentContainerStyle: {
-    flexDirection: "column"
+    flexDirection: 'column',
   },
   mainContainer: {
-    flex: 1
+    flex: 1,
   },
   albumCovers: {
     height: 124,
@@ -203,8 +203,8 @@ const styles = {
     marginLeft: 0.5,
     marginRight: 0.5,
     marginTop: 0.5,
-    marginBottom: 0.5
-  }
+    marginBottom: 0.5,
+  },
 };
 
 export default Wantlist;

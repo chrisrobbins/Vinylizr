@@ -1,13 +1,13 @@
-import React from "react";
+import React from 'react';
 import {
   createStackNavigator,
-  createBottomTabNavigator
-} from "react-navigation";
+  createBottomTabNavigator,
+} from 'react-navigation';
 
-import UserCollections from "../../screens/UserCollections";
-import WantList from "../../screens/WantList";
-import UserProfile from "../../screens/UserProfile";
-import DiscogsSearch from "../../screens/DiscogsSearch";
+import UserCollections from '#screens/UserCollections';
+import WantList from '#screens/WantList';
+import UserProfile from '#screens/UserProfile';
+import DiscogsSearch from '#screens/DiscogsSearch';
 import {
   CollectionFocused,
   CollectionRested,
@@ -16,10 +16,10 @@ import {
   ProfileFocused,
   ProfileRested,
   SearchFocused,
-  SearchRested
-} from "./TabBarIcons";
+  SearchRested,
+} from './TabBarIcons';
 const Collection = createStackNavigator({
-  UserCollections
+  UserCollections,
 });
 
 Collection.navigationOptions = {
@@ -27,15 +27,15 @@ Collection.navigationOptions = {
     showLabel: false,
 
     style: {
-      backgroundColor: "#121212"
-    }
+      backgroundColor: '#121212',
+    },
   },
   tabBarIcon: ({ focused }) =>
-    focused ? <CollectionFocused /> : <CollectionRested />
+    focused ? <CollectionFocused /> : <CollectionRested />,
 };
 
 const UserWantlist = createStackNavigator({
-  WantList
+  WantList,
 });
 
 UserWantlist.navigationOptions = {
@@ -43,15 +43,15 @@ UserWantlist.navigationOptions = {
     showLabel: false,
 
     style: {
-      backgroundColor: "#121212"
-    }
+      backgroundColor: '#121212',
+    },
   },
   tabBarIcon: ({ focused }) =>
-    focused ? <WantlistFocused /> : <WantlistRested />
+    focused ? <WantlistFocused /> : <WantlistRested />,
 };
 
 const Profile = createStackNavigator({
-  UserProfile
+  UserProfile,
 });
 
 Profile.navigationOptions = {
@@ -59,15 +59,15 @@ Profile.navigationOptions = {
     showLabel: false,
 
     style: {
-      backgroundColor: "#121212"
-    }
+      backgroundColor: '#121212',
+    },
   },
   tabBarIcon: ({ focused }) =>
-    focused ? <ProfileFocused /> : <ProfileRested />
+    focused ? <ProfileFocused /> : <ProfileRested />,
 };
 
 const SearchAlbums = createStackNavigator({
-  DiscogsSearch
+  DiscogsSearch,
 });
 
 SearchAlbums.navigationOptions = {
@@ -75,15 +75,15 @@ SearchAlbums.navigationOptions = {
     showLabel: false,
 
     style: {
-      backgroundColor: "#121212"
-    }
+      backgroundColor: '#121212',
+    },
   },
-  tabBarIcon: ({ focused }) => (focused ? <SearchFocused /> : <SearchRested />)
+  tabBarIcon: ({ focused }) => (focused ? <SearchFocused /> : <SearchRested />),
 };
 
 export default createBottomTabNavigator({
   Collection,
   UserWantlist,
   Profile,
-  SearchAlbums
+  SearchAlbums,
 });
