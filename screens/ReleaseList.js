@@ -1,19 +1,21 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Text,
   View,
   Image,
   FlatList,
   Dimensions,
-  AsyncStorage
-} from "react-native";
-const windowSize = Dimensions.get("window");
-import ReleaseResultItem from "../components/ReleaseResultItem";
+  AsyncStorage,
+} from 'react-native';
+const windowSize = Dimensions.get('window');
+import ReleaseResultItem from '#views/SearchResults/ReleaseResultItem';
 
-import axios from "axios";
-import VersionsBadge from "../components/VersionsBadge";
-import CollectionBadge from "../components/CollectionBadge";
-import WantlistBadge from "../components/WantlistBadge";
+import axios from 'axios';
+import {
+  VersionsBadge,
+  CollectionBadge,
+  WantlistBadge,
+} from '#common/Badges/VersionsBadge';
 
 export default class ReleaseList extends Component {
   constructor(props) {
@@ -30,13 +32,13 @@ export default class ReleaseList extends Component {
       collectionRecords: [],
       wantlistRecords: [],
       releasesOwned: [],
-      releasesWanted: []
+      releasesWanted: [],
     };
   }
 
   static navigationOptions = {
-    drawerLabel: "ReleaseList",
-    header: null
+    drawerLabel: 'ReleaseList',
+    header: null,
   };
 
   componentWillMount() {
@@ -53,20 +55,20 @@ export default class ReleaseList extends Component {
   getUserCollection() {
     const { userData } = this.props.navigation.state.params;
     const { page } = this.state;
-    AsyncStorage.multiGet(["oauth_token", "oauth_secret"]).then(values => {
+    AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then(values => {
       const user_token = values[0][1];
       const user_secret = values[1][1];
       const user_name = userData.username;
 
       axios({
-        method: "GET",
+        method: 'GET',
         url: `https://api.discogs.com/users/${user_name}/collection/folders/0/releases?page=${page}&per_page=25`,
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          'Content-Type': 'application/x-www-form-urlencoded',
           Authorization: `OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
-          "User-Agent":
-            "Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
-        }
+          'User-Agent':
+            'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+        },
       })
         .then(response => {
           this.setState({ collectionRecords: response.data.releases });
@@ -80,7 +82,7 @@ export default class ReleaseList extends Component {
           } else if (error.request) {
             console.log(error.request);
           } else {
-            console.log("Error", error.message);
+            console.log('Error', error.message);
           }
           console.log(error.config);
         });
@@ -89,21 +91,21 @@ export default class ReleaseList extends Component {
 
   getUserWantlist() {
     const { userData } = this.props.navigation.state.params;
-    value = AsyncStorage.multiGet(["oauth_token", "oauth_secret"]).then(
+    value = AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then(
       values => {
         const user_token = values[0][1];
         const user_secret = values[1][1];
         const user_name = userData.username;
 
         axios({
-          method: "GET",
+          method: 'GET',
           url: `https://api.discogs.com/users/${user_name}/wants`,
           headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
+            'Content-Type': 'application/x-www-form-urlencoded',
             Authorization: `OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
-            "User-Agent":
-              "Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
-          }
+            'User-Agent':
+              'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+          },
         })
           .then(response => {
             // console.log(response, "WANTLIST RESPONSE")
@@ -118,7 +120,7 @@ export default class ReleaseList extends Component {
             } else if (error.request) {
               console.log(error.request);
             } else {
-              console.log("Error", error.message);
+              console.log('Error', error.message);
             }
             console.log(error.config);
           });
@@ -131,7 +133,7 @@ export default class ReleaseList extends Component {
       {
         page: 1,
         seed: this.state.seed + 1,
-        refreshing: true
+        refreshing: true,
       },
       () => {
         this.searchDiscogs;
@@ -141,7 +143,7 @@ export default class ReleaseList extends Component {
   handleLoadMore = () => {
     this.setState(
       {
-        page: this.state.page + 1
+        page: this.state.page + 1,
       },
       () => {
         this.searchDiscogs;
@@ -155,7 +157,7 @@ export default class ReleaseList extends Component {
         style={{
           paddingVertical: 20,
           borderTopWidth: 1,
-          borderColor: "#CED0CE"
+          borderColor: '#CED0CE',
         }}
       >
         <ActivityIndicator animating size="large" />
@@ -170,9 +172,9 @@ export default class ReleaseList extends Component {
       return records.map(releaseItem => {
         if (collectionRecord.basic_information.id === releaseItem.id) {
           console.log(
-            "Collection item: ",
+            'Collection item: ',
             collectionRecord,
-            "RElease Item: ",
+            'RElease Item: ',
             releaseItem
           );
           return ownedReleases.push(collectionRecord);
@@ -189,9 +191,9 @@ export default class ReleaseList extends Component {
       return records.map(releaseItem => {
         if (wantlistRecord.basic_information.id === releaseItem.id) {
           console.log(
-            "Collection item: ",
+            'Collection item: ',
             wantlistRecord,
-            "RElease Item: ",
+            'RElease Item: ',
             releaseItem
           );
           return wantedReleases.push(wantlistRecord);
@@ -204,24 +206,24 @@ export default class ReleaseList extends Component {
   getMasterReleases = () => {
     const { userData, item } = this.props.navigation.state.params;
     const { page } = this.state;
-    value = AsyncStorage.multiGet(["oauth_token", "oauth_secret"]).then(
+    value = AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then(
       values => {
         const user_token = values[0][1];
         const user_secret = values[1][1];
         const master_id = item.id;
 
         axios({
-          method: "GET",
+          method: 'GET',
           url: `https://api.discogs.com/masters/${master_id}/versions?format=vinyl&sort=year&sort_order=asc&page=${page}&per_page=30`,
           headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
+            'Content-Type': 'application/x-www-form-urlencoded',
             Authorization: `OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
-            "User-Agent":
-              "Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
-          }
+            'User-Agent':
+              'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+          },
         })
           .then(response => {
-            console.log(response.data.versions, "VERSIONS VINYL");
+            console.log(response.data.versions, 'VERSIONS VINYL');
             this.setState({ records: response.data.versions });
           })
 
@@ -233,7 +235,7 @@ export default class ReleaseList extends Component {
             } else if (error.request) {
               console.log(error.request);
             } else {
-              console.log("Error", error.message);
+              console.log('Error', error.message);
             }
             console.log(error.config);
           });
@@ -250,14 +252,14 @@ export default class ReleaseList extends Component {
       collectionRecords,
       releasesOwned,
       releasesWanted,
-      wantlistRecords
+      wantlistRecords,
     } = this.state;
-    let discogsString = item.title.split("-");
+    let discogsString = item.title.split('-');
     const title = discogsString[1];
     const artist = discogsString[0];
     const label = item.label;
 
-    console.log(wantlistRecords, "RECS FROM WANTS");
+    console.log(wantlistRecords, 'RECS FROM WANTS');
 
     return (
       <View style={styles.container}>
@@ -266,7 +268,7 @@ export default class ReleaseList extends Component {
           <View style={styles.headerContainer}>
             <Text
               numberOfLines={1}
-              ellipsifyMode={"tail"}
+              ellipsifyMode={'tail'}
               style={styles.detailTitle}
             >
               {title}
@@ -322,122 +324,122 @@ export default class ReleaseList extends Component {
 const styles = {
   container: {
     flex: 1,
-    backgroundColor: "#000"
+    backgroundColor: '#000',
   },
   badgeContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginBottom: 10,
-    marginLeft: 6
+    marginLeft: 6,
   },
   imagesContainer: {
     width: windowSize.width,
     height: 145,
-    flexDirection: "row",
-    backgroundColor: "#000",
-    alignItems: "flex-end",
+    flexDirection: 'row',
+    backgroundColor: '#000',
+    alignItems: 'flex-end',
     borderBottomWidth: 4,
-    borderBottomColor: "#d3d3d3"
+    borderBottomColor: '#d3d3d3',
   },
   detailThumb: {
     height: 100,
     width: 100,
     marginBottom: 0,
     marginLeft: 0,
-    marginRight: 15
+    marginRight: 15,
   },
   headerContainer: {
-    justifyContent: "center"
+    justifyContent: 'center',
   },
   detailTitle: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 20,
-    backgroundColor: "transparent",
-    fontFamily: "Lato-Regular",
-    lineHeight: 28
+    backgroundColor: 'transparent',
+    fontFamily: 'Lato-Regular',
+    lineHeight: 28,
   },
   detailArtist: {
-    color: "#777777",
+    color: '#777777',
     marginBottom: 10,
-    backgroundColor: "transparent",
-    fontFamily: "Lato-Regular",
+    backgroundColor: 'transparent',
+    fontFamily: 'Lato-Regular',
     lineHeight: 24,
     fontSize: 16,
-    marginLeft: 6
+    marginLeft: 6,
   },
   btnContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignSelf: "stretch",
-    marginBottom: 45
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignSelf: 'stretch',
+    marginBottom: 45,
   },
   btnCollText: {
-    fontFamily: "Lato-Regular",
-    color: "#0967EE",
-    backgroundColor: "transparent"
+    fontFamily: 'Lato-Regular',
+    color: '#0967EE',
+    backgroundColor: 'transparent',
   },
   btnWantText: {
-    fontFamily: "Lato-Regular",
-    color: "#D400FF",
-    backgroundColor: "transparent"
+    fontFamily: 'Lato-Regular',
+    color: '#D400FF',
+    backgroundColor: 'transparent',
   },
   renderAlbums: {
     flex: 1,
     marginTop: -3,
-    backgroundColor: "#000"
+    backgroundColor: '#000',
   },
   detailCollectionBtnFalse: {
     borderWidth: 1,
-    borderColor: "#0967EE",
+    borderColor: '#0967EE',
     borderRadius: 99,
     height: 44,
     width: 165,
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   detailWantlistBtnFalse: {
     borderWidth: 1,
-    borderColor: "#D400FF",
+    borderColor: '#D400FF',
     borderRadius: 99,
     height: 44,
     width: 165,
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   detailStaticTxt: {
-    color: "rgba(217,217,217,.35)",
+    color: 'rgba(217,217,217,.35)',
     width: 90,
-    fontFamily: "Lato-Regular",
+    fontFamily: 'Lato-Regular',
     fontSize: 14,
-    lineHeight: 18
+    lineHeight: 18,
   },
   detailDynTxt: {
-    color: "#fff",
-    fontFamily: "Lato-Bold",
+    color: '#fff',
+    fontFamily: 'Lato-Bold',
     fontSize: 14,
-    lineHeight: 18
+    lineHeight: 18,
   },
   detailContain: {
     height: 32,
-    alignSelf: "stretch",
-    flexDirection: "row",
-    justifyContent: "space-around",
+    alignSelf: 'stretch',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     borderBottomWidth: 0.5,
-    borderColor: "rgba(217,217,217,.35)",
-    justifyContent: "flex-start",
-    marginBottom: 10
+    borderColor: 'rgba(217,217,217,.35)',
+    justifyContent: 'flex-start',
+    marginBottom: 10,
   },
   starTxt: {
-    color: "rgba(217,217,217,.35)",
-    alignSelf: "flex-start",
+    color: 'rgba(217,217,217,.35)',
+    alignSelf: 'flex-start',
     marginBottom: 8,
     lineHeight: 17,
-    fontFamily: "Lato-Regular",
-    fontSize: 14
+    fontFamily: 'Lato-Regular',
+    fontSize: 14,
   },
   starContainer: {
-    alignItems: "flex-start",
+    alignItems: 'flex-start',
     marginLeft: 20,
     marginTop: 25,
-    marginBottom: 25
-  }
+    marginBottom: 25,
+  },
 };

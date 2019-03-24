@@ -1,14 +1,13 @@
-import React from "react";
+import React from 'react';
 import {
   createAppContainer,
   createSwitchNavigator,
-  createStackNavigator
-} from "react-navigation";
-
-import createBottomTabNavigator from "./MainTabNavigator";
-import AlbumDetail from "../screens/AlbumDetail";
-import SignInScreen from "../auth/Login/components/SignInScreen";
-import AuthLoadingScreen from "../auth/Login/components/AuthLoadingScreen";
+  createStackNavigator,
+} from 'react-navigation';
+import createBottomTabNavigator from './MainTabNavigator';
+import AlbumDetail from '#screens/AlbumDetail';
+import SignInScreen from '../auth/Login/components/SignInScreen';
+import AuthLoadingScreen from '../auth/Login/components/AuthLoadingScreen';
 const AuthStack = createStackNavigator({ SignIn: SignInScreen });
 
 const DiscogsOauthFlow = createAppContainer(
@@ -17,16 +16,18 @@ const DiscogsOauthFlow = createAppContainer(
       AuthLoading: AuthLoadingScreen,
       App: createBottomTabNavigator,
       AlbumDetail: AlbumDetail,
-      Auth: AuthStack
+      Auth: AuthStack,
     },
     {
-      initialRouteName: "AuthLoading"
+      initialRouteName: 'AuthLoading',
     }
   )
 );
 
-const prefix = Expo.Linking.makeUrl("/");
+const prefix = Expo.Linking.makeUrl('/');
 
-const Vinylizr = () => <DiscogsOauthFlow uriPrefix={prefix} />;
+const Vinylizr = props => (
+  <DiscogsOauthFlow uriPrefix={prefix} screenProps={props} />
+);
 
 export default Vinylizr;
