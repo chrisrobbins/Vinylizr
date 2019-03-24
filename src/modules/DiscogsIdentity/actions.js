@@ -1,26 +1,29 @@
 import { AsyncStorage } from 'react-native';
-import DISCOGS_BASE_URL from '#src/routes';
-import { FETCH_DISCOGS_IDENTITY, UPDATE_IS_FETCHING } from '#constants/';
+import { FETCH_DISCOGS_IDENTITY, UPDATE_IS_FETCHING } from './constants';
 import axios from 'axios';
+import {
+  CONSUMER_KEY,
+  CONSUMER_SECRET,
+  DISCOGS_BASE_URL,
+  IDENTITY,
+  IDENTITY_CONFIG,
+} from '#src/routes';
 
-function fetchDiscogsIdentityFromDiscogsApi() {
+async function fetchDiscogsIdentityFromDiscogsApi() {
+  let apiResponse;
   AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then(values => {
     const user_secret = values[0][1];
     const user_token = values[1][1];
-
+    const url = `${DISCOGS_BASE_URL}${IDENTITY}`;
+    const config = IDENTITY_CONFIG(user_token, user_secret);
     console.log('TOKENS from ACTION', user_token, user_secret);
 
-    axios({
-      method: 'GET',
-      url: `${DISCOGS_BASE_URL}/oauth/identity`,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: `OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
-        'User-Agent':
-          'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
-      },
-    }).then(response => response.data);
+    return axios.get(url, config).then(response => {
+      console.log('HELLLLOOOO', response);
+      apiResponse = response.data;
+    });
   });
+  return apiResponse;
 }
 
 export function fetchDiscogsIdentity() {

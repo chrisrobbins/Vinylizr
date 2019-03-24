@@ -1,8 +1,8 @@
-import { combineReducers } from "redux";
-import DiscogsIdentity from "./modules/DiscogsIdentity/reducer";
+import { combineReducers } from 'redux';
+import DiscogsIdentity from '#modules/DiscogsIdentity/reducer';
 
 const rootReducer = combineReducers({
-  userProfile: DiscogsIdentity
+  userProfile: DiscogsIdentity,
 });
 
 export default rootReducer;

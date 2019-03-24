@@ -15,7 +15,7 @@ class IdentityLayer extends Component {
     };
   }
   async componentDidMount() {
-    await this.getTokens();
+    await getTokens();
   }
 
   componentDidUpdate(prevState) {

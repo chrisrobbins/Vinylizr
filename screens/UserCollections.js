@@ -6,11 +6,14 @@ import {
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
-  AsyncStorage,
 } from 'react-native';
 import { Header } from '#common/';
 import axios from 'axios';
-import { withUser } from '#contexts/';
+import {
+  IDENTITY_CONFIG,
+  DISCOGS_BASE_URL,
+  USER_COLLECTION,
+} from '#src/routes';
 // ApiClient.init(DISCOGS_CONSUMER_KEY, DISCOGS_CONSUMER_SECRET);
 
 class UserCollections extends Component {
@@ -19,40 +22,40 @@ class UserCollections extends Component {
   };
   state = { records: [], refreshing: false, userData: {}, page: 1 };
 
-  getUserCollection(username) {
-    const { page } = this.state;
-    AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then(values => {
-      const user_token = values[0][1];
-      const user_secret = values[1][1];
-
-      axios({
-        method: 'GET',
-        url: `https://api.discogs.com/users/${username}/collection/folders/0/releases?page=${page}&per_page=100`,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          Authorization: `OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
-          'User-Agent':
-            'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
-        },
-      })
-        .then(response => {
-          this.setState({ records: response.data.releases, refreshing: false });
-        })
-
-        .catch(error => {
-          if (error.response) {
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-          } else if (error.request) {
-            console.log(error.request);
-          } else {
-            console.log('Error', error.message);
-          }
-          console.log(error.config);
-        });
-    });
+  componentDidMount() {
+    this.getUserCollection();
   }
+
+  getUserCollection = () => {
+    const {
+      oauthToken,
+      oauthSecret,
+      user: { username },
+    } = this.props.screenProps.user;
+    const { page } = this.state;
+    const config = IDENTITY_CONFIG(oauthToken, oauthSecret);
+    const url = USER_COLLECTION(username, page);
+    axios
+      .get(url, config)
+      .then(response => {
+        console.log('RESPONSE FOR COLLECTION', response);
+
+        this.setState({ records: response.data.releases, refreshing: false });
+      })
+
+      .catch(error => {
+        if (error.response) {
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          console.log('Error', error.message);
+        }
+        console.log(error.config);
+      });
+  };
 
   handleRefresh = () => {
     this.setState(
@@ -94,8 +97,6 @@ class UserCollections extends Component {
   _keyExtractor = (item, index) => item.id + index;
 
   render() {
-    console.log('USER CONTEXT IN COLLECTION', this.props);
-
     const { records, userData } = this.state;
     return (
       <View style={styles.mainContainer}>
@@ -164,4 +165,4 @@ const styles = {
   },
 };
 
-export default withUser(UserCollections);
+export default UserCollections;

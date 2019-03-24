@@ -5,7 +5,15 @@ export const CONSUMER_SECRET = 'LSQDaLpplgcCGlkzujkHyUkxImNlWVoI';
 export const DISCOGS_BASE_URL = 'https://api.discogs.com';
 
 // DISCOGS USER IDENTITY ENDPOINT
-export const IDENTITY = '/oauth/identity';
+export const IDENTITY = `${DISCOGS_BASE_URL}/oauth/identity`;
+
+// DISCOGS USER COLLECTION ENPOINT
+export const USER_COLLECTION = (username, page) =>
+  `${DISCOGS_BASE_URL}/users/${username}/collection/folders/0/releases?page=1&per_page=900`;
+
+// DISCOGS WANTLIST ENDPOINT
+export const USER_WANTLIST = username =>
+  `${DISCOGS_BASE_URL}/users/${username}/wants`;
 
 // DISCOGS URL CONFIGS
 

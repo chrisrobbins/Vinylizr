@@ -7,7 +7,7 @@
       "modules": true
     }
   },
-  "extends": ["airbnb", "prettier"],
+  "extends": "airbnb",
   "rules": {
     "no-underscore-dangle": ["off"],
     "no-console": [

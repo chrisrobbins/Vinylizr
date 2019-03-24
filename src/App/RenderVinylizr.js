@@ -7,7 +7,7 @@ class RenderVinylizr extends Component {
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
-        <AppNavigator />
+        <AppNavigator {...this.props} />
       </View>
     );
   }
