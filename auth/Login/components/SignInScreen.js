@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   View,
   AsyncStorage,
@@ -6,39 +6,36 @@ import {
   Text,
   Image,
   Dimensions,
-  ImageBackground
-} from "react-native";
-import { AuthSession } from "expo";
-import axios from "axios";
-import * as Animatable from "react-native-animatable";
-const windowSize = Dimensions.get("window");
+  ImageBackground,
+} from 'react-native';
+import { AuthSession } from 'expo';
+import axios from 'axios';
+import * as Animatable from 'react-native-animatable';
+const windowSize = Dimensions.get('window');
+import { withUser } from '#contexts';
+import { Button } from '#common/';
 
-import { Button } from "../../../src/components/common";
-
-const backgroundImg = require("../../../assets/images/vinyl-record-player.png");
-const power = require("../../../assets/images/power.png");
+const backgroundImg = require('#assets/images/vinyl-record-player.png');
+const power = require('#assets/images/power.png');
 
 class SignInScreen extends Component {
   static navigationOptions = {
-    header: null
+    header: null,
   };
 
   state = {
-    Token: "",
-    Secret: "",
-    verifier: "",
-    loggedIn: null
+    Token: '',
+    Secret: '',
+    verifier: '',
+    loggedIn: null,
   };
 
   componentDidMount() {
     this.getDiscogsRequestToken();
-    AsyncStorage.multiGet(["oauth_token", "oauth_secret"]).then(values => {
-      console.log("SIGN IN TOKENS", values);
-      if (values[0][1] !== null)
-        this.setState({ loggedIn: true }, () => {
-          this.props.navigation.navigate("App");
-        });
-      if (values[0][1] === null) this.setState({ loggedIn: false });
+    if (this.props.user) console.log('user', this.props.user);
+
+    this.setState({ loggedIn: true }, () => {
+      this.props.navigation.navigate('App');
     });
   }
 
@@ -57,19 +54,19 @@ class SignInScreen extends Component {
     const redirectUrl = AuthSession.getRedirectUrl();
     const config = {
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        'Content-Type': 'application/x-www-form-urlencoded',
         Authorization: `OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}",oauth_callback="${redirectUrl}"`,
-        "User-Agent":
-          "Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
-      }
+        'User-Agent':
+          'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+      },
     };
 
     await axios
       .get(`https://api.discogs.com/oauth/request_token`, config)
       .then(response => {
-        const stringBreak = response.data.split("=");
-        const parseToken = stringBreak[2].split("&");
-        const parseSecret = stringBreak[1].split("&");
+        const stringBreak = response.data.split('=');
+        const parseToken = stringBreak[2].split('&');
+        const parseSecret = stringBreak[1].split('&');
         const reqToken = parseSecret[0];
         const tokenSecret = parseToken[0];
         this.setState({ Token: reqToken, Secret: tokenSecret });
@@ -82,51 +79,50 @@ class SignInScreen extends Component {
   _handlePressAsync = async () => {
     const { Token } = this.state;
     let redirectUrl = AuthSession.getRedirectUrl();
-    console.log("REDIRECT URL", redirectUrl);
+    console.log('REDIRECT URL', redirectUrl);
 
     let oauthReturnObj = await AuthSession.startAsync({
       authUrl:
         `https://discogs.com/oauth/authorize?oauth_token=${Token}` +
-        `&redirect_uri=${encodeURIComponent(redirectUrl)}`
+        `&redirect_uri=${encodeURIComponent(redirectUrl)}`,
     });
-    console.log("OAUTH RETURN object", oauthReturnObj);
 
     this.setState({
-      verifier: oauthReturnObj.params.oauth_verifier
+      verifier: oauthReturnObj.params.oauth_verifier,
     });
   };
 
   _handleOpenURL = () => {
     if (this.state.verifier) {
       this.getAccessToken();
-      this.props.navigation.navigate("App");
+      this.props.navigation.navigate('App');
     }
   };
 
   getAccessToken = () => {
     const { verifier, Token, Secret } = this.state;
     axios({
-      method: "POST",
+      method: 'POST',
       url: `https://api.discogs.com/oauth/access_token`,
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        'Content-Type': 'application/x-www-form-urlencoded',
         Authorization: `OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${Token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${Secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}",oauth_verifier="${verifier}"`,
-        "User-Agent":
-          "Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
-      }
+        'User-Agent':
+          'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+      },
     })
       .then(response => {
-        console.log("ACCESS TOKEN RESPONSE", response);
+        console.log('ACCESS TOKEN RESPONSE', response);
 
-        const stringBreak = response.data.split("=");
-        let secretSplit = stringBreak[1].split("&");
+        const stringBreak = response.data.split('=');
+        let secretSplit = stringBreak[1].split('&');
 
         const oauthSecret = stringBreak[2];
         const oauthToken = secretSplit[0];
 
         AsyncStorage.multiSet([
-          ["oauth_token", oauthToken],
-          ["oauth_secret", oauthSecret]
+          ['oauth_token', oauthToken],
+          ['oauth_secret', oauthSecret],
         ]);
       })
       .catch(error => {
@@ -135,6 +131,8 @@ class SignInScreen extends Component {
   };
 
   render() {
+    console.log('WITH USER SIGN IN SCREEN', this.props);
+
     return (
       <View style={styles.imagesContainer}>
         <ImageBackground style={styles.backgroundImage} source={backgroundImg}>
@@ -160,48 +158,48 @@ class SignInScreen extends Component {
 const styles = {
   animateStyles: {
     flex: 1,
-    justifyContent: "flex-end",
-    marginBottom: 40
+    justifyContent: 'flex-end',
+    marginBottom: 40,
   },
   headingContainer: {
-    alignItems: "center",
-    justifyContent: "flex-end",
+    alignItems: 'center',
+    justifyContent: 'flex-end',
     marginTop: 100,
-    width: 295
+    width: 295,
   },
   title: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     fontSize: 24,
-    color: "#ffffff",
+    color: '#ffffff',
     lineHeight: 29,
-    marginBottom: 10
+    marginBottom: 10,
   },
   subText: {
-    backgroundColor: "transparent",
-    color: "#ffffff",
+    backgroundColor: 'transparent',
+    color: '#ffffff',
     fontSize: 16,
     lineHeight: 29,
     marginTop: 10,
-    textAlign: "center"
+    textAlign: 'center',
   },
   logo: {
     width: 24,
-    height: 28
+    height: 28,
   },
   imagesContainer: {
     width: windowSize.width,
     height: windowSize.height,
-    justifyContent: "flex-end",
-    alignItems: "center"
+    justifyContent: 'flex-end',
+    alignItems: 'center',
   },
   backgroundImage: {
     flex: 1,
     width: windowSize.width,
     height: windowSize.height,
-    backgroundColor: "#000",
-    justifyContent: "flex-end",
-    alignItems: "center"
-  }
+    backgroundColor: '#000',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
 };
 
-export default SignInScreen;
+export default withUser(SignInScreen);

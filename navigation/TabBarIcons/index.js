@@ -5,7 +5,7 @@ import { Image } from "react-native";
 export const CollectionFocused = () => {
   return (
     <Image
-      source={require("../../../assets/icons/collection-selected.png")}
+      source={require("../../assets/icons/collection-selected.png")}
       style={styles.icons}
     />
   );
@@ -13,7 +13,7 @@ export const CollectionFocused = () => {
 export const CollectionRested = () => {
   return (
     <Image
-      source={require("../../../assets/icons/collection-rested.png")}
+      source={require("../../assets/icons/collection-rested.png")}
       style={styles.icons}
     />
   );
@@ -23,7 +23,7 @@ export const CollectionRested = () => {
 export const WantlistFocused = () => {
   return (
     <Image
-      source={require("../../../assets/icons/wantlist-selected.png")}
+      source={require("../../assets/icons/wantlist-selected.png")}
       style={styles.icons}
     />
   );
@@ -31,7 +31,7 @@ export const WantlistFocused = () => {
 export const WantlistRested = () => {
   return (
     <Image
-      source={require("../../../assets/icons/wantlist-rested.png")}
+      source={require("../../assets/icons/wantlist-rested.png")}
       style={styles.icons}
     />
   );
@@ -41,7 +41,7 @@ export const WantlistRested = () => {
 export const ProfileFocused = () => {
   return (
     <Image
-      source={require("../../../assets/icons/profile-selected.png")}
+      source={require("../../assets/icons/profile-selected.png")}
       style={styles.icons}
     />
   );
@@ -49,7 +49,7 @@ export const ProfileFocused = () => {
 export const ProfileRested = () => {
   return (
     <Image
-      source={require("../../../assets/icons/profile-rested.png")}
+      source={require("../../assets/icons/profile-rested.png")}
       style={styles.icons}
     />
   );
@@ -59,7 +59,7 @@ export const ProfileRested = () => {
 export const SearchFocused = () => {
   return (
     <Image
-      source={require("../../../assets/icons/search-selected.png")}
+      source={require("../../assets/icons/search-selected.png")}
       style={styles.icons}
     />
   );
@@ -67,7 +67,7 @@ export const SearchFocused = () => {
 export const SearchRested = () => {
   return (
     <Image
-      source={require("../../../assets/icons/search-rested.png")}
+      source={require("../../assets/icons/search-rested.png")}
       style={styles.icons}
     />
   );

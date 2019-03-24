@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import { Text, View, Image, AsyncStorage } from "react-native";
+import React, { Component } from 'react';
+import { Text, View, Image, AsyncStorage } from 'react-native';
 
-import axios from "axios";
+import axios from 'axios';
 
-import { CardSection } from "../common/CardSection";
-import Swipeable from "react-native-swipeable";
-import SearchSuccessModal from "../Modals/SearchSuccessModal";
+import { CardSection } from '#common/CardSection';
+import Swipeable from 'react-native-swipeable';
+import SearchSuccessModal from '../Modals/SearchSuccessModal';
 
 class SearchResultItem extends Component {
   constructor(props) {
@@ -15,13 +15,13 @@ class SearchResultItem extends Component {
       rightActionActivated: false,
       isModalVisible: false,
       leftSwiped: false,
-      rightSwiped: false
+      rightSwiped: false,
     };
   }
 
   saveToCollection = () => {
     const { userData } = this.props;
-    value = AsyncStorage.multiGet(["oauth_token", "oauth_secret"]).then(
+    value = AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then(
       values => {
         const user_token = values[0][1];
         const user_secret = values[1][1];
@@ -29,17 +29,17 @@ class SearchResultItem extends Component {
         const release_id = this.props.item.id;
 
         axios({
-          method: "POST",
+          method: 'POST',
           url: `https://api.discogs.com/users/${user_name}/collection/folders/1/releases/${release_id}`,
           headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
+            'Content-Type': 'application/x-www-form-urlencoded',
             Authorization: `OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
-            "User-Agent":
-              "Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
-          }
+            'User-Agent':
+              'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+          },
         })
           .then(response => {
-            console.log(response, " post response");
+            console.log(response, ' post response');
             this.setState({ items: response.data.releases });
           })
           .then(() => {
@@ -54,7 +54,7 @@ class SearchResultItem extends Component {
             } else if (error.request) {
               console.log(error.request);
             } else {
-              console.log("Error", error.message);
+              console.log('Error', error.message);
             }
             console.log(error.config);
           });
@@ -63,7 +63,7 @@ class SearchResultItem extends Component {
   };
   saveToWantlist = () => {
     const { userData, item } = this.props;
-    value = AsyncStorage.multiGet(["oauth_token", "oauth_secret"]).then(
+    value = AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then(
       values => {
         const user_token = values[0][1];
         const user_secret = values[1][1];
@@ -71,14 +71,14 @@ class SearchResultItem extends Component {
         const release_id = item.id;
 
         axios({
-          method: "PUT",
+          method: 'PUT',
           url: `https://api.discogs.com/users/${user_name}/wants/${release_id}`,
           headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
+            'Content-Type': 'application/x-www-form-urlencoded',
             Authorization: `OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
-            "User-Agent":
-              "Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
-          }
+            'User-Agent':
+              'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+          },
         })
           .then(response => {
             this.setState({ records: response.data.wants });
@@ -96,7 +96,7 @@ class SearchResultItem extends Component {
             } else if (error.request) {
               console.log(error.request);
             } else {
-              console.log("Error", error.message);
+              console.log('Error', error.message);
             }
             console.log(error.config);
           });
@@ -133,34 +133,34 @@ class SearchResultItem extends Component {
       titleTextStyle,
       artistTextStyle,
       collectionSavedTextStyle,
-      wantlistSavedTextStyle
+      wantlistSavedTextStyle,
     } = styles;
     const { leftActionActivated, rightActionActivated, toggle } = this.state;
-    const wantlistIcon = require("../../assets/images/wantlistButton.png");
-    const collectionIcon = require("../../assets/images/collectionButton.png");
-    const check = require("../../assets/images/checkmark.png");
+    const wantlistIcon = require('../../assets/images/wantlistButton.png');
+    const collectionIcon = require('../../assets/images/collectionButton.png');
+    const check = require('../../assets/images/checkmark.png');
 
     const leftContent = [
       <View
         key={item.id}
         style={[
           styles.leftSwipeItem,
-          { backgroundColor: leftActionActivated ? "#0967EE" : "#000" }
+          { backgroundColor: leftActionActivated ? '#0967EE' : '#000' },
         ]}
       >
         <Image style={styles.leftIconStyles} source={collectionIcon} />
-      </View>
+      </View>,
     ];
     const rightContent = [
       <View
         key={item.id}
         style={[
           styles.rightSwipeItem,
-          { backgroundColor: rightActionActivated ? "#D400FF" : "#000" }
+          { backgroundColor: rightActionActivated ? '#D400FF' : '#000' },
         ]}
       >
         <Image style={styles.rightIconStyles} source={wantlistIcon} />
-      </View>
+      </View>,
     ];
 
     return (
@@ -199,7 +199,7 @@ class SearchResultItem extends Component {
               {!discogsRecord ? (
                 <Image
                   style={imageStyle}
-                  source={require("../assets/images/n-a.png")}
+                  source={require('../assets/images/n-a.png')}
                 />
               ) : (
                 <Image style={imageStyle} source={{ uri: discogsRecord }} />
@@ -208,21 +208,21 @@ class SearchResultItem extends Component {
 
             <View style={textView}>
               <Text
-                ellipsizeMode={"tail"}
+                ellipsizeMode={'tail'}
                 numberOfLines={1}
                 style={titleTextStyle}
               >
                 {title}
               </Text>
               <Text
-                ellipsizeMode={"tail"}
+                ellipsizeMode={'tail'}
                 numberOfLines={1}
                 style={artistTextStyle}
               >
                 {artist}
               </Text>
               <Text key={item.id} style={styles.artistTextStyle}>
-                {item.label[0]} -{item.country || ""} - {item.year || ""}
+                {item.label[0]} -{item.country || ''} - {item.year || ''}
               </Text>
             </View>
           </CardSection>
@@ -234,49 +234,49 @@ class SearchResultItem extends Component {
 
 const styles = {
   container: {
-    flexDirection: "column",
+    flexDirection: 'column',
     borderBottomWidth: 1,
-    borderBottomColor: "rgba(217,217,217,.6)"
+    borderBottomColor: 'rgba(217,217,217,.6)',
   },
 
   textView: {
-    justifyContent: "center",
-    width: 250
+    justifyContent: 'center',
+    width: 250,
   },
   titleTextStyle: {
     fontSize: 20,
-    color: "#DADADA",
+    color: '#DADADA',
     marginLeft: 5,
-    fontFamily: "Lato-Regular"
+    fontFamily: 'Lato-Regular',
   },
   artistTextStyle: {
     fontSize: 16,
-    color: "rgba(217,217,217,.6)",
+    color: 'rgba(217,217,217,.6)',
     marginLeft: 10,
     marginTop: 1,
-    fontFamily: "Lato-Regular"
+    fontFamily: 'Lato-Regular',
   },
   leftSwipeItem: {
     flex: 1,
-    alignItems: "flex-end",
-    justifyContent: "center",
-    paddingRight: 20
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    paddingRight: 20,
   },
   imageStyle: {
     height: 85,
-    width: 85
+    width: 85,
   },
   rightSwipeItem: {
     flex: 1,
-    alignItems: "flex-start",
-    justifyContent: "center",
-    paddingLeft: 20
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    paddingLeft: 20,
   },
   searchModal: {
-    justifyContent: "center",
+    justifyContent: 'center',
     height: 90,
-    width: 90
-  }
+    width: 90,
+  },
 };
 
 export default SearchResultItem;
