@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { AsyncStorage } from 'react-native';
-import { DISCOGS_BASE_URL, IDENTITY, IDENTITY_CONFIG } from '#src/routes';
+import { IDENTITY_URL, IDENTITY_CONFIG } from '#src/routes';
 import { UserProvider } from '#contexts/';
 import axios from 'axios';
 
@@ -26,7 +26,7 @@ class IdentityLayer extends Component {
 
   getDiscogsIdentity = () => {
     const { oauthToken, oauthSecret } = this.state;
-    const url = `${DISCOGS_BASE_URL}${IDENTITY}`;
+    const url = IDENTITY_URL;
     const config = IDENTITY_CONFIG(oauthToken, oauthSecret);
     axios
       .get(url, config)

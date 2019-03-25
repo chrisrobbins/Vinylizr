@@ -9,6 +9,13 @@
   },
   "extends": "airbnb",
   "rules": {
+    "no-unused-vars": [
+      2,
+      {
+        "vars": "all",
+        "args": "after-used"
+      }
+    ],
     "no-underscore-dangle": ["off"],
     "no-console": [
       "warn",

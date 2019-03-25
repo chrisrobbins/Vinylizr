@@ -5,7 +5,7 @@ import {
   CONSUMER_KEY,
   CONSUMER_SECRET,
   DISCOGS_BASE_URL,
-  IDENTITY,
+  IDENTITY_URL,
   IDENTITY_CONFIG,
 } from '#src/routes';
 
@@ -14,7 +14,7 @@ async function fetchDiscogsIdentityFromDiscogsApi() {
   AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then(values => {
     const user_secret = values[0][1];
     const user_token = values[1][1];
-    const url = `${DISCOGS_BASE_URL}${IDENTITY}`;
+    const url = `${DISCOGS_BASE_URL}${IDENTITY_URL}`;
     const config = IDENTITY_CONFIG(user_token, user_secret);
     console.log('TOKENS from ACTION', user_token, user_secret);
 
