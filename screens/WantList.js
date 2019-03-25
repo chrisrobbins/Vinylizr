@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Image, FlatList, TouchableOpacity } from 'react-native';
 import { Header } from '#common/';
 import axios from 'axios';
-import { IDENTITY_CONFIG, USER_WANTLIST } from '#src/routes';
+import { IDENTITY_CONFIG, USER_WANTLIST_URL } from '#src/routes';
 
 class Wantlist extends Component {
   static navigationOptions = {
@@ -20,7 +20,7 @@ class Wantlist extends Component {
       oauthToken,
       oauthSecret,
     } = this.props.screenProps.user;
-    const url = USER_WANTLIST(username);
+    const url = USER_WANTLIST_URL(username);
     const config = IDENTITY_CONFIG(oauthToken, oauthSecret);
     axios
       .get(url, config)

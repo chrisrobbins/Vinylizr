@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, AsyncStorage } from 'react-native';
+import { AsyncStorage } from 'react-native';
 import { Font } from 'expo';
 import Vinylizr from './src/App/RenderVinylizr';
 import IdentityLayer from '#views/Layer';
@@ -8,7 +8,7 @@ import { createStore, applyMiddleware } from 'redux';
 import rootReducer from './src/reducers';
 import { Provider } from 'react-redux';
 import ReduxThunk from 'redux-thunk';
-import { IDENTITY, IDENTITY_CONFIG } from './src/routes';
+import { IDENTITY_URL, IDENTITY_CONFIG } from './src/routes';
 import axios from 'axios';
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 // disable yellow box warnings b/c they're fucking annoying
@@ -22,6 +22,8 @@ class App extends Component {
       user: {},
       oauthToken: '',
       oauthSecret: '',
+      loggedIn: null,
+      userLoggedIn: this.logUserIn,
     };
   }
   async componentDidMount() {
@@ -34,21 +36,24 @@ class App extends Component {
     });
   }
 
-  componentDidUpdate(prevState) {
+  async componentDidUpdate(prevState) {
     const { user, oauthToken } = this.state;
-    if (!prevState.oauthToken && !user && oauthToken) {
-      this.getDiscogsIdentity();
+    if (!prevState.oauthToken && oauthToken) {
+      await this.getDiscogsIdentity();
     }
   }
+  logUserIn = () => {
+    this.setState({ loggedIn: true });
+  };
 
   getDiscogsIdentity = () => {
     const { oauthToken, oauthSecret } = this.state;
-    const url = `${IDENTITY}`;
+    const url = IDENTITY_URL;
     const config = IDENTITY_CONFIG(oauthToken, oauthSecret);
     axios
       .get(url, config)
       .then(response => {
-        this.setState({ user: response.data });
+        this.setState({ user: response.data, loggedIn: true });
       })
 
       .catch(error => {
@@ -57,10 +62,15 @@ class App extends Component {
   };
 
   getTokens = () => {
+    console.log('GET SOME TOKENS!!!');
+
     AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then(values => {
       const user_token = values[0][1];
       const user_secret = values[1][1];
-      this.setState({ oauthToken: user_token, oauthSecret: user_secret });
+      this.setState({
+        oauthToken: user_token,
+        oauthSecret: user_secret,
+      });
     });
   };
 

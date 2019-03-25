@@ -9,11 +9,7 @@ import {
 } from 'react-native';
 import { Header } from '#common/';
 import axios from 'axios';
-import {
-  IDENTITY_CONFIG,
-  DISCOGS_BASE_URL,
-  USER_COLLECTION,
-} from '#src/routes';
+import { IDENTITY_CONFIG, USER_COLLECTION_URL } from '#src/routes';
 // ApiClient.init(DISCOGS_CONSUMER_KEY, DISCOGS_CONSUMER_SECRET);
 
 class UserCollections extends Component {
@@ -23,6 +19,8 @@ class UserCollections extends Component {
   state = { records: [], refreshing: false, userData: {}, page: 1 };
 
   componentDidMount() {
+    console.log('this.pprops for coollelctint', this.props.screenProps);
+
     this.getUserCollection();
   }
 
@@ -34,7 +32,7 @@ class UserCollections extends Component {
     } = this.props.screenProps.user;
     const { page } = this.state;
     const config = IDENTITY_CONFIG(oauthToken, oauthSecret);
-    const url = USER_COLLECTION(username, page);
+    const url = USER_COLLECTION_URL(username, page);
     axios
       .get(url, config)
       .then(response => {

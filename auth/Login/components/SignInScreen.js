@@ -14,6 +14,12 @@ import * as Animatable from 'react-native-animatable';
 const windowSize = Dimensions.get('window');
 import { withUser } from '#contexts';
 import { Button } from '#common/';
+import {
+  DISCOGS_AUTH_URL,
+  DISCOGS_ACCESS_TOKEN_URL,
+  ACCESS_TOKEN_CONFIG,
+  REQUEST_TOKEN_CONFIG,
+} from '#src/routes';
 
 const backgroundImg = require('#assets/images/vinyl-record-player.png');
 const power = require('#assets/images/power.png');
@@ -27,21 +33,18 @@ class SignInScreen extends Component {
     Token: '',
     Secret: '',
     verifier: '',
-    loggedIn: null,
   };
 
-  componentDidMount() {
-    this.getDiscogsRequestToken();
-    if (this.props.user) console.log('user', this.props.user);
-
-    this.setState({ loggedIn: true }, () => {
+  async componentDidUpdate(prevProps) {
+    const { loggedIn } = this.props.screenProps.user;
+    if (!prevProps.screenProps.user.loggedIn && loggedIn) {
       this.props.navigation.navigate('App');
-    });
-  }
-
-  componentDidUpdate() {
-    let url = AuthSession.getRedirectUrl();
-    Linking.addEventListener(`${url}`, this._handleOpenURL());
+    }
+    if (!loggedIn) {
+      await this.getDiscogsRequestToken();
+      let url = AuthSession.getRedirectUrl();
+      await Linking.addEventListener(`${url}`, this._handleOpenURL());
+    }
   }
 
   componentWillUnmount() {
@@ -51,25 +54,21 @@ class SignInScreen extends Component {
   }
 
   getDiscogsRequestToken = async () => {
-    const redirectUrl = AuthSession.getRedirectUrl();
-    const config = {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: `OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}",oauth_callback="${redirectUrl}"`,
-        'User-Agent':
-          'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
-      },
-    };
-
+    console.log('PROPS PROPS PROPS', this.props);
+    let redirectUrl = AuthSession.getRedirectUrl();
+    const config = REQUEST_TOKEN_CONFIG(redirectUrl);
+    const url = `${DISCOGS_AUTH_URL}`;
     await axios
-      .get(`https://api.discogs.com/oauth/request_token`, config)
+      .get(url, config)
       .then(response => {
+        console.log('RESPONSE REQUEST TOKEN', response);
+
         const stringBreak = response.data.split('=');
         const parseToken = stringBreak[2].split('&');
         const parseSecret = stringBreak[1].split('&');
         const reqToken = parseSecret[0];
         const tokenSecret = parseToken[0];
-        this.setState({ Token: reqToken, Secret: tokenSecret });
+        this.setState({ Token: reqToken, Secret: tokenSecret, loggedIn: true });
       })
       .catch(error => {
         console.log(error);
@@ -78,12 +77,11 @@ class SignInScreen extends Component {
 
   _handlePressAsync = async () => {
     const { Token } = this.state;
-    let redirectUrl = AuthSession.getRedirectUrl();
-    console.log('REDIRECT URL', redirectUrl);
-
+    const redirectUrl = AuthSession.getRedirectUrl();
+    const discogsAuthUrl = DISCOGS_AUTH_URL(Token);
     let oauthReturnObj = await AuthSession.startAsync({
       authUrl:
-        `https://discogs.com/oauth/authorize?oauth_token=${Token}` +
+        `${discogsAuthUrl}` +
         `&redirect_uri=${encodeURIComponent(redirectUrl)}`,
     });
 
@@ -101,16 +99,10 @@ class SignInScreen extends Component {
 
   getAccessToken = () => {
     const { verifier, Token, Secret } = this.state;
-    axios({
-      method: 'POST',
-      url: `https://api.discogs.com/oauth/access_token`,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: `OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${Token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${Secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}",oauth_verifier="${verifier}"`,
-        'User-Agent':
-          'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
-      },
-    })
+    const url = `${DISCOGS_ACCESS_TOKEN_URL}`;
+    const config = ACCESS_TOKEN_CONFIG(Token, Secret, verifier);
+    axios
+      .post(url, config)
       .then(response => {
         console.log('ACCESS TOKEN RESPONSE', response);
 
@@ -202,4 +194,4 @@ const styles = {
   },
 };
 
-export default withUser(SignInScreen);
+export default SignInScreen;
