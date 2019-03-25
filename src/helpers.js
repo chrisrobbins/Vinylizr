@@ -1,7 +1,7 @@
 // Discogs User Profile Request
 getDiscogsIdentity = () => {
   const { oauthToken, oauthSecret } = this.state;
-  const url = `${DISCOGS_BASE_URL}${IDENTITY}`;
+  const url = `${DISCOGS_BASE_URL}${IDENTITY_URL}`;
   const config = IDENTITY_CONFIG(oauthToken, oauthSecret);
   axios
     .get(url, config)
