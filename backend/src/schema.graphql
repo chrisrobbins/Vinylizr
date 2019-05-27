@@ -1,0 +1,14 @@
+type Query {
+  requestToken(redirectUrl: String!): [String!]!
+  # oauthAccess(accessToken: String!, accessSecret: String!): String!
+  # user: User
+}
+
+# type Mutation {
+#   mutate: String!
+# }
+
+# type User {
+#   id: Int!
+#   username: String!
+# }
