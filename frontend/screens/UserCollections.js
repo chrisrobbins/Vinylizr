@@ -3,9 +3,11 @@ import { shape, func } from 'prop-types';
 import {
   View,
   Image,
+  SectionList,
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
+  Text,
   AsyncStorage,
 } from 'react-native';
 import { Header } from '#common/';
@@ -20,11 +22,10 @@ class UserCollections extends Component {
   state = { records: [], refreshing: false, userData: {}, page: 1 };
 
   async componentDidMount() {
-    console.log('COLLECTION PROPS', this.props.screenProps);
+    await this.getUserCollection();
     const {
       user: { userMeta },
       getDiscogsIdentity,
-      saveAccessTokens,
     } = this.props.screenProps;
     const accessToken = await AsyncStorage.getItem('access_token');
     const accessSecret = await AsyncStorage.getItem('access_secret');
@@ -34,10 +35,6 @@ class UserCollections extends Component {
     };
     if (!userMeta.username) {
       getDiscogsIdentity(accessData);
-    }
-    if (!this.state.records.length) {
-      console.log('theres no records !!!!!!!!!!!!!!!!!');
-      this.getUserCollection();
     }
   }
 
@@ -55,22 +52,11 @@ class UserCollections extends Component {
     vinylAxios
       .get(url, config)
       .then(response => {
-        console.log('RESPONSE FOR COLLECTION', response);
-
         this.setState({ records: response.data.releases, refreshing: false });
       })
 
       .catch(error => {
-        if (error.response) {
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          console.log(error.request);
-        } else {
-          console.log('Error', error.message);
-        }
-        console.log(error.config);
+        console.log('error fetching collection');
       });
   };
 
@@ -118,41 +104,68 @@ class UserCollections extends Component {
     const {
       user: { userMeta },
     } = this.props.screenProps;
-    console.log({ userMeta });
+
+    const vinylData = records.reduce((arrangedData, data) => {
+      // c[0] should be the first letter of an entry
+      let record = data.basic_information.artists[0].name[0].toLocaleUpperCase();
+
+      // either push to an existing dict entry or create one
+      if (arrangedData[record]) arrangedData[record].push(data);
+      else arrangedData[record] = [data];
+
+      return arrangedData;
+    }, {});
+
+    const collectionSections = Object.entries(vinylData).map(vinyl => {
+      return {
+        title: vinyl[0],
+        data: vinyl[1],
+      };
+    });
+    console.log('COLLECTION SECTIONS', collectionSections);
     return (
       <View style={styles.mainContainer}>
         <View style={styles.headerContainer}>
           <Header headerText={'Collection'} />
         </View>
         <View style={styles.contentContainer}>
-          <FlatList
-            data={records}
-            renderItem={({ item, index }) => (
-              <TouchableOpacity
-                key={item.intance_id}
-                onPress={() => {
-                  this.props.navigation.navigate('AlbumDetail', {
-                    item: item,
-                    inCollection: true,
-                    userData: userMeta,
-                  });
-                }}
-              >
-                <Image
-                  style={styles.albumCovers}
-                  source={{ uri: item.basic_information.cover_image }}
-                />
-              </TouchableOpacity>
+          <SectionList
+            renderItem={({ section }) => (
+              <FlatList
+                data={section.data}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    key={item.intance_id}
+                    onPress={() => {
+                      this.props.navigation.navigate('AlbumDetail', {
+                        item: item,
+                        inCollection: true,
+                        inWantlist: false,
+                        userData: userMeta,
+                      });
+                    }}
+                  >
+                    <Image
+                      style={styles.albumCovers}
+                      source={{ uri: item.basic_information.cover_image }}
+                    />
+                  </TouchableOpacity>
+                )}
+                keyExtractor={this._keyExtractor}
+                ListFooterComponent={this.renderFooter}
+                contentContainerStyle={styles.contentContainerStyle}
+                numColumns={3}
+              />
             )}
+            renderSectionHeader={({ section: { title } }) => (
+              <Text style={{ fontWeight: 'bold', color: '#fff' }}>{title}</Text>
+            )}
+            sections={collectionSections}
             keyExtractor={this._keyExtractor}
-            ListFooterComponent={this.renderFooter}
             refreshing={this.state.refreshing}
             onRefresh={this.handleRefresh}
             onEndReached={this.handleLoadMore}
             onEndReachedThreshold={40}
-            style={styles.textContainer}
-            contentContainerStyle={styles.contentContainerStyle}
-            numColumns={3}
           />
         </View>
       </View>

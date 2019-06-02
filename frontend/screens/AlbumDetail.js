@@ -10,6 +10,7 @@ import {
   AsyncStorage,
 } from 'react-native';
 import { DetailButton } from '#common';
+import cx from 'classnames';
 import TrackList from '#views/TrackList/TrackList';
 import Stars from 'react-native-stars';
 const windowSize = Dimensions.get('window');
@@ -23,6 +24,8 @@ class AlbumDetail extends Component {
     median: '',
     high: '',
     userRating: '',
+    inWantlist: this.props.navigation.state.params.inWantlist,
+    inCollection: this.props.navigation.state.params.inCollection,
   };
 
   static navigationOptions = {
@@ -31,8 +34,6 @@ class AlbumDetail extends Component {
   };
 
   componentDidMount() {
-    console.log('ALBUM DETAIL', this.props);
-
     this.getPrices();
     this.getTrackList();
     this.getUserRating();
@@ -58,6 +59,13 @@ class AlbumDetail extends Component {
       });
   };
 
+  toggleInWantlist = () => {
+    this.setState({ inWantlist: !this.state.inWantlist });
+  };
+  toggleInCollection = () => {
+    this.setState({ inCollection: !this.state.inCollection });
+  };
+
   getPrices = () => {
     const { item, userData } = this.props.navigation.state.params;
     const release_id = item.id;
@@ -74,26 +82,13 @@ class AlbumDetail extends Component {
           'User-Agent':
             'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
         },
-      })
-        .then(response => {
-          this.setState({
-            low: response.data['Good Plus (G+)'].value,
-            median: response.data['Very Good Plus (VG+)'].value,
-            high: response.data['Mint (M)'].value,
-          });
-        })
-        .catch(error => {
-          if (error.response) {
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-          } else if (error.request) {
-            console.log(error.request);
-          } else {
-            console.log('Error', error.message);
-          }
-          console.log(error.config);
+      }).then(response => {
+        this.setState({
+          low: response.data['Good Plus (G+)'].value,
+          median: response.data['Very Good Plus (VG+)'].value,
+          high: response.data['Mint (M)'].value,
         });
+      });
     });
   };
 
@@ -117,22 +112,7 @@ class AlbumDetail extends Component {
             'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
         },
         rating: `'${rating}'`,
-      })
-        .then(response => {
-          console.log(response, rating, 'CHANGE RATING');
-        })
-        .catch(error => {
-          if (error.response) {
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-          } else if (error.request) {
-            console.log(error.request);
-          } else {
-            console.log('Error', error.message);
-          }
-          console.log(error.config);
-        });
+      });
     });
   };
 
@@ -154,11 +134,7 @@ class AlbumDetail extends Component {
   };
 
   render() {
-    const {
-      item,
-      inCollection,
-      inWantlist,
-    } = this.props.navigation.state.params;
+    const { item } = this.props.navigation.state.params;
     const {
       avgRating,
       low,
@@ -167,6 +143,8 @@ class AlbumDetail extends Component {
       numForSale,
       tracklist,
       userRating,
+      inCollection,
+      inWantlist,
     } = this.state;
     const roundedRating = Math.round(avgRating * 10) / 10;
     const roundedMedian = !median ? 0 : median.toFixed(2);
@@ -178,8 +156,6 @@ class AlbumDetail extends Component {
     const year = item.basic_information.year;
 
     userRatingNum = parseInt(userRating);
-
-    console.log(userRating, 'fuk');
 
     return (
       <View style={styles.detailScrollView}>
@@ -231,6 +207,7 @@ class AlbumDetail extends Component {
                         : styles.detailCollectionBtnFalse
                     }
                     txtStyle={styles.btnCollText}
+                    onPress={this.toggleInCollection}
                   >
                     {inCollection === true
                       ? 'In Collection'
@@ -242,6 +219,7 @@ class AlbumDetail extends Component {
                         ? styles.detailWantlistBtnTrue
                         : styles.detailWantlistBtnFalse
                     }
+                    onPress={this.toggleInWantlist}
                     txtStyle={styles.btnWantText}
                   >
                     {inWantlist === true ? 'In Wantlist' : 'Add to Wantlist'}
