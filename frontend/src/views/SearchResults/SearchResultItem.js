@@ -39,7 +39,6 @@ class SearchResultItem extends Component {
           },
         })
           .then(response => {
-            console.log(response, ' post response');
             this.setState({ items: response.data.releases });
           })
           .then(() => {
@@ -47,15 +46,6 @@ class SearchResultItem extends Component {
           })
 
           .catch(error => {
-            if (error.response) {
-              console.log(error.response.data);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-            } else if (error.request) {
-              console.log(error.request);
-            } else {
-              console.log('Error', error.message);
-            }
             console.log(error.config);
           });
       }
@@ -89,15 +79,6 @@ class SearchResultItem extends Component {
           })
 
           .catch(error => {
-            if (error.response) {
-              console.log(error.response.data);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-            } else if (error.request) {
-              console.log(error.request);
-            } else {
-              console.log('Error', error.message);
-            }
             console.log(error.config);
           });
       }
@@ -132,10 +113,8 @@ class SearchResultItem extends Component {
       imageStyle,
       titleTextStyle,
       artistTextStyle,
-      collectionSavedTextStyle,
-      wantlistSavedTextStyle,
     } = styles;
-    const { leftActionActivated, rightActionActivated, toggle } = this.state;
+    const { leftActionActivated, rightActionActivated } = this.state;
     const wantlistIcon = require('../../assets/images/wantlistButton.png');
     const collectionIcon = require('../../assets/images/collectionButton.png');
     const check = require('../../assets/images/checkmark.png');

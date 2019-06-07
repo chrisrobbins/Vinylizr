@@ -1,18 +1,13 @@
 import React, { Component } from 'react';
-import { shape, func } from 'prop-types';
 import {
   View,
-  Image,
-  FlatList,
-  TouchableOpacity,
+  SectionList,
   ActivityIndicator,
+  Text,
   AsyncStorage,
 } from 'react-native';
-import { Header } from '#common/';
+import { Header, SectionFlatList } from '#common/';
 import vinylAxios from 'axios';
-import { IDENTITY_CONFIG, USER_COLLECTION_URL } from '#src/routes';
-// ApiClient.init(DISCOGS_CONSUMER_KEY, DISCOGS_CONSUMER_SECRET);
-
 class UserCollections extends Component {
   static navigationOptions = {
     header: null,
@@ -20,58 +15,46 @@ class UserCollections extends Component {
   state = { records: [], refreshing: false, userData: {}, page: 1 };
 
   async componentDidMount() {
-    console.log('COLLECTION PROPS', this.props.screenProps);
-    const {
-      user: { userMeta },
-      getDiscogsIdentity,
-      saveAccessTokens,
-    } = this.props.screenProps;
-    const accessToken = await AsyncStorage.getItem('access_token');
-    const accessSecret = await AsyncStorage.getItem('access_secret');
-    const accessData = {
-      token: accessToken,
-      tokenSecret: accessSecret,
-    };
-    if (!userMeta.username) {
-      getDiscogsIdentity(accessData);
-    }
-    if (!this.state.records.length) {
-      console.log('theres no records !!!!!!!!!!!!!!!!!');
-      this.getUserCollection();
-    }
+    await this.getUserCollection();
   }
 
   getUserCollection = async () => {
-    const {
-      user: {
-        userMeta: { username },
-      },
-    } = this.props.screenProps;
-    const accessToken = await AsyncStorage.getItem('access_token');
-    const accessSecret = await AsyncStorage.getItem('access_secret');
-    const { page } = this.state;
-    const config = IDENTITY_CONFIG(accessToken, accessSecret);
-    const url = USER_COLLECTION_URL(username, page);
+    const token = await AsyncStorage.getItem('access_token');
+    const tokenSecret = await AsyncStorage.getItem('access_token');
+    const user = await AsyncStorage.getItem('userMeta');
+    const userMeta = JSON.parse(user);
+    const { username } = userMeta;
+    const folder = 0;
+    const accessData = {
+      token,
+      tokenSecret,
+    };
+
+    const url = `http://localhost:3000/collection?folder=${folder}&user=${username}`;
     vinylAxios
-      .get(url, config)
+      .post(url, accessData)
       .then(response => {
-        console.log('RESPONSE FOR COLLECTION', response);
+        const { releases } = response.data;
+        const vinylData = releases.reduce((arrangedData, data) => {
+          // c[0] should be the first letter of an entry
+          let record = data.basic_information.artists[0].name[0].toLocaleUpperCase();
 
-        this.setState({ records: response.data.releases, refreshing: false });
+          // either push to an existing dict entry or create one
+          if (arrangedData[record]) arrangedData[record].push(data);
+          else arrangedData[record] = [data];
+
+          return arrangedData;
+        }, {});
+
+        const collectionSections = Object.entries(vinylData).map(vinyl => {
+          return {
+            title: vinyl[0],
+            data: vinyl[1],
+          };
+        });
+        this.setState({ records: collectionSections });
       })
-
-      .catch(error => {
-        if (error.response) {
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          console.log(error.request);
-        } else {
-          console.log('Error', error.message);
-        }
-        console.log(error.config);
-      });
+      .catch(err => console.log('ERROR', err));
   };
 
   handleRefresh = () => {
@@ -111,48 +94,36 @@ class UserCollections extends Component {
     );
   };
 
-  _keyExtractor = (item, index) => item.id + index;
+  _keyExtractor = (item, index) => index;
+  _sectionKeyExtractor = (section, index) => index;
 
   render() {
     const { records } = this.state;
-    const {
-      user: { userMeta },
-    } = this.props.screenProps;
-    console.log({ userMeta });
+
     return (
       <View style={styles.mainContainer}>
         <View style={styles.headerContainer}>
           <Header headerText={'Collection'} />
         </View>
         <View style={styles.contentContainer}>
-          <FlatList
-            data={records}
-            renderItem={({ item, index }) => (
-              <TouchableOpacity
-                key={item.intance_id}
-                onPress={() => {
-                  this.props.navigation.navigate('AlbumDetail', {
-                    item: item,
-                    inCollection: true,
-                    userData: userMeta,
-                  });
-                }}
-              >
-                <Image
-                  style={styles.albumCovers}
-                  source={{ uri: item.basic_information.cover_image }}
-                />
-              </TouchableOpacity>
+          <SectionList
+            sections={records}
+            windowSize={15}
+            renderItem={({ section }) => (
+              <SectionFlatList
+                {...this.props}
+                section={section}
+                keyExtractor={this._keyExtractor}
+              />
             )}
-            keyExtractor={this._keyExtractor}
-            ListFooterComponent={this.renderFooter}
+            renderSectionHeader={({ section: { title } }) => (
+              <Text style={{ fontWeight: 'bold', color: '#fff' }}>{title}</Text>
+            )}
+            keyExtractor={this._sectionKeyExtractor}
             refreshing={this.state.refreshing}
             onRefresh={this.handleRefresh}
             onEndReached={this.handleLoadMore}
             onEndReachedThreshold={40}
-            style={styles.textContainer}
-            contentContainerStyle={styles.contentContainerStyle}
-            numColumns={3}
           />
         </View>
       </View>
@@ -175,14 +146,6 @@ const styles = {
   },
   mainContainer: {
     flex: 1,
-  },
-  albumCovers: {
-    height: 124,
-    width: 124,
-    marginLeft: 0.5,
-    marginRight: 0.5,
-    marginTop: 0.5,
-    marginBottom: 0.5,
   },
 };
 

@@ -38,20 +38,10 @@ class MasterReleaseResult extends Component {
           },
         })
           .then(response => {
-            console.log(response, ' MASTER RESPONSE');
             this.setState({ records: response.data.versions });
           })
 
           .catch(error => {
-            if (error.response) {
-              console.log(error.response.data);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-            } else if (error.request) {
-              console.log(error.request);
-            } else {
-              console.log('Error', error.message);
-            }
             console.log(error.config);
           });
       }
@@ -76,8 +66,6 @@ class MasterReleaseResult extends Component {
       titleTextStyle,
       artistTextStyle,
       container,
-      collectionSavedTextStyle,
-      wantlistSavedTextStyle,
     } = styles;
 
     return (

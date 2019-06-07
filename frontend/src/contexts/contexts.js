@@ -15,8 +15,6 @@ const withUser = Component => {
       'Unknown'})`;
 
     render() {
-      // console.log('CONTEXT IN CONSUMER', this.context);
-
       return <Component {...this.props} user={this.context} />;
     }
   };
