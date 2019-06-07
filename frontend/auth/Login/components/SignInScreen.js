@@ -34,6 +34,7 @@ class SignInScreen extends Component {
   }
 
   async componentDidUpdate(prevProps, prevState) {
+    const token = AsyncStorage.getItem('access_token');
     if (!prevState.verifier.length && this.state.verifier.length) {
       await this.getAccessToken();
     }
@@ -49,7 +50,6 @@ class SignInScreen extends Component {
     const proxyUrl = 'http://localhost:3000/authorize';
 
     vinylAxios.get(proxyUrl).then(res => {
-      console.log(res);
       this.setState({ authData: res.data });
       this.asyncGetData(res.data.authorizeUrl);
     });
@@ -59,7 +59,6 @@ class SignInScreen extends Component {
     const oauthReturnObj = await AuthSession.startAsync({
       authUrl: url,
     });
-    console.log({ oauthReturnObj });
 
     this.setState({
       verifier: oauthReturnObj.params.oauth_verifier,
@@ -73,17 +72,14 @@ class SignInScreen extends Component {
   };
 
   getAccessToken = () => {
-    const { verifier, accessData, authData } = this.state;
+    const { verifier, authData } = this.state;
     const proxyUrl = 'http://localhost:3000/callback';
     const url = `${proxyUrl}?oauth_verifier=${verifier}`;
     vinylAxios
       .post(url, authData)
       .then(response => {
-        this.setState({ accessData: response.data }, () => {
-          if (accessData.accessToken) {
-            this.props.screenProps.getDiscogsIdentity(accessData);
-          }
-        });
+        this.setState({ accessData: response.data });
+        this.props.screenProps.getDiscogsIdentity(response.data);
 
         const { token, tokenSecret } = response.data;
 

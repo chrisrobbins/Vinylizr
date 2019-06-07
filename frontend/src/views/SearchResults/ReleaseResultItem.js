@@ -52,15 +52,6 @@ class ReleaseResultItem extends Component {
             this._showLeftModal();
           })
           .catch(error => {
-            if (error.response) {
-              console.log(error.response.data);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-            } else if (error.request) {
-              console.log(error.request);
-            } else {
-              console.log('Error', error.message);
-            }
             console.log(error.config);
           });
       }
@@ -91,15 +82,6 @@ class ReleaseResultItem extends Component {
           })
 
           .catch(error => {
-            if (error.response) {
-              console.log(error.response.data);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-            } else if (error.request) {
-              console.log(error.request);
-            } else {
-              console.log('Error', error.message);
-            }
             console.log(error.config);
           });
       }
@@ -126,24 +108,13 @@ class ReleaseResultItem extends Component {
       wantlistRecords,
       artist,
     } = this.props;
-    console.log(item, 'rlease itme');
-    let discogsRecord = item.thumb;
     const title = item.title;
 
-    const {
-      imageView,
-      textView,
-      imageStyle,
-      titleTextStyle,
-      artistTextStyle,
-      collectionSavedTextStyle,
-      wantlistSavedTextStyle,
-    } = styles;
+    const { textView, titleTextStyle, artistTextStyle } = styles;
 
     const {
       leftActionActivated,
       rightActionActivated,
-      toggle,
       isModalVisible,
       leftSwiped,
       rightSwiped,

@@ -56,15 +56,6 @@ class DiscogsSearch extends Component {
             this.setState({ userData: response.data });
           })
           .catch(error => {
-            if (error.response) {
-              console.log(error.response.data);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-            } else if (error.request) {
-              console.log(error.request);
-            } else {
-              console.log('Error', error.message);
-            }
             console.log(error.config);
           });
       }
@@ -114,7 +105,6 @@ class DiscogsSearch extends Component {
     );
   };
   handleLoadMore = () => {
-    console.log('IM LOADING MORE THINGS FROM THE SEARCH');
     this.setState(
       {
         page: this.state.page + 1,
@@ -123,7 +113,6 @@ class DiscogsSearch extends Component {
         debounce(this.searchDiscogs());
       }
     );
-    console.log('PAGE: ', this.state.page);
   };
   renderFooter = () => {
     if (!this.state.loading) return null;

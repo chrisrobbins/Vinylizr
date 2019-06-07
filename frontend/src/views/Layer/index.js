@@ -48,8 +48,6 @@ class IdentityLayer extends Component {
   };
 
   render() {
-    console.log('props user provider', this.state);
-
     return (
       <UserProvider value={{ name: 'chris' }}>
         {this.props.children}

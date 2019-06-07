@@ -47,7 +47,6 @@ class AlbumDetail extends Component {
     axios
       .get(url)
       .then(res => {
-        console.log(res.data.tracklist, 'Track list RESULT');
         this.setState({
           tracklist: res.data.tracklist,
           avgRating: res.data.community.rating.average,
@@ -64,6 +63,9 @@ class AlbumDetail extends Component {
   };
   toggleInCollection = () => {
     this.setState({ inCollection: !this.state.inCollection });
+    // if(this.state.inCollection) {
+
+    // }
   };
 
   getPrices = () => {
@@ -125,7 +127,6 @@ class AlbumDetail extends Component {
     axios
       .get(url)
       .then(res => {
-        console.log(res, 'user rating');
         this.setState({ userRating: res.data.rating });
       })
       .catch(error => {

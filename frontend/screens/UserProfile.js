@@ -8,13 +8,11 @@ export default class UserProfile extends Component {
   static navigationOptions = {
     header: null,
   };
-  signOut() {
-    AsyncStorage.removeItem('oauth_token').then(() => {
-      console.log('Token Removed');
-    });
-    AsyncStorage.removeItem('oauth_secret').then(() => {
-      console.log('SECRET removed!!');
-    });
+  async signOut() {
+    await AsyncStorage.removeItem('oauth_token');
+    await AsyncStorage.removeItem('oauth_secret');
+    await AsyncStorage.removeItem('userMeta');
+
     this.props.navigation.navigate('Auth');
   }
 
