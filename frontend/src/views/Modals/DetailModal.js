@@ -17,10 +17,6 @@ export default class DetailModal extends Component {
   //     )
   // };
 
-  componentWillMount() {
-    console.log(this.props, 'modal props bro!!');
-  }
-
   _showModal = () => {
     this.setState({ isModalVisible: true });
   };

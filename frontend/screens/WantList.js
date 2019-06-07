@@ -21,7 +21,6 @@ class Wantlist extends Component {
     axios
       .get(url, config)
       .then(response => {
-        console.log(response, 'WANTLIST RESPONSE');
         this.setState({ records: response.data.wants, refreshing: false });
       })
 
