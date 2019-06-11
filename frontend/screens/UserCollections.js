@@ -1,3 +1,4 @@
+// SECTION LIST COMPONENT
 import React, { Component } from 'react';
 import {
   View,
@@ -6,79 +7,99 @@ import {
   Text,
   AsyncStorage,
 } from 'react-native';
+import { connect } from 'react-redux';
+import { isEqual } from 'lodash';
+import { getReleases } from '#modules/Collection/actions';
 import { Header, SectionFlatList } from '#common/';
-import vinylAxios from 'axios';
 class UserCollections extends Component {
   static navigationOptions = {
     header: null,
   };
-  state = { records: [], refreshing: false, userData: {}, page: 1 };
+  state = {
+    records: [],
+    refreshing: false,
+    userData: {},
+    page: 1,
+    isLoading: false,
+  };
 
-  async componentDidMount() {
-    await this.getUserCollection();
+  componentDidMount() {
+    this.getUserCollection();
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (!isEqual(this.props.releases, nextProps.releases)) {
+      return true;
+    }
+    return false;
   }
 
   getUserCollection = async () => {
+    console.log('GETTING USER COLLECTION');
     const token = await AsyncStorage.getItem('access_token');
     const tokenSecret = await AsyncStorage.getItem('access_token');
     const user = await AsyncStorage.getItem('userMeta');
     const userMeta = JSON.parse(user);
     const { username } = userMeta;
+    const { page } = this.state;
     const folder = 0;
     const accessData = {
       token,
       tokenSecret,
     };
-
-    const url = `http://localhost:3000/collection?folder=${folder}&user=${username}`;
-    vinylAxios
-      .post(url, accessData)
-      .then(response => {
-        const { releases } = response.data;
-        const vinylData = releases.reduce((arrangedData, data) => {
-          // c[0] should be the first letter of an entry
-          let record = data.basic_information.artists[0].name[0].toLocaleUpperCase();
-
-          // either push to an existing dict entry or create one
-          if (arrangedData[record]) arrangedData[record].push(data);
-          else arrangedData[record] = [data];
-
-          return arrangedData;
-        }, {});
-
-        const collectionSections = Object.entries(vinylData).map(vinyl => {
-          return {
-            title: vinyl[0],
-            data: vinyl[1],
-          };
-        });
-        this.setState({ records: collectionSections });
-      })
-      .catch(err => console.log('ERROR', err));
+    try {
+      await this.props.dispatch(
+        getReleases(accessData, username, folder, page)
+      );
+    } catch (error) {
+      console.log('ERROR', error);
+    }
   };
 
   handleRefresh = () => {
+    console.log('REFRESHING');
     this.setState(
       {
         page: 1,
-        seed: this.state.seed + 1,
         refreshing: true,
       },
       () => {
         this.getUserCollection();
+        this.setState({ refeshing: false });
       }
     );
   };
   handleLoadMore = () => {
-    this.setState(
-      {
-        page: this.state.page + 1,
-      },
-      () => {
-        this.getUserCollection();
-      }
-    );
+    console.log('END REACHED');
+    const { releases, isFetching } = this.props;
+    if (!isFetching && releases.length > 0) {
+      this.setState(
+        {
+          page: this.state.page + 1,
+        },
+        () => {
+          this.getUserCollection();
+        }
+      );
+    } else {
+      //console.log('waiting end list');
+      this.waitingForMoreData();
+    }
   };
+
+  waitingForMoreData() {
+    setTimeout(() => {
+      if (this.state.loading === false && this.props.releases.length > 0) {
+        //console.log('getting after waiting end list');
+
+        this.handleLoadMore();
+      } else {
+        //console.log('waiting again end list');
+        this.waitingForMoreData();
+      }
+    }, 15000);
+  }
+
   renderFooter = () => {
     if (!this.state.loading) return null;
     return (
@@ -94,11 +115,19 @@ class UserCollections extends Component {
     );
   };
 
-  _keyExtractor = (item, index) => index;
-  _sectionKeyExtractor = (section, index) => index;
+  _sectionKeyExtractor = (section, index) => 'S' + index.toString();
+
+  _renderSections = ({ section }) => (
+    <SectionFlatList
+      {...this.props}
+      section={section}
+      key={section.sectionId}
+    />
+  );
 
   render() {
-    const { records } = this.state;
+    console.log('RENDERING SECTION LIST');
+    const { releases } = this.props;
 
     return (
       <View style={styles.mainContainer}>
@@ -107,15 +136,9 @@ class UserCollections extends Component {
         </View>
         <View style={styles.contentContainer}>
           <SectionList
-            sections={records}
-            windowSize={15}
-            renderItem={({ section }) => (
-              <SectionFlatList
-                {...this.props}
-                section={section}
-                keyExtractor={this._keyExtractor}
-              />
-            )}
+            sections={releases}
+            bounces={false}
+            renderItem={this._renderSections}
             renderSectionHeader={({ section: { title } }) => (
               <Text style={{ fontWeight: 'bold', color: '#fff' }}>{title}</Text>
             )}
@@ -123,7 +146,6 @@ class UserCollections extends Component {
             refreshing={this.state.refreshing}
             onRefresh={this.handleRefresh}
             onEndReached={this.handleLoadMore}
-            onEndReachedThreshold={40}
           />
         </View>
       </View>
@@ -149,4 +171,12 @@ const styles = {
   },
 };
 
-export default UserCollections;
+mapStateToProps = state => {
+  console.log('MAP STATE TO PROPAS STATE', state);
+  return {
+    releases: state.UserCollection.releases,
+    isFetching: state.UserCollection.isFetching,
+  };
+};
+
+export default connect(mapStateToProps)(UserCollections);
