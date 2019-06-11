@@ -4,10 +4,12 @@ if (__DEV__) {
 
 import React, { Component } from 'react';
 import { AsyncStorage } from 'react-native';
+import { Provider } from 'react-redux';
 import vinylAxios from 'axios';
+import store from './src/store';
 import * as Font from 'expo-font';
 import Vinylizr from './src/App/RenderVinylizr';
-import { isEmpty } from 'rxjs/operator/isEmpty';
+import { isEmpty } from 'lodash';
 
 // disable yellow box warnings b/c they're fucking annoying
 console.disableYellowBox = true;
@@ -59,13 +61,13 @@ class App extends Component {
 
   render() {
     return (
-      <>
+      <Provider store={store}>
         <Vinylizr
           user={this.state}
           login={this.logUserIn}
           getDiscogsIdentity={this.getDiscogsIdentity}
         />
-      </>
+      </Provider>
     );
   }
 }

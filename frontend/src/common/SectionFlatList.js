@@ -1,16 +1,26 @@
+// SECTIONLIST RENDERITEM COMPONENT (FLATLIST)
 import React, { Component } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, View } from 'react-native';
+import { isEqual } from 'lodash';
 import { RecordItem } from './';
 
 class SectionFlatList extends Component {
   shouldComponentUpdate(nextProps, nextState) {
-    if (this.props.section.data === nextProps.section.data) return false;
-    return true;
+    if (!isEqual(this.props.item, nextProps.item)) {
+      return true;
+    }
+    return false;
   }
+  listKey = (item, index) => 'D' + index.toString();
+
+  _endReached = () => {
+    console.log('END REACHED');
+  };
+
   render() {
+    console.log('FLATLIST RENDERING');
     const {
-      section,
-      keyExtractor,
+      section: { data },
       navigation,
       screenProps: {
         user: {
@@ -19,18 +29,24 @@ class SectionFlatList extends Component {
       },
     } = this.props;
     return (
-      <FlatList
-        data={section.data}
-        windowSize={15}
-        extraData={this.props}
-        renderItem={({ item }) => (
-          <RecordItem item={item} navigation={navigation} userMeta={userMeta} />
-        )}
-        keyExtractor={keyExtractor}
-        ListFooterComponent={this.renderFooter}
-        contentContainerStyle={styles.contentContainerStyle}
-        numColumns={3}
-      />
+      <View style={{ flex: 1 }}>
+        <FlatList
+          data={data}
+          bounces={false}
+          renderItem={({ item }) => (
+            <RecordItem
+              item={item}
+              key={data.instance_id}
+              navigation={navigation}
+              userMeta={userMeta}
+            />
+          )}
+          keyExtractor={this.listKey}
+          contentContainerStyle={styles.contentContainerStyle}
+          numColumns={3}
+          onEndReached={this._endReached}
+        />
+      </View>
     );
   }
 }

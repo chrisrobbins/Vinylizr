@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
 import { ClearText } from '#common/';
 import {
   MasterReleaseResult,
@@ -9,9 +10,7 @@ import { debounce, uniqBy } from 'lodash';
 
 import {
   View,
-  Text,
   TextInput,
-  Image,
   ActivityIndicator,
   FlatList,
   StatusBar,
@@ -38,28 +37,7 @@ class DiscogsSearch extends Component {
   };
 
   componentDidMount() {
-    value = AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then(
-      values => {
-        const user_token = values[0][1];
-        const user_secret = values[1][1];
-        axios({
-          method: 'GET',
-          url: `https://api.discogs.com/oauth/identity`,
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: `OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}`,
-            'User-Agent':
-              'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
-          },
-        })
-          .then(response => {
-            this.setState({ userData: response.data });
-          })
-          .catch(error => {
-            console.log(error.config);
-          });
-      }
-    );
+    console.log(this.props);
   }
 
   searchDiscogs = () => {
