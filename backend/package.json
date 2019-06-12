@@ -1,28 +1,27 @@
 {
-  "name": "vinylizr-backend",
+  "name": "express-practice",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT",
   "scripts": {
-    "start": "nodemon -e js,graphql -x node src/index.js",
-    "dev": "nodemon -e js,graphql -x node --inspect src/index.js",
-    "test": "jest"
+    "start": "node_modules/.bin/nodemon index.js --exec babel-node --"
   },
+  "author": "Chris Robbins",
+  "license": "MIT",
   "dependencies": {
-    "axios": "^0.18.0",
-    "babel-preset-env": "^1.7.0",
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "body-parser": "^1.19.0",
+    "connect-redis": "^3.4.1",
+    "cookie-parser": "^1.4.4",
+    "cors": "^2.8.5",
+    "disconnect": "^1.2.1",
     "dotenv": "^7.0.0",
-    "graphql": "^14.2.1",
-    "graphql-cli": "^3.0.11",
-    "graphql-yoga": "^1.17.4",
-    "nodemon": "^1.18.10"
-  },
-  "babel": {
-    "presets": [
-      "env"
-    ]
+    "express": "^4.16.4",
+    "express-session": "^1.16.1",
+    "redis": "^2.8.0",
+    "session": "^0.1.0"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.4.3"
+    "nodemon": "^1.18.11"
   }
 }
