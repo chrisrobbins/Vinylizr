@@ -1,16 +1,10 @@
 // SECTION LIST COMPONENT
 import React, { Component } from 'react';
-import {
-  View,
-  SectionList,
-  ActivityIndicator,
-  Text,
-  AsyncStorage,
-} from 'react-native';
+import { View, ActivityIndicator, Text, AsyncStorage } from 'react-native';
 import { connect } from 'react-redux';
-import { isEqual } from 'lodash';
+import { SectionGrid } from 'react-native-super-grid';
 import { getReleases } from '#modules/Collection/actions';
-import { Header, SectionFlatList } from '#common/';
+import { Header, RecordItem } from '#common/';
 class UserCollections extends Component {
   static navigationOptions = {
     header: null,
@@ -27,15 +21,7 @@ class UserCollections extends Component {
     this.getUserCollection();
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (!isEqual(this.props.releases, nextProps.releases)) {
-      return true;
-    }
-    return false;
-  }
-
   getUserCollection = async () => {
-    console.log('GETTING USER COLLECTION');
     const token = await AsyncStorage.getItem('access_token');
     const tokenSecret = await AsyncStorage.getItem('access_token');
     const user = await AsyncStorage.getItem('userMeta');
@@ -117,35 +103,36 @@ class UserCollections extends Component {
 
   _sectionKeyExtractor = (section, index) => 'S' + index.toString();
 
-  _renderSections = ({ section }) => (
-    <SectionFlatList
-      {...this.props}
-      section={section}
-      key={section.sectionId}
-    />
-  );
-
   render() {
-    console.log('RENDERING SECTION LIST');
-    const { releases } = this.props;
-
+    const {
+      releases,
+      navigation,
+      screenProps: {
+        user: { userMeta },
+      },
+    } = this.props;
+    console.log(this.props);
     return (
       <View style={styles.mainContainer}>
         <View style={styles.headerContainer}>
           <Header headerText={'Collection'} />
         </View>
         <View style={styles.contentContainer}>
-          <SectionList
+          <SectionGrid
             sections={releases}
-            bounces={false}
-            renderItem={this._renderSections}
-            renderSectionHeader={({ section: { title } }) => (
-              <Text style={{ fontWeight: 'bold', color: '#fff' }}>{title}</Text>
+            style={{ flex: 1 }}
+            renderItem={({ item, section, index }) => (
+              <RecordItem
+                item={item}
+                navigation={navigation}
+                userMeta={userMeta}
+              />
             )}
-            keyExtractor={this._sectionKeyExtractor}
-            refreshing={this.state.refreshing}
-            onRefresh={this.handleRefresh}
-            onEndReached={this.handleLoadMore}
+            renderSectionHeader={({ section }) => (
+              <Text style={{ fontSize: 16, color: '#fff', padding: 10 }}>
+                {section.title}
+              </Text>
+            )}
           />
         </View>
       </View>
@@ -157,14 +144,10 @@ const styles = {
   textContainer: {
     paddingBottom: 50,
   },
+
   contentContainer: {
     flex: 1,
     backgroundColor: '#000',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-  },
-  contentContainerStyle: {
-    flexDirection: 'column',
   },
   mainContainer: {
     flex: 1,
@@ -172,7 +155,6 @@ const styles = {
 };
 
 mapStateToProps = state => {
-  console.log('MAP STATE TO PROPAS STATE', state);
   return {
     releases: state.UserCollection.releases,
     isFetching: state.UserCollection.isFetching,

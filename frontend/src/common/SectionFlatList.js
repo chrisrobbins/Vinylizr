@@ -19,8 +19,9 @@ class SectionFlatList extends Component {
 
   render() {
     console.log('FLATLIST RENDERING');
+    console.log('FLAT LIST PROPS', this.props);
     const {
-      section: { data },
+      section,
       navigation,
       screenProps: {
         user: {
@@ -29,24 +30,23 @@ class SectionFlatList extends Component {
       },
     } = this.props;
     return (
-      <View style={{ flex: 1 }}>
-        <FlatList
-          data={data}
-          bounces={false}
-          renderItem={({ item }) => (
-            <RecordItem
-              item={item}
-              key={data.instance_id}
-              navigation={navigation}
-              userMeta={userMeta}
-            />
-          )}
-          keyExtractor={this.listKey}
-          contentContainerStyle={styles.contentContainerStyle}
-          numColumns={3}
-          onEndReached={this._endReached}
-        />
-      </View>
+      <FlatList
+        data={section}
+        bounces={false}
+        renderItem={({ index, item }) => (
+          <RecordItem
+            item={item}
+            key={item.instance_id}
+            navigation={navigation}
+            userMeta={userMeta}
+          />
+        )}
+        keyExtractor={this.listKey}
+        contentContainerStyle={styles.contentContainerStyle}
+        numColumns={3}
+        scrollEnabled={false}
+        onEndReached={this._endReached}
+      />
     );
   }
 }

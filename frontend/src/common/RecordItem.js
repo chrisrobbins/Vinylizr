@@ -1,12 +1,9 @@
 import React, { PureComponent } from 'react';
-import { TouchableOpacity, View, Image } from 'react-native';
+import { TouchableOpacity, View, Image, Text } from 'react-native';
 class RecordItem extends PureComponent {
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   if (this.props.item.instance_id === nextProps.item.instance_id)
-  //     return false;
-  // }
   render() {
-    const { item } = this.props;
+    const { item, navigation, userMeta } = this.props;
+
     return (
       <View>
         <TouchableOpacity
