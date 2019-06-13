@@ -1,0 +1,27 @@
+{
+  "parser": "babel-eslint",
+  "plugins": ["react", "react-native", "prettier"],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true,
+      "modules": true
+    }
+  },
+  "extends": "airbnb",
+  "rules": {
+    "no-unused-vars": [
+      2,
+      {
+        "vars": "all",
+        "args": "after-used"
+      }
+    ],
+    "no-underscore-dangle": ["off"],
+    "no-console": [
+      "warn",
+      {
+        "allow": ["error"]
+      }
+    ]
+  }
+}
