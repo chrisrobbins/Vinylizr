@@ -6617,6 +6617,13 @@ react-native-stars@^1.1.5:
   resolved "https://registry.yarnpkg.com/react-native-stars/-/react-native-stars-1.1.5.tgz#48e56c566cefac5086edd61b94eab2521440fc49"
   integrity sha512-BK9GmFYGZroQOtGEZfp8Y5XcuFZ6e3YCfnK+urPTcp6A5i43P7gnoCQx2Ofj60qZKuCBCCvRLgszj2sZ55rv3g==
 
+react-native-super-grid@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/react-native-super-grid/-/react-native-super-grid-3.0.4.tgz#bc0888f68d0960557dfe445970f96e36a0d61a1d"
+  integrity sha512-aoK71FGP5sFcLujuODYkAqyFDAZZRpvTeEwwaoXsc0JENhExEG7rGg65T5ELqyykiDOLBihuCLKasK5gLb0WtQ==
+  dependencies:
+    prop-types "^15.6.0"
+
 react-native-svg@9.4.0:
   version "9.4.0"
   resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-9.4.0.tgz#e428e0eae55aebd2355f1ff4f22675dad4611960"

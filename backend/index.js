@@ -48,7 +48,6 @@ app.post('/identity', function(req, res) {
 });
 
 app.post('/collection', function(req, res) {
-  console.log('COLLECTION BEING HIT');
   const { user, folder, page } = req.query;
   const { token, tokenSecret } = req.body;
   const accessData = {
@@ -59,13 +58,31 @@ app.post('/collection', function(req, res) {
     token,
     tokenSecret,
   };
-  console.log({ accessData });
   var dis = new Discogs(accessData).user().collection();
   dis.getReleases(user, folder, { page: page, per_page: 75 }, function(
     err,
     data
   ) {
-    res.send(data);
+    var vinylData = data.releases.reduce((arrangedData, data) => {
+      // c[0] should be the first letter of an entry
+      var record = data.basic_information.artists[0].name[0].toLocaleUpperCase();
+
+      // either push to an existing dict entry or create one
+      if (arrangedData[record]) arrangedData[record].push(data);
+      else arrangedData[record] = [data];
+      return arrangedData;
+    }, {});
+
+    var collectionSections = Object.entries(vinylData).map(vinyl => {
+      return {
+        title: vinyl[0],
+        data: vinyl[1],
+        sectionId: Math.random()
+          .toString(36)
+          .slice(2),
+      };
+    });
+    res.send(collectionSections);
   });
 });
 

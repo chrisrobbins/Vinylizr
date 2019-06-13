@@ -18,11 +18,9 @@ function updateIsFetching(status) {
 }
 async function fetchUserCollection(accessData, username, folder, page) {
   const url = `${VINYLIZR_API_BASE_URL}/collection?folder=${folder}&user=${username}&page=${page}`;
-  const {
-    data: { releases },
-  } = await vinylAxios.post(url, accessData);
+  const { data } = await vinylAxios.post(url, accessData);
   try {
-    return releases;
+    return data;
   } catch (error) {
     console.log('error fetch', error);
   }
