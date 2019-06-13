@@ -1,6 +1,6 @@
 // SECTIONLIST RENDERITEM COMPONENT (FLATLIST)
 import React, { Component } from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList } from 'react-native';
 import { isEqual } from 'lodash';
 import { RecordItem } from './';
 
@@ -18,8 +18,6 @@ class SectionFlatList extends Component {
   };
 
   render() {
-    console.log('FLATLIST RENDERING');
-    console.log('FLAT LIST PROPS', this.props);
     const {
       section,
       navigation,
