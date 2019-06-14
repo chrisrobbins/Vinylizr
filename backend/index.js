@@ -86,4 +86,54 @@ app.post('/collection', function(req, res) {
   });
 });
 
+app.post('/database/search', function(req, res) {
+  const { q, page, per_page } = req.query;
+  const { token, tokenSecret } = req.body;
+  const searchQuery = {
+    q,
+    page,
+    per_page,
+  };
+
+  const accessData = {
+    level: 1,
+    method: 'oauth',
+    consumerKey: process.env.CONSUMER_KEY,
+    consumerSecret: process.env.CONSUMER_SECRET,
+    token,
+    tokenSecret,
+  };
+
+  var dis = new Discogs(accessData).database();
+  dis.search(searchQuery, function(err, data) {
+    if (err) {
+      throw err;
+    }
+    res.send(data);
+  });
+});
+
+app.post('/collection/save', function(req, res) {
+  const { user, folder, release } = req.query;
+  const { token, tokenSecret } = req.body;
+
+  const accessData = {
+    level: 2,
+    method: 'oauth',
+    consumerKey: process.env.CONSUMER_KEY,
+    consumerSecret: process.env.CONSUMER_SECRET,
+    token,
+    tokenSecret,
+  };
+
+  var dis = new Discogs(accessData).user().collection();
+  dis.addRelease(user, folder, release, function(err, data) {
+    console.log('record added success', data);
+    if (err) {
+      throw err;
+    }
+    res.send(data);
+  });
+});
+
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
