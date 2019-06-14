@@ -16,6 +16,11 @@ import Stars from 'react-native-stars';
 const windowSize = Dimensions.get('window');
 import axios from 'axios';
 
+import albumGradient from '/assets/images/album_gradient_BG.png';
+import starFull from '/assets/images/star-full.png';
+import starEmpty from '/assets/images/empty-star.png';
+import goTo from '/assets/images/goto-icon.png';
+
 class AlbumDetail extends Component {
   state = {
     avgRating: '',
@@ -171,7 +176,7 @@ class AlbumDetail extends Component {
               resizeMode="cover"
             >
               <ImageBackground
-                source={require('../assets/images/album_gradient_BG.png')}
+                source={albumGradient}
                 resizeMode="cover"
                 style={styles.album_gradient}
               >
@@ -245,8 +250,8 @@ class AlbumDetail extends Component {
                   spacing={4}
                   starSize={30}
                   count={5}
-                  fullStar={require('../assets/images/star-full.png')}
-                  emptyStar={require('../assets/images/empty-star.png')}
+                  fullStar={starFull}
+                  emptyStar={starEmpty}
                 />
               </View>
             </View>
@@ -267,7 +272,7 @@ class AlbumDetail extends Component {
               <View>
                 <TouchableOpacity style={styles.buyLinkContainer}>
                   <Text style={styles.buyLink}>{numForSale} for sale</Text>
-                  <Image source={require('../assets/images/goto-icon.png')} />
+                  <Image source={goTo} />
                 </TouchableOpacity>
               </View>
             </View>

@@ -14,7 +14,6 @@ module.exports = function(api) {
             '#constants': './src/constants',
             '#src': './src',
             '#node_modules': './node_modules',
-            '#assets': './assets',
             '#contexts': './src/contexts',
             '#utils': './src/utils',
             '#screens': './screens',

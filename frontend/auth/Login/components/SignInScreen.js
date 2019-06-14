@@ -14,8 +14,8 @@ import * as Animatable from 'react-native-animatable';
 const windowSize = Dimensions.get('window');
 import { Button } from '#common/';
 
-const backgroundImg = require('#assets/images/vinyl-record-player.png');
-const power = require('#assets/images/power.png');
+import backgroundImg from '/assets/images/vinyl-record-player.png';
+import power from '/assets/images/power.png';
 
 class SignInScreen extends Component {
   static navigationOptions = {

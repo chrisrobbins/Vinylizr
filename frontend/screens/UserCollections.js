@@ -23,7 +23,7 @@ class UserCollections extends Component {
 
   getUserCollection = async () => {
     const token = await AsyncStorage.getItem('access_token');
-    const tokenSecret = await AsyncStorage.getItem('access_token');
+    const tokenSecret = await AsyncStorage.getItem('access_secret');
     const user = await AsyncStorage.getItem('userMeta');
     const userMeta = JSON.parse(user);
     const { username } = userMeta;

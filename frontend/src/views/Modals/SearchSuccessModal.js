@@ -1,7 +1,8 @@
-import React, { Component } from "react";
-import { Text, View, Image } from "react-native";
-import Modal from "react-native-modal";
+import React, { Component } from 'react';
+import { Text, View, Image } from 'react-native';
+import Modal from 'react-native-modal';
 
+import modalCheck from '/assets/images/checkmark.png';
 export default class SearchSuccessModal extends Component {
   renderText = () => {
     if (this.props.leftSwiped === true) {
@@ -13,6 +14,7 @@ export default class SearchSuccessModal extends Component {
   };
 
   render() {
+    console.log('MODAL PROPS', this.props);
     return (
       <View style={styles.mainContainer}>
         <View style={styles.mainContainer}>{this.props.children}</View>
@@ -21,15 +23,12 @@ export default class SearchSuccessModal extends Component {
             style={styles.modal}
             isVisible={this.props.isModalVisible}
             backdropOpacity={0.3}
-            animationIn={"zoomIn"}
-            animationOut={"fadeOutDown"}
+            animationIn={'zoomIn'}
+            animationOut={'fadeOutDown'}
             animationInTiming={800}
           >
             <View style={styles.textBox}>
-              <Image
-                style={styles.imageStyles}
-                source={require("../assets/images/modal-check.png")}
-              />
+              <Image style={styles.imageStyles} source={modalCheck} />
               {this.renderText()}
             </View>
           </Modal>
@@ -41,32 +40,32 @@ export default class SearchSuccessModal extends Component {
 
 const styles = {
   mainContainer: {
-    flex: 1
+    flex: 1,
   },
   modalContainer: {
     maxHeight: 100,
     width: 100,
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "column",
-    borderRadius: 4
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+    borderRadius: 4,
   },
   imageStyles: {
-    alignSelf: "center",
-    marginBottom: 5
+    alignSelf: 'center',
+    marginBottom: 5,
   },
   modal: {
     maxHeight: 150,
     width: 150,
-    justifyContent: "center",
-    alignItems: "center",
-    alignSelf: "center",
-    backgroundColor: "rgba(0,0,0,.4)",
-    top: 250
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    backgroundColor: 'rgba(0,0,0,.4)',
+    top: 250,
   },
   textBox: {},
   text: {
-    color: "#fff",
-    fontSize: 20
-  }
+    color: '#fff',
+    fontSize: 20,
+  },
 };
