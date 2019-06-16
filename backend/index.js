@@ -86,6 +86,42 @@ app.post('/collection', function(req, res) {
   });
 });
 
+app.post('/wantlist', function(req, res) {
+  const { user, page } = req.query;
+  const { token, tokenSecret } = req.body;
+  const accessData = {
+    level: 2,
+    method: 'oauth',
+    consumerKey: process.env.CONSUMER_KEY,
+    consumerSecret: process.env.CONSUMER_SECRET,
+    token,
+    tokenSecret,
+  };
+  var dis = new Discogs(accessData).user().wantlist();
+  dis.getReleases(user, { page: page, per_page: 75 }, function(err, data) {
+    var vinylData = data.wants.reduce((arrangedData, data) => {
+      // c[0] should be the first letter of an entry
+      var record = data.basic_information.artists[0].name[0].toLocaleUpperCase();
+
+      // either push to an existing dict entry or create one
+      if (arrangedData[record]) arrangedData[record].push(data);
+      else arrangedData[record] = [data];
+      return arrangedData;
+    }, {});
+
+    var wantlistSections = Object.entries(vinylData).map(vinyl => {
+      return {
+        title: vinyl[0],
+        data: vinyl[1],
+        sectionId: Math.random()
+          .toString(36)
+          .slice(2),
+      };
+    });
+    res.send(wantlistSections);
+  });
+});
+
 app.post('/database/search', function(req, res) {
   const { q, page, per_page } = req.query;
   const { token, tokenSecret } = req.body;
@@ -125,11 +161,76 @@ app.post('/collection/save', function(req, res) {
     token,
     tokenSecret,
   };
-
   var dis = new Discogs(accessData).user().collection();
   dis.addRelease(user, folder, release, function(err, data) {
-    console.log('record added success', data);
     if (err) {
+      console.log('ERROR', err);
+      throw err;
+    }
+    res.send(data);
+  });
+});
+
+app.post('/collection/remove', function(req, res) {
+  const { user, folder, release, instance } = req.query;
+  const { token, tokenSecret } = req.body;
+
+  const accessData = {
+    level: 2,
+    method: 'oauth',
+    consumerKey: process.env.CONSUMER_KEY,
+    consumerSecret: process.env.CONSUMER_SECRET,
+    token,
+    tokenSecret,
+  };
+  var dis = new Discogs(accessData).user().collection();
+  dis.removeRelease(user, folder, release, instance, function(err, data) {
+    if (err) {
+      console.log('ERROR', err);
+      throw err;
+    }
+    res.send(data);
+  });
+});
+
+app.post('/wantlist/save', function(req, res) {
+  const { user, release } = req.query;
+  const { token, tokenSecret } = req.body;
+
+  const accessData = {
+    level: 2,
+    method: 'oauth',
+    consumerKey: process.env.CONSUMER_KEY,
+    consumerSecret: process.env.CONSUMER_SECRET,
+    token,
+    tokenSecret,
+  };
+  var dis = new Discogs(accessData).user().collection();
+  dis.addRelease(user, release, function(err, data) {
+    if (err) {
+      console.log('ERROR', err);
+      throw err;
+    }
+    res.send(data);
+  });
+});
+
+app.post('/wantlist/remove', function(req, res) {
+  const { user, release } = req.query;
+  const { token, tokenSecret } = req.body;
+
+  const accessData = {
+    level: 2,
+    method: 'oauth',
+    consumerKey: process.env.CONSUMER_KEY,
+    consumerSecret: process.env.CONSUMER_SECRET,
+    token,
+    tokenSecret,
+  };
+  var dis = new Discogs(accessData).user().collection();
+  dis.removeRelease(user, release, function(err, data) {
+    if (err) {
+      console.log('ERROR', err);
       throw err;
     }
     res.send(data);
