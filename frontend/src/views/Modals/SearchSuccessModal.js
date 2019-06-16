@@ -14,7 +14,6 @@ export default class SearchSuccessModal extends Component {
   };
 
   render() {
-    console.log('MODAL PROPS', this.props);
     return (
       <View style={styles.mainContainer}>
         <View style={styles.mainContainer}>{this.props.children}</View>

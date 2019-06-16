@@ -1,8 +1,8 @@
 {
   "expoServerPort": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerNgrokUrl": "https://ku-jag.chrisrobbins.frontend.exp.direct",
+  "packagerNgrokUrl": "https://packager.ku-jag.chrisrobbins.frontend.exp.direct",
+  "ngrokPid": 43500,
   "devToolsPort": 19002,
   "packagerPort": null,
   "packagerPid": null,

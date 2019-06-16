@@ -27,65 +27,40 @@ class SearchResultItem extends Component {
     const userMeta = JSON.parse(user);
     const { username } = userMeta;
     const release_id = this.props.item.id;
-    const url = `${VINYLIZR_API_BASE_URL}/?user=${username}&folder=1&release=${release_id}`;
+    const url = `${VINYLIZR_API_BASE_URL}/collection/save?user=${username}&folder=1&release=${release_id}`;
 
     const accessData = {
       token,
       tokenSecret,
     };
-
-    const {
-      response: {
-        data: { releases },
-      },
-    } = await vinylAxios.post(url, accessData);
-
-    try {
-      this.setState({ items: releases }, () => {
-        this._showLeftModal();
-      });
-    } catch (err) {
-      console.log('ERROR', err);
-    }
+    vinylAxios
+      .post(url, accessData)
+      .then(response => this._showLeftModal())
+      .catch(err => console.log('ERROR', err));
   };
 
-  saveToWantlist = () => {
-    const { userData, item } = this.props;
-    value = AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then(
-      values => {
-        const user_token = values[0][1];
-        const user_secret = values[1][1];
-        const user_name = userData.username;
-        const release_id = item.id;
+  saveToWantlist = async () => {
+    const token = await AsyncStorage.getItem('access_token');
+    const tokenSecret = await AsyncStorage.getItem('access_secret');
+    const user = await AsyncStorage.getItem('userMeta');
+    const userMeta = JSON.parse(user);
+    const { username } = userMeta;
+    const release_id = this.props.item.id;
+    const url = `${VINYLIZR_API_BASE_URL}/wantlist/save?user=${username}&release=${release_id}`;
 
-        axios({
-          method: 'PUT',
-          url: `https://api.discogs.com/users/${user_name}/wants/${release_id}`,
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: `OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
-            'User-Agent':
-              'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
-          },
-        })
-          .then(response => {
-            this.setState({ records: response.data.wants });
-          })
-
-          .then(() => {
-            this._showRightModal();
-          })
-
-          .catch(error => {
-            console.log(error.config);
-          });
-      }
-    );
+    const accessData = {
+      token,
+      tokenSecret,
+    };
+    vinylAxios
+      .post(url, accessData)
+      .then(response => this._showRightModal())
+      .catch(err => console.log('ERROR', err));
   };
 
   _showLeftModal = () => {
     this.setState({ leftSwiped: true });
-    setTimeout(() => this.setState({ isModalVisible: true }), 300);
+    setTimeout(() => this.setState({ isModalVisible: true }), 200);
     setTimeout(() => this._hideModal(), 2000);
   };
   _showRightModal = () => {
@@ -98,12 +73,18 @@ class SearchResultItem extends Component {
     this.setState({ isModalVisible: false });
   };
 
+  toggleLeftAction = () => {
+    this.setState({ leftActionActivated: !this.state.leftActionActivated });
+  };
+  toggleRightAction = () => {
+    this.setState({ rightActionActivated: !this.state.rightActionActivated });
+  };
+
   render() {
     const { item, onSwipeStart, onSwipeRelease } = this.props;
     let discogsRecord = item.thumb;
     const title = item.title;
     const artist = item.artist;
-    const label = item.label[0];
 
     const {
       imageView,
@@ -149,18 +130,10 @@ class SearchResultItem extends Component {
           rightContent={rightContent}
           leftActionActivationDistance={100}
           rightActionActivationDistance={100}
-          onLeftActionActivate={() =>
-            this.setState({ leftActionActivated: true })
-          }
-          onLeftActionDeactivate={() =>
-            this.setState({ leftActionActivated: false })
-          }
-          onRightActionActivate={() =>
-            this.setState({ rightActionActivated: true })
-          }
-          onRightActionDeactivate={() =>
-            this.setState({ rightActionActivated: false })
-          }
+          onLeftActionActivate={this.toggleLeftAction}
+          onLeftActionDeactivate={this.toggleLeftAction}
+          onRightActionActivate={this.toggleRightAction}
+          onRightActionDeactivate={this.toggleRightAction}
           onLeftActionRelease={this.saveToCollection}
           onRightActionRelease={this.saveToWantlist}
           onSwipeStart={onSwipeStart}

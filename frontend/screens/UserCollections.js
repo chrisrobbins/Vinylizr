@@ -10,9 +10,7 @@ class UserCollections extends Component {
     header: null,
   };
   state = {
-    records: [],
     refreshing: false,
-    userData: {},
     page: 1,
     isLoading: false,
   };
