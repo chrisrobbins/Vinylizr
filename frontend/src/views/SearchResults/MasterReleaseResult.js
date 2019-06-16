@@ -3,7 +3,7 @@ import { Text, View, Image, AsyncStorage } from 'react-native';
 import { CardSection } from '#common/CardSection';
 import axios from 'axios';
 import VersionsBadge from '#common/Badges/VersionsBadge';
-
+import naImage from '/assets/images/empty-star.png';
 class MasterReleaseResult extends Component {
   constructor(props) {
     super(props);
@@ -73,10 +73,7 @@ class MasterReleaseResult extends Component {
         <CardSection>
           <View style={imageView}>
             {!discogsRecord ? (
-              <Image
-                style={imageStyle}
-                source={require('../../../assets/images/n-a.png')}
-              />
+              <Image style={imageStyle} source={naImage} />
             ) : (
               <Image style={imageStyle} source={{ uri: discogsRecord }} />
             )}

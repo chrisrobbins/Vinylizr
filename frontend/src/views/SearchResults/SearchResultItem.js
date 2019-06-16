@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Text, View, Image, AsyncStorage } from 'react-native';
 
-import axios from 'axios';
-
+import vinylAxios from 'axios';
 import { CardSection } from '#common/CardSection';
 import Swipeable from 'react-native-swipeable';
 import SearchSuccessModal from '../Modals/SearchSuccessModal';
-
+import wantlistIcon from '/assets/images/wantlistButton.png';
+import collectionIcon from '/assets/images/collectionButton.png';
+import { VINYLIZR_API_BASE_URL } from '#src/routes';
 class SearchResultItem extends Component {
   constructor(props) {
     super(props);
@@ -19,75 +20,47 @@ class SearchResultItem extends Component {
     };
   }
 
-  saveToCollection = () => {
-    const { userData } = this.props;
-    value = AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then(
-      values => {
-        const user_token = values[0][1];
-        const user_secret = values[1][1];
-        const user_name = userData.username;
-        const release_id = this.props.item.id;
+  saveToCollection = async () => {
+    const token = await AsyncStorage.getItem('access_token');
+    const tokenSecret = await AsyncStorage.getItem('access_secret');
+    const user = await AsyncStorage.getItem('userMeta');
+    const userMeta = JSON.parse(user);
+    const { username } = userMeta;
+    const release_id = this.props.item.id;
+    const url = `${VINYLIZR_API_BASE_URL}/collection/save?user=${username}&folder=1&release=${release_id}`;
 
-        axios({
-          method: 'POST',
-          url: `https://api.discogs.com/users/${user_name}/collection/folders/1/releases/${release_id}`,
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: `OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
-            'User-Agent':
-              'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
-          },
-        })
-          .then(response => {
-            this.setState({ items: response.data.releases });
-          })
-          .then(() => {
-            this._showLeftModal();
-          })
-
-          .catch(error => {
-            console.log(error.config);
-          });
-      }
-    );
+    const accessData = {
+      token,
+      tokenSecret,
+    };
+    vinylAxios
+      .post(url, accessData)
+      .then(response => this._showLeftModal())
+      .catch(err => console.log('ERROR', err));
   };
-  saveToWantlist = () => {
-    const { userData, item } = this.props;
-    value = AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then(
-      values => {
-        const user_token = values[0][1];
-        const user_secret = values[1][1];
-        const user_name = userData.username;
-        const release_id = item.id;
 
-        axios({
-          method: 'PUT',
-          url: `https://api.discogs.com/users/${user_name}/wants/${release_id}`,
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: `OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
-            'User-Agent':
-              'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
-          },
-        })
-          .then(response => {
-            this.setState({ records: response.data.wants });
-          })
+  saveToWantlist = async () => {
+    const token = await AsyncStorage.getItem('access_token');
+    const tokenSecret = await AsyncStorage.getItem('access_secret');
+    const user = await AsyncStorage.getItem('userMeta');
+    const userMeta = JSON.parse(user);
+    const { username } = userMeta;
+    const release_id = this.props.item.id;
+    const url = `${VINYLIZR_API_BASE_URL}/wantlist/save?user=${username}&release=${release_id}`;
 
-          .then(() => {
-            this._showRightModal();
-          })
-
-          .catch(error => {
-            console.log(error.config);
-          });
-      }
-    );
+    const accessData = {
+      token,
+      tokenSecret,
+    };
+    vinylAxios
+      .post(url, accessData)
+      .then(response => this._showRightModal())
+      .catch(err => console.log('ERROR', err));
   };
 
   _showLeftModal = () => {
     this.setState({ leftSwiped: true });
-    setTimeout(() => this.setState({ isModalVisible: true }), 300);
+    setTimeout(() => this.setState({ isModalVisible: true }), 200);
     setTimeout(() => this._hideModal(), 2000);
   };
   _showRightModal = () => {
@@ -100,12 +73,18 @@ class SearchResultItem extends Component {
     this.setState({ isModalVisible: false });
   };
 
+  toggleLeftAction = () => {
+    this.setState({ leftActionActivated: !this.state.leftActionActivated });
+  };
+  toggleRightAction = () => {
+    this.setState({ rightActionActivated: !this.state.rightActionActivated });
+  };
+
   render() {
     const { item, onSwipeStart, onSwipeRelease } = this.props;
     let discogsRecord = item.thumb;
     const title = item.title;
     const artist = item.artist;
-    const label = item.label[0];
 
     const {
       imageView,
@@ -115,9 +94,6 @@ class SearchResultItem extends Component {
       artistTextStyle,
     } = styles;
     const { leftActionActivated, rightActionActivated } = this.state;
-    const wantlistIcon = require('../../assets/images/wantlistButton.png');
-    const collectionIcon = require('../../assets/images/collectionButton.png');
-    const check = require('../../assets/images/checkmark.png');
 
     const leftContent = [
       <View
@@ -154,21 +130,11 @@ class SearchResultItem extends Component {
           rightContent={rightContent}
           leftActionActivationDistance={100}
           rightActionActivationDistance={100}
-          onLeftActionActivate={() =>
-            this.setState({ leftActionActivated: true })
-          }
-          onLeftActionDeactivate={() =>
-            this.setState({ leftActionActivated: false })
-          }
-          onRightActionActivate={() =>
-            this.setState({ rightActionActivated: true })
-          }
-          onRightActionDeactivate={() =>
-            this.setState({ rightActionActivated: false })
-          }
+          onLeftActionActivate={this.toggleLeftAction}
+          onLeftActionDeactivate={this.toggleLeftAction}
+          onRightActionActivate={this.toggleRightAction}
+          onRightActionDeactivate={this.toggleRightAction}
           onLeftActionRelease={this.saveToCollection}
-          onLeftActionComplete={() => this.setState({ isModalVisible: true })}
-          onRightActionComplete={() => this.setState({ isModalVisible: true })}
           onRightActionRelease={this.saveToWantlist}
           onSwipeStart={onSwipeStart}
           onSwipeRelease={onSwipeRelease}
@@ -176,10 +142,7 @@ class SearchResultItem extends Component {
           <CardSection>
             <View style={imageView}>
               {!discogsRecord ? (
-                <Image
-                  style={imageStyle}
-                  source={require('../assets/images/n-a.png')}
-                />
+                <Image style={imageStyle} source={noImage} />
               ) : (
                 <Image style={imageStyle} source={{ uri: discogsRecord }} />
               )}

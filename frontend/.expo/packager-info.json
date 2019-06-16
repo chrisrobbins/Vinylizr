@@ -1,9 +1,10 @@
 {
-  "expoServerPort": 19000,
+  "expoServerPort": null,
   "expoServerNgrokUrl": "https://ku-jag.chrisrobbins.frontend.exp.direct",
   "packagerNgrokUrl": "https://packager.ku-jag.chrisrobbins.frontend.exp.direct",
-  "ngrokPid": 40302,
+  "ngrokPid": 43500,
   "devToolsPort": 19002,
-  "packagerPort": 19003,
-  "packagerPid": 40286
+  "packagerPort": null,
+  "packagerPid": null,
+  "webpackServerPort": null
 }

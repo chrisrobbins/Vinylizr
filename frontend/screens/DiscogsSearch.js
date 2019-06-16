@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-import { connect } from 'react-redux';
+import vinylAxios from 'axios';
 import { ClearText } from '#common/';
-import {
-  MasterReleaseResult,
-  SearchResultItem,
-} from '#views/SearchResults/MasterReleaseResult';
+import { VINYLIZR_API_BASE_URL } from '#src/routes';
+import MasterReleaseResult from '#views/SearchResults/MasterReleaseResult';
+import SearchResultItem from '#views/SearchResults/SearchResultItem';
 import { debounce, uniqBy } from 'lodash';
 
 import {
@@ -27,7 +25,6 @@ class DiscogsSearch extends Component {
     loading: false,
     albums: [],
     page: 1,
-    seed: 1,
     error: null,
     refreshing: false,
     isModalVisible: false,
@@ -36,35 +33,30 @@ class DiscogsSearch extends Component {
     collectionRecords: [],
   };
 
-  componentDidMount() {
-    console.log(this.props);
-  }
-
-  searchDiscogs = () => {
-    const apiKey = 'jbUTpFhLTiyyHgLRoBgq';
-    const apiSecret = 'LSQDaLpplgcCGlkzujkHyUkxImNlWVoI';
+  searchDiscogs = async () => {
     const { page } = this.state;
     const apiSearch = this.state.newText;
-    const releaseType = 'master';
-    const url = `https://api.discogs.com/database/search?&q=${apiSearch}&page=${page}&per_page=80&key=${apiKey}&secret=${apiSecret}`;
+    const token = await AsyncStorage.getItem('access_token');
+    const tokenSecret = await AsyncStorage.getItem('access_secret');
+    const url = `${VINYLIZR_API_BASE_URL}/database/search?&q=${apiSearch}&page=${page}&per_page=10`;
+    const accessData = {
+      token,
+      tokenSecret,
+    };
     this.setState({ loading: true });
-    axios
-      .get(url)
-      .then(res => {
-        this.setState({
-          albums:
-            page === 1
-              ? res.data.results
-              : [...this.state.albums, ...res.data.results],
-          error: res.error || null,
-          loading: false,
-          refreshing: false,
-        });
-      })
-      .catch(error => {
-        this.setState({ error, loading: false });
+    vinylAxios.post(url, accessData).then(response => {
+      const { results } = response.data;
+      console.log('RESULTS FROM PROMIS', results);
+
+      this.setState({
+        albums: page === 1 ? results : [...this.state.albums, ...results],
+        error: results.error || null,
+        loading: false,
+        refreshing: false,
       });
+    });
   };
+
   clearTextInput = () => {
     this._textInput.setNativeProps({ text: '' });
     this.setState({ text: '', albums: [] });
@@ -78,7 +70,7 @@ class DiscogsSearch extends Component {
         refreshing: true,
       },
       () => {
-        debounce(this.searchDiscogs());
+        debounce(this.searchDiscogs, 300);
       }
     );
   };
@@ -88,7 +80,7 @@ class DiscogsSearch extends Component {
         page: this.state.page + 1,
       },
       () => {
-        debounce(this.searchDiscogs());
+        debounce(this.searchDiscogs, 300);
       }
     );
   };
@@ -111,7 +103,7 @@ class DiscogsSearch extends Component {
     return <ClearText onPress={this.clearTextInput} />;
   };
 
-  renderScrollContent = item => {
+  renderScrollContent = ({ item }) => {
     const { albums, userData } = this.state;
     if (item.type === 'master') {
       return (
@@ -148,11 +140,12 @@ class DiscogsSearch extends Component {
     }
   };
 
-  _keyExtractor = (item, index) => item.id + index;
+  _keyExtractor = (item, index) => 'S' + index.toString();
 
   render() {
     const { userData, albums } = this.state;
     let records = uniqBy(albums, 'thumb');
+    console.log({ albums });
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
@@ -163,7 +156,7 @@ class DiscogsSearch extends Component {
             autoFocus={false}
             type="search"
             value={this.state.newText}
-            onKeyPress={this.searchDiscogs}
+            onKeyPress={debounce(this.searchDiscogs, 250)}
             onChange={event =>
               this.setState({ newText: event.nativeEvent.text })
             }
@@ -175,7 +168,7 @@ class DiscogsSearch extends Component {
         <View style={styles.inputContainer}>{this.renderInputButton()}</View>
         <FlatList
           data={records}
-          renderItem={({ item }) => this.renderScrollContent(item)}
+          renderItem={this.renderScrollContent}
           keyExtractor={this._keyExtractor}
           ListFooterComponent={this.renderFooter}
           refreshing={this.state.refreshing}

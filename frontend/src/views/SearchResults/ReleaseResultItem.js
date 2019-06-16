@@ -9,6 +9,8 @@ import axios from 'axios';
 import { CardSection } from '#common/CardSection';
 import Swipeable from 'react-native-swipeable';
 import SearchSuccessModal from '../Modals/SearchSuccessModal';
+import wantlistIcon from '/assets/images/wantlistButton.png';
+import collectionIcon from '/assets/images/collectionButton.png';
 
 class ReleaseResultItem extends Component {
   constructor(props) {
@@ -121,8 +123,6 @@ class ReleaseResultItem extends Component {
       releasesOwned,
       releasesWanted,
     } = this.state;
-    const wantlistIcon = require('../assets/images/wantlistButton.png');
-    const collectionIcon = require('../assets/images/collectionButton.png');
 
     const leftContent = [
       <View
