@@ -1,5 +1,5 @@
-import MasterReleaseResult from './';
-import ReleaseResultItem from './';
-import SearchResultItem from './';
+import MasterReleaseResult from './MasterReleaseResult';
+import ReleaseResultItem from './ReleaseResultItem';
+import SearchResultItem from './SearchResultItem';
 
 export { MasterReleaseResult, ReleaseResultItem, SearchResultItem };

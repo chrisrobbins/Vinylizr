@@ -6,6 +6,7 @@ import React, { Component } from 'react';
 import { AsyncStorage } from 'react-native';
 import { Provider } from 'react-redux';
 import vinylAxios from 'axios';
+import { UserData } from '#src/contexts';
 import store from './src/store';
 import * as Font from 'expo-font';
 import Vinylizr from './src/App/RenderVinylizr';
@@ -37,12 +38,7 @@ class App extends Component {
   }
 
   saveDisInfoAsyncStore = async () => {
-    const accessData = await AsyncStorage.multiGet([
-      'access_token',
-      'access_secret',
-      'userMeta',
-    ]);
-
+    const accessData = await UserData();
     this.setState({ accessData });
   };
 

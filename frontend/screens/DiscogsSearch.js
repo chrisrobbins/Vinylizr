@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import vinylAxios from 'axios';
+import { debounce } from 'lodash';
+import { connect } from 'react-redux';
+import { saveToCollection } from '#modules/Collection/actions';
+import { saveToWantlist } from '#modules/Wantlist/actions';
 import { ClearText } from '#common/';
+import { UserData } from '#src/contexts';
+import SearchSuccessModal from '#views/Modals/SearchSuccessModal';
 import { VINYLIZR_API_BASE_URL } from '#src/routes';
-import MasterReleaseResult from '#views/SearchResults/MasterReleaseResult';
-import SearchResultItem from '#views/SearchResults/SearchResultItem';
-import { debounce, uniqBy } from 'lodash';
+import SearchSwiper from './SearchSwiper';
 
 import {
   View,
@@ -12,8 +16,6 @@ import {
   ActivityIndicator,
   FlatList,
   StatusBar,
-  TouchableOpacity,
-  AsyncStorage,
 } from 'react-native';
 
 class DiscogsSearch extends Component {
@@ -28,28 +30,28 @@ class DiscogsSearch extends Component {
     error: null,
     refreshing: false,
     isModalVisible: false,
-    userData: {},
     isSwiping: null,
     collectionRecords: [],
+    rightSwiped: false,
+    leftSwiped: false,
   };
 
   searchDiscogs = async () => {
     const { page } = this.state;
     const apiSearch = this.state.newText;
-    const token = await AsyncStorage.getItem('access_token');
-    const tokenSecret = await AsyncStorage.getItem('access_secret');
-    const url = `${VINYLIZR_API_BASE_URL}/database/search?&q=${apiSearch}&page=${page}&per_page=10`;
+    const { token, tokenSecret } = await UserData();
+    const url = `${VINYLIZR_API_BASE_URL}/database/search?&q=${apiSearch}&page=${page}&per_page=75`;
     const accessData = {
       token,
       tokenSecret,
     };
     this.setState({ loading: true });
-    vinylAxios.post(url, accessData).then(response => {
+    await vinylAxios.post(url, accessData).then(response => {
       const { results } = response.data;
-      console.log('RESULTS FROM PROMIS', results);
-
+      console.log('response.data', response.data);
       this.setState({
-        albums: page === 1 ? results : [...this.state.albums, ...results],
+        albums:
+          page === 1 ? Array.from(results) : [...this.state.albums, ...results],
         error: results.error || null,
         loading: false,
         refreshing: false,
@@ -70,17 +72,19 @@ class DiscogsSearch extends Component {
         refreshing: true,
       },
       () => {
-        debounce(this.searchDiscogs, 300);
+        this.searchDiscogs();
       }
     );
   };
   handleLoadMore = () => {
+    console.log('load more');
     this.setState(
       {
         page: this.state.page + 1,
       },
       () => {
-        debounce(this.searchDiscogs, 300);
+        console.log('debounce func');
+        this.searchDiscogs();
       }
     );
   };
@@ -103,82 +107,113 @@ class DiscogsSearch extends Component {
     return <ClearText onPress={this.clearTextInput} />;
   };
 
-  renderScrollContent = ({ item }) => {
-    const { albums, userData } = this.state;
-    if (item.type === 'master') {
-      return (
-        <TouchableOpacity
-          onPress={() => {
-            this.props.navigation.navigate('ReleaseList', {
-              item: item,
-              userData: userData,
-            });
-          }}
-        >
-          <MasterReleaseResult
-            item={item}
-            key={item.id}
-            records={albums}
-            userData={userData}
-          />
-        </TouchableOpacity>
-      );
-    }
-    if (item.type === 'release') {
-      return (
-        <SearchResultItem
-          records={albums}
-          userData={userData}
-          item={item}
-          key={item.id}
-          onSwipeStart={() => this.setState({ isSwiping: true })}
-          onSwipeRelease={() => this.setState({ isSwiping: false })}
-        />
-      );
-    } else {
-      return;
+  _keyExtractor = (item, index) => 'S' + index.toString();
+
+  renderSearchResults = ({ item, index }) => {
+    return (
+      <SearchSwiper
+        item={item}
+        addToCollection={this.addToCollection}
+        addToWantlist={this.addToWantlist}
+        onSwipeStart={() => this.setState({ isSwiping: true })}
+        onSwipeRelease={() => this.setState({ isSwiping: false })}
+      />
+    );
+  };
+  addToCollection = async item => {
+    const { token, tokenSecret, user } = await UserData();
+    const accessData = {
+      token,
+      tokenSecret,
+    };
+    const userMeta = JSON.parse(user);
+    const { username } = userMeta;
+    const { id } = item;
+    try {
+      await this.props.dispatch(saveToCollection(accessData, username, id));
+      this._showLeftModal();
+    } catch (error) {
+      console.log('ERROR', error);
     }
   };
 
-  _keyExtractor = (item, index) => 'S' + index.toString();
+  addToWantlist = async item => {
+    const { token, tokenSecret, user } = await UserData();
+    const accessData = {
+      token,
+      tokenSecret,
+    };
+    const userMeta = JSON.parse(user);
+    const { username } = userMeta;
+    const { id } = item;
+    try {
+      await this.props.dispatch(saveToWantlist(accessData, username, id));
+      this._showRightModal();
+    } catch (error) {
+      console.log('ERROR', error);
+    }
+  };
+
+  _showLeftModal = () => {
+    this.setState({ leftSwiped: true });
+    setTimeout(() => this.setState({ isModalVisible: true }), 200);
+    setTimeout(() => this._hideModal(), 2000);
+  };
+  _showRightModal = () => {
+    this.setState({ rightSwiped: true });
+    setTimeout(() => this.setState({ isModalVisible: true }), 300);
+    setTimeout(() => this._hideModal(), 2000);
+  };
+
+  _hideModal = () => {
+    this.setState({
+      isModalVisible: false,
+      leftSwiped: false,
+      rightSwiped: false,
+    });
+  };
 
   render() {
-    const { userData, albums } = this.state;
-    let records = uniqBy(albums, 'thumb');
-    console.log({ albums });
+    const { albums } = this.state;
+
     return (
-      <View style={styles.container}>
-        <StatusBar barStyle="light-content" />
-        <View style={styles.inputStyleContainer}>
-          <TextInput
-            ref={text => (this._textInput = text)}
-            style={styles.inputStyle}
-            autoFocus={false}
-            type="search"
-            value={this.state.newText}
-            onKeyPress={debounce(this.searchDiscogs, 250)}
-            onChange={event =>
-              this.setState({ newText: event.nativeEvent.text })
-            }
-            placeholder="Artist or Album"
-            placeholderTextColor="#D9D9D9"
-            selectionColor={'#F42E4A'}
+      <SearchSuccessModal
+        isModalVisible={this.state.isModalVisible}
+        leftSwiped={this.state.leftSwiped}
+        rightSwiped={this.state.rightSwiped}
+      >
+        <View style={styles.container}>
+          <StatusBar barStyle="light-content" />
+          <View style={styles.inputStyleContainer}>
+            <TextInput
+              ref={text => (this._textInput = text)}
+              style={styles.inputStyle}
+              autoFocus={false}
+              type="search"
+              value={this.state.newText}
+              onKeyPress={debounce(this.searchDiscogs, 218)}
+              onChange={event =>
+                this.setState({ newText: event.nativeEvent.text })
+              }
+              placeholder="Artist or Album"
+              placeholderTextColor="#D9D9D9"
+              selectionColor={'#F42E4A'}
+            />
+          </View>
+          <View style={styles.inputContainer}>{this.renderInputButton()}</View>
+          <FlatList
+            data={albums}
+            renderItem={this.renderSearchResults}
+            keyExtractor={this._keyExtractor}
+            ListFooterComponent={this.renderFooter}
+            refreshing={this.state.refreshing}
+            onEndReached={this.handleLoadMore}
+            style={styles.renderAlbums}
+            scrollEnabled={!this.state.isSwiping}
+            style={styles.renderAlbums}
           />
         </View>
-        <View style={styles.inputContainer}>{this.renderInputButton()}</View>
-        <FlatList
-          data={records}
-          renderItem={this.renderScrollContent}
-          keyExtractor={this._keyExtractor}
-          ListFooterComponent={this.renderFooter}
-          refreshing={this.state.refreshing}
-          onEndReached={this.handleLoadMore}
-          onEndReachedThreshold={0.2}
-          style={styles.renderAlbums}
-          scrollEnabled={!this.state.isSwiping}
-          style={styles.renderAlbums}
-        />
-      </View>
+      </SearchSuccessModal>
     );
   }
 }
@@ -223,4 +258,4 @@ const styles = {
   },
 };
 
-export default DiscogsSearch;
+export default connect()(DiscogsSearch);

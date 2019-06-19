@@ -38,3 +38,21 @@ export function getReleases(accessData, username, page) {
     return processResponse(wantlist, false, dispatch);
   };
 }
+
+async function savingWantlist(accessData, username, release_id) {
+  const url = `${VINYLIZR_API_BASE_URL}/wantlist/save?user=${username}&release=${release_id}`;
+  await vinylAxios.post(url, accessData);
+}
+
+function processSaveResponse(status, dispatch) {
+  dispatch(updateIsFetching(status));
+}
+
+export function saveToWantlist(accessData, username, release_id) {
+  return async dispatch => {
+    dispatch(updateIsFetching(true));
+    await savingWantlist(accessData, username, release_id);
+    getReleases();
+    return processSaveResponse(false, dispatch);
+  };
+}
