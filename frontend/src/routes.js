@@ -4,7 +4,8 @@ export const CONSUMER_SECRET = 'LSQDaLpplgcCGlkzujkHyUkxImNlWVoI';
 // DISCOGS API BASE URL
 export const DISCOGS_BASE_URL = 'https://discogs.com';
 export const DISCOGS_API_BASE_URL = 'https://api.discogs.com';
-export const VINYLIZR_API_BASE_URL = 'http://localhost:3000';
+export const VINYLIZR_API_BASE_URL =
+  'http://vinylizr.us-east-2.elasticbeanstalk.com';
 
 // DISCOGS OAUTH REQUEST URL
 export const DISCOGS_REQUEST_TOKEN_URL = `${DISCOGS_API_BASE_URL}/oauth/request_token`;

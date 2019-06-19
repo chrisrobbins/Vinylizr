@@ -1,9 +1,9 @@
 {
   "name": "express-practice",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node_modules/.bin/nodemon index.js --exec babel-node --"
+    "start": "node_modules/.bin/nodemon app.js --exec babel-node --"
   },
   "author": "Chris Robbins",
   "license": "MIT",
