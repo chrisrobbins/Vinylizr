@@ -11,6 +11,7 @@ import store from './src/store';
 import * as Font from 'expo-font';
 import Vinylizr from './src/App/RenderVinylizr';
 import { isEmpty } from 'lodash';
+import { VINYLIZR_API_BASE_URL } from './src/routes';
 
 // disable yellow box warnings b/c they're fucking annoying
 console.disableYellowBox = true;
@@ -49,7 +50,7 @@ class App extends Component {
   };
 
   getDiscogsIdentity = accessData => {
-    const url = 'http://localhost:3000/identity';
+    const url = `${VINYLIZR_API_BASE_URL}/identity`;
     vinylAxios.post(url, accessData).then(response => {
       this.logUserIn(response);
     });

@@ -28,7 +28,7 @@ class MasterReleaseResult extends Component {
       token,
       tokenSecret,
     };
-    const url = `${VINYLIZR_API_BASE_URL}/master-releases?master=${master_id}&page=${page}`;
+    const url = `${VINYLIZR_API_BASE_URL}/database/master-releases?master=${master_id}&page=${page}`;
     vinylAxios.post(url, accessData).then(response => {
       const { versions } = response.data;
       this.setState({ records: versions });

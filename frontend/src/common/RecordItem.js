@@ -1,8 +1,12 @@
 import React, { PureComponent } from 'react';
-import { TouchableOpacity, View, Image, Text } from 'react-native';
+import { TouchableOpacity, View, Image } from 'react-native';
+import noImage from '/assets/images/n-a.png';
 class RecordItem extends PureComponent {
   render() {
     const { item, navigation, userMeta } = this.props;
+    const { cover_image } = item.basic_information;
+
+    console.log({ item });
 
     return (
       <View>
@@ -17,10 +21,11 @@ class RecordItem extends PureComponent {
             });
           }}
         >
-          <Image
-            style={styles.albumCovers}
-            source={{ uri: item.basic_information.cover_image }}
-          />
+          {!cover_image ? (
+            <Image style={styles.albumCovers} source={noImage} />
+          ) : (
+            <Image style={styles.albumCovers} source={{ uri: cover_image }} />
+          )}
         </TouchableOpacity>
       </View>
     );

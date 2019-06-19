@@ -15,7 +15,7 @@ import { Button } from '#common/';
 const windowSize = Dimensions.get('window');
 import backgroundImg from '/assets/images/vinyl-record-player.png';
 import power from '/assets/images/power.png';
-import { VINYLIZR_API_BASE_URL } from '../../../src/routes';
+import { VINYLIZR_API_BASE_URL } from '#src/routes';
 
 class SignInScreen extends Component {
   static navigationOptions = {
@@ -47,15 +47,18 @@ class SignInScreen extends Component {
   }
 
   _handlePressAsync = () => {
-    const proxyUrl = 'http://localhost:3000/authorize';
+    const proxyUrl = `${VINYLIZR_API_BASE_URL}/authorize`;
+    console.log('proxy url', proxyUrl);
 
     vinylAxios.get(proxyUrl).then(res => {
+      console.log('RESPONS FROM AUTHORIE', res);
       this.setState({ authData: res.data });
       this.asyncGetData(res.data.authorizeUrl);
     });
   };
 
   asyncGetData = async url => {
+    console.log('URL ASYNC', url);
     const oauthReturnObj = await AuthSession.startAsync({
       authUrl: url,
     });
