@@ -1,10 +1,12 @@
 // SECTION LIST COMPONENT
 import React, { Component } from 'react';
-import { View, Text, AsyncStorage } from 'react-native';
+import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
+import { UserData } from '#src/contexts';
 import { SectionGrid } from 'react-native-super-grid';
 import { getReleases } from '#modules/Collection/actions';
 import { Header, RecordItem } from '#common/';
+
 class UserCollections extends Component {
   static navigationOptions = {
     header: null,
@@ -20,9 +22,7 @@ class UserCollections extends Component {
   }
 
   getUserCollection = async () => {
-    const token = await AsyncStorage.getItem('access_token');
-    const tokenSecret = await AsyncStorage.getItem('access_secret');
-    const user = await AsyncStorage.getItem('userMeta');
+    const { token, tokenSecret, user } = await UserData();
     const userMeta = JSON.parse(user);
     const { username } = userMeta;
     const { page } = this.state;
@@ -48,7 +48,6 @@ class UserCollections extends Component {
         user: { userMeta },
       },
     } = this.props;
-    console.log(this.props);
     return (
       <View style={styles.mainContainer}>
         <View style={styles.headerContainer}>

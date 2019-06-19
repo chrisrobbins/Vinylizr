@@ -1,16 +1,7 @@
 import React, { Component } from 'react';
-import {
-  Text,
-  View,
-  Image,
-  FlatList,
-  Dimensions,
-  AsyncStorage,
-} from 'react-native';
+import { Text, View, Image, FlatList, Dimensions } from 'react-native';
 const windowSize = Dimensions.get('window');
-import ReleaseResultItem from '#views/SearchResults/ReleaseResultItem';
-
-import axios from 'axios';
+import { ReleaseResultItem } from '#views/SearchResults';
 import {
   VersionsBadge,
   CollectionBadge,
@@ -18,138 +9,15 @@ import {
 } from '#common/Badges/VersionsBadge';
 
 export default class ReleaseList extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      loading: false,
-      records: [],
-      page: 1,
-      seed: 1,
-      error: null,
-      refreshing: false,
-      isSwiping: null,
-      collectionRecords: [],
-      wantlistRecords: [],
-      releasesOwned: [],
-      releasesWanted: [],
-    };
-  }
-
+  state = {
+    refreshing: null,
+    page: 1,
+  };
   static navigationOptions = {
     drawerLabel: 'ReleaseList',
     header: null,
   };
 
-  componentWillMount() {
-    this.getMasterReleases();
-    this.getUserCollection();
-    this.getUserWantlist();
-  }
-
-  componentDidMount() {
-    setTimeout(this.getReleasesOwned, 1000);
-    setTimeout(this.getReleasesWanted, 1000);
-  }
-
-  getUserCollection() {
-    const { userData } = this.props.navigation.state.params;
-    const { page } = this.state;
-    AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then(values => {
-      const user_token = values[0][1];
-      const user_secret = values[1][1];
-      const user_name = userData.username;
-
-      axios({
-        method: 'GET',
-        url: `https://api.discogs.com/users/${user_name}/collection/folders/0/releases?page=${page}&per_page=25`,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          Authorization: `OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
-          'User-Agent':
-            'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
-        },
-      })
-        .then(response => {
-          this.setState({ collectionRecords: response.data.releases });
-        })
-
-        .catch(error => {
-          if (error.response) {
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-          } else if (error.request) {
-            console.log(error.request);
-          } else {
-            console.log('Error', error.message);
-          }
-          console.log(error.config);
-        });
-    });
-  }
-
-  getUserWantlist() {
-    const { userData } = this.props.navigation.state.params;
-    value = AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then(
-      values => {
-        const user_token = values[0][1];
-        const user_secret = values[1][1];
-        const user_name = userData.username;
-
-        axios({
-          method: 'GET',
-          url: `https://api.discogs.com/users/${user_name}/wants`,
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: `OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
-            'User-Agent':
-              'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
-          },
-        })
-          .then(response => {
-            // console.log(response, "WANTLIST RESPONSE")
-            this.setState({ wantlistRecords: response.data.wants });
-          })
-
-          .catch(error => {
-            if (error.response) {
-              console.log(error.response.data);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-            } else if (error.request) {
-              console.log(error.request);
-            } else {
-              console.log('Error', error.message);
-            }
-            console.log(error.config);
-          });
-      }
-    );
-  }
-
-  handleRefresh = () => {
-    this.setState(
-      {
-        page: 1,
-        seed: this.state.seed + 1,
-        refreshing: true,
-      },
-      () => {
-        this.searchDiscogs;
-      }
-    );
-  };
-  handleLoadMore = () => {
-    this.setState(
-      {
-        page: this.state.page + 1,
-      },
-      () => {
-        this.searchDiscogs;
-      }
-    );
-  };
   renderFooter = () => {
     if (!this.state.loading) return null;
     return (
@@ -165,106 +33,28 @@ export default class ReleaseList extends Component {
     );
   };
 
-  getReleasesOwned = () => {
-    const { records, collectionRecords, releasesOwned } = this.state;
-    let ownedReleases = [];
-    collectionRecords.map(collectionRecord => {
-      return records.map(releaseItem => {
-        if (collectionRecord.basic_information.id === releaseItem.id) {
-          console.log(
-            'Collection item: ',
-            collectionRecord,
-            'RElease Item: ',
-            releaseItem
-          );
-          return ownedReleases.push(collectionRecord);
-        }
-      });
-    });
-    this.setState({ releasesOwned: ownedReleases });
-  };
-
-  getReleasesWanted = () => {
-    const { records, wantlistRecords, releasesWanted } = this.state;
-    let wantedReleases = [];
-    wantlistRecords.map(wantlistRecord => {
-      return records.map(releaseItem => {
-        if (wantlistRecord.basic_information.id === releaseItem.id) {
-          console.log(
-            'Collection item: ',
-            wantlistRecord,
-            'RElease Item: ',
-            releaseItem
-          );
-          return wantedReleases.push(wantlistRecord);
-        }
-      });
-    });
-    this.setState({ releasesWanted: wantedReleases });
-  };
-
-  getMasterReleases = () => {
-    const { userData, item } = this.props.navigation.state.params;
-    const { page } = this.state;
-    value = AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then(
-      values => {
-        const user_token = values[0][1];
-        const user_secret = values[1][1];
-        const master_id = item.id;
-
-        axios({
-          method: 'GET',
-          url: `https://api.discogs.com/masters/${master_id}/versions?format=vinyl&sort=year&sort_order=asc&page=${page}&per_page=30`,
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: `OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
-            'User-Agent':
-              'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
-          },
-        })
-          .then(response => {
-            console.log(response.data.versions, 'VERSIONS VINYL');
-            this.setState({ records: response.data.versions });
-          })
-
-          .catch(error => {
-            if (error.response) {
-              console.log(error.response.data);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-            } else if (error.request) {
-              console.log(error.request);
-            } else {
-              console.log('Error', error.message);
-            }
-            console.log(error.config);
-          });
-      }
-    );
-  };
-
-  _keyExtractor = (item, index) => item.id + index;
+  _keyExtractor = (item, index) => 'M' + index.toString();
 
   render() {
-    const { item, userData } = this.props.navigation.state.params;
     const {
+      masterRelease,
+      userData,
       records,
-      collectionRecords,
-      releasesOwned,
-      releasesWanted,
-      wantlistRecords,
-    } = this.state;
-    let discogsString = item.title.split('-');
+    } = this.props.navigation.state.params;
+
+    console.log({ records });
+
+    let discogsString = masterRelease.title.split('-');
     const title = discogsString[1];
     const artist = discogsString[0];
-    const label = item.label;
-
-    console.log(wantlistRecords, 'RECS FROM WANTS');
 
     return (
       <View style={styles.container}>
         <View style={styles.imagesContainer}>
-          <Image source={{ uri: item.thumb }} style={styles.detailThumb} />
+          <Image
+            source={{ uri: masterRelease.thumb }}
+            style={styles.detailThumb}
+          />
           <View style={styles.headerContainer}>
             <Text
               numberOfLines={1}
@@ -275,8 +65,8 @@ export default class ReleaseList extends Component {
             </Text>
             <Text style={styles.detailArtist}>{artist}</Text>
             <View style={styles.badgeContainer}>
-              <VersionsBadge>{records.length} VERSIONS</VersionsBadge>
-              {releasesOwned.length <= 0 ? (
+              {/* <VersionsBadge>{records.length} VERSIONS</VersionsBadge> */}
+              {/* {releasesOwned.length <= 0 ? (
                 <Text />
               ) : (
                 <CollectionBadge style={styles.badge}>
@@ -289,7 +79,7 @@ export default class ReleaseList extends Component {
                 <WantlistBadge style={styles.badge}>
                   {releasesWanted.length}
                 </WantlistBadge>
-              )}
+              )} */}
             </View>
           </View>
         </View>
@@ -301,17 +91,13 @@ export default class ReleaseList extends Component {
               item={item}
               key={item.id}
               artist={artist}
-              collectionRecords={collectionRecords}
-              wantlistRecords={wantlistRecords}
               onSwipeStart={() => this.setState({ isSwiping: true })}
               onSwipeRelease={() => this.setState({ isSwiping: false })}
             />
           )}
           keyExtractor={this._keyExtractor}
           ListFooterComponent={this.renderFooter}
-          refreshing={this.state.refreshing}
-          onEndReached={this.handleLoadMore}
-          onEndReachedThreshold={15}
+          onEndReachedThreshold={0.02}
           style={styles.renderAlbums}
           scrollEnabled={!this.state.isSwiping}
           style={styles.renderAlbums}
