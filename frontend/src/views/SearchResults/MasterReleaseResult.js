@@ -61,7 +61,7 @@ class MasterReleaseResult extends Component {
         onPress={() => {
           this.props.navigation.navigate('ReleaseList', {
             records: records,
-            masterRelease: item,
+            masterRelease: this.props.item,
           });
         }}
         style={container}

@@ -26,9 +26,9 @@ class SearchSwiper extends Component {
   };
 
   renderItem = () => {
-    const { item } = this.props;
-    console.log('ITEM FOR SWIPER', item);
-    if (item.type === 'master') return <MasterReleaseResult item={item} />;
+    const { item, navigation } = this.props;
+    if (item.type === 'master')
+      return <MasterReleaseResult item={item} navigation={navigation} />;
     if (item.type === 'release') return <SearchResultItem item={item} />;
     return;
   };

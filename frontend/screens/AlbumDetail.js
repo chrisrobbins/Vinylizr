@@ -139,6 +139,10 @@ class AlbumDetail extends Component {
       });
   };
 
+  goBack = () => {
+    this.props.navigation.navigate('App');
+  };
+
   render() {
     const { item } = this.props.navigation.state.params;
     const {
@@ -180,6 +184,11 @@ class AlbumDetail extends Component {
                 resizeMode="cover"
                 style={styles.album_gradient}
               >
+                <View style={styles.backTextContainer}>
+                  <TouchableOpacity onPress={this.goBack}>
+                    <Text style={styles.backText}>BACK</Text>
+                  </TouchableOpacity>
+                </View>
                 <View style={styles.infoContainer}>
                   <Image
                     source={{
@@ -294,6 +303,17 @@ const styles = {
     right: 0,
     backgroundColor: '#000',
     flexDirection: 'column',
+  },
+  backTextContainer: {
+    flex: 1,
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    marginTop: 35,
+    marginLeft: 25,
+  },
+  backText: {
+    color: '#fff',
+    fontSize: 18,
   },
   midContainer: {
     flexDirection: 'row',

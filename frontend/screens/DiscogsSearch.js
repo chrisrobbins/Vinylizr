@@ -109,14 +109,28 @@ class DiscogsSearch extends Component {
 
   _keyExtractor = (item, index) => 'S' + index.toString();
 
+  _disableScroll = () => {
+    //debugger;
+    this.swipeableList.getScrollResponder().setNativeProps({
+      scrollEnabled: false,
+    });
+  };
+
+  _enableScroll = () => {
+    this.swipeableList.getScrollResponder().setNativeProps({
+      scrollEnabled: true,
+    });
+  };
+
   renderSearchResults = ({ item, index }) => {
     return (
       <SearchSwiper
         item={item}
         addToCollection={this.addToCollection}
         addToWantlist={this.addToWantlist}
-        onSwipeStart={() => this.setState({ isSwiping: true })}
-        onSwipeRelease={() => this.setState({ isSwiping: false })}
+        onSwipeStart={this._disableScroll}
+        onSwipeRelease={this._enableScroll}
+        {...this.props}
       />
     );
   };
@@ -191,7 +205,7 @@ class DiscogsSearch extends Component {
               autoFocus={false}
               type="search"
               value={this.state.newText}
-              onKeyPress={debounce(this.searchDiscogs, 218)}
+              onKeyPress={debounce(this.searchDiscogs, 230)}
               onChange={event =>
                 this.setState({ newText: event.nativeEvent.text })
               }
@@ -203,6 +217,7 @@ class DiscogsSearch extends Component {
           <View style={styles.inputContainer}>{this.renderInputButton()}</View>
           <FlatList
             data={albums}
+            ref={ref => (this.swipeableList = ref)}
             renderItem={this.renderSearchResults}
             keyExtractor={this._keyExtractor}
             ListFooterComponent={this.renderFooter}
