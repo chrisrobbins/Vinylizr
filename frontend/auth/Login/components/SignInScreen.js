@@ -8,6 +8,7 @@ import {
   Dimensions,
   ImageBackground,
 } from 'react-native';
+import { isEmpty } from 'lodash';
 import { AuthSession } from 'expo';
 import vinylAxios from 'axios';
 import * as Animatable from 'react-native-animatable';
@@ -34,10 +35,13 @@ class SignInScreen extends Component {
   }
 
   async componentDidUpdate(prevProps, prevState) {
-    const token = AsyncStorage.getItem('access_token');
+    const token = await AsyncStorage.getItem('access_token');
     if (!prevState.verifier.length && this.state.verifier.length) {
       await this.getAccessToken();
     }
+    this.props.navigation.navigate(
+      !token || token === 'undefined' ? 'Auth' : 'App'
+    );
   }
 
   componentWillUnmount() {
@@ -48,17 +52,13 @@ class SignInScreen extends Component {
 
   _handlePressAsync = () => {
     const proxyUrl = `${VINYLIZR_API_BASE_URL}/authorize`;
-    console.log('proxy url', proxyUrl);
-
     vinylAxios.get(proxyUrl).then(res => {
-      console.log('RESPONS FROM AUTHORIE', res);
       this.setState({ authData: res.data });
       this.asyncGetData(res.data.authorizeUrl);
     });
   };
 
   asyncGetData = async url => {
-    console.log('URL ASYNC', url);
     const oauthReturnObj = await AuthSession.startAsync({
       authUrl: url,
     });
@@ -69,7 +69,8 @@ class SignInScreen extends Component {
   };
 
   _handleOpenURL = () => {
-    if (this.state.accessData.token) {
+    const { accessData } = this.state;
+    if (isEmpty(accessData)) {
       this.props.navigation.push('App');
     }
   };

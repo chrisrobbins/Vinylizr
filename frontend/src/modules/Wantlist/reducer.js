@@ -1,13 +1,18 @@
 /**
  *  Import action creator constants
  */
-import { UPDATE_IS_FETCHING, FETCH_USER_WANTLIST } from './constants';
+import {
+  UPDATE_IS_FETCHING,
+  FETCH_USER_WANTLIST,
+  STORE_WANT_INSTANCE,
+} from './constants';
 
 /**
  *  Set intial state
  */
 const initialState = {
   releases: [],
+  newWantInstance: null,
   isFetching: false,
 };
 
@@ -21,6 +26,11 @@ function userWantlist(state = initialState, action) {
       return {
         ...state,
         releases: payload,
+      };
+    case STORE_WANT_INSTANCE:
+      return {
+        ...state,
+        newWantInstance: action.payload,
       };
     case UPDATE_IS_FETCHING:
       return {

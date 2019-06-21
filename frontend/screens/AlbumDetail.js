@@ -9,17 +9,24 @@ import {
   TouchableOpacity,
   AsyncStorage,
 } from 'react-native';
-import { DetailButton } from '#common';
-import cx from 'classnames';
-import TrackList from '#views/TrackList/TrackList';
+import vinylAxios from 'axios';
+import { connect } from 'react-redux';
+import { UserData } from 'src/contexts';
+import {
+  saveToCollection,
+  removeFromCollection,
+} from '#modules/Collection/actions';
+import { saveToWantlist, removeFromWantlist } from '#modules/Wantlist/actions';
 import Stars from 'react-native-stars';
 const windowSize = Dimensions.get('window');
-import axios from 'axios';
 
+import { DetailButton } from '#common';
+import TrackList from '#views/TrackList/TrackList';
 import albumGradient from '/assets/images/album_gradient_BG.png';
 import starFull from '/assets/images/star-full.png';
 import starEmpty from '/assets/images/empty-star.png';
 import goTo from '/assets/images/goto-icon.png';
+import { VINYLIZR_API_BASE_URL } from '../src/routes';
 
 class AlbumDetail extends Component {
   state = {
@@ -29,8 +36,9 @@ class AlbumDetail extends Component {
     median: '',
     high: '',
     userRating: '',
-    inWantlist: this.props.navigation.state.params.inWantlist,
+    record: this.props.navigation.state.params.item,
     inCollection: this.props.navigation.state.params.inCollection,
+    inWantlist: this.props.navigation.state.params.inWantlist,
   };
 
   static navigationOptions = {
@@ -38,18 +46,12 @@ class AlbumDetail extends Component {
     header: null,
   };
 
-  componentDidMount() {
-    this.getPrices();
-    this.getTrackList();
-    this.getUserRating();
-  }
-
   getTrackList = () => {
     const { item } = this.props.navigation.state.params;
     const release_id = item.id;
 
     const url = `https://api.discogs.com/releases/${release_id}`;
-    axios
+    vinylAxios
       .get(url)
       .then(res => {
         this.setState({
@@ -64,13 +66,35 @@ class AlbumDetail extends Component {
   };
 
   toggleInWantlist = () => {
-    this.setState({ inWantlist: !this.state.inWantlist });
+    const { record } = this.state;
+    if (!this.state.inWantlist) {
+      this.addToWantlist(record);
+      this.setState({ inWantlist: true });
+    }
+    if (this.state.inWantlist) {
+      this.deleteFromWantlist(record);
+      this.setState({ inWantlist: false });
+    }
   };
-  toggleInCollection = () => {
-    this.setState({ inCollection: !this.state.inCollection });
-    // if(this.state.inCollection) {
 
-    // }
+  toggleInCollection = async () => {
+    const { record } = this.state;
+    if (!this.state.inCollection) {
+      this.addToCollection(record);
+      this.setState({ inCollection: true });
+    }
+    if (this.state.inCollection) {
+      this.deleteFromCollection(record);
+      this.setState({ inCollection: false });
+    }
+  };
+
+  getReleaseInfo = async () => {
+    const {
+      item: { id },
+    } = this.props.navigation.state.params;
+    const url = `${VINYLIZR_API_BASE_URL}/database/release?release=${id}`;
+    const theRelease = await vinylAxios.get(url);
   };
 
   getPrices = () => {
@@ -80,7 +104,7 @@ class AlbumDetail extends Component {
       const user_token = values[0][1];
       const user_secret = values[1][1];
 
-      axios({
+      vinylAxios({
         method: 'GET',
         url: `https://api.discogs.com/marketplace/price_suggestions/${release_id}`,
         headers: {
@@ -109,7 +133,7 @@ class AlbumDetail extends Component {
       const instance_id = item.instance_id;
       const folder_id = item.folder_id;
 
-      axios({
+      vinylAxios({
         method: 'POST',
         url: `https://api.discogs.com//users/${user_name}/collection/folders/${folder_id}/releases/${release_id}/instances/${instance_id}`,
         headers: {
@@ -129,7 +153,7 @@ class AlbumDetail extends Component {
     const user_name = userData.username;
 
     const url = `https://api.discogs.com//releases/${release_id}/rating/${user_name}`;
-    axios
+    vinylAxios
       .get(url)
       .then(res => {
         this.setState({ userRating: res.data.rating });
@@ -137,6 +161,84 @@ class AlbumDetail extends Component {
       .catch(error => {
         this.setState({ error });
       });
+  };
+
+  addToCollection = async item => {
+    const { token, tokenSecret, user } = await UserData();
+    const accessData = {
+      token,
+      tokenSecret,
+    };
+    const userMeta = JSON.parse(user);
+    const { username } = userMeta;
+    const { id } = item;
+    try {
+      await this.props.dispatch(saveToCollection(accessData, username, id));
+      console.log(`Added ${item.basic_information.title}`);
+    } catch (error) {
+      console.log('ERROR', error);
+    }
+  };
+  deleteFromCollection = async item => {
+    const { token, tokenSecret, user } = await UserData();
+    const accessData = {
+      token,
+      tokenSecret,
+    };
+    const { newInstance } = this.props;
+    const userMeta = JSON.parse(user);
+    const { username } = userMeta;
+    const { id, instance_id } = item;
+    const instance = !newInstance ? instance_id : newInstance;
+    try {
+      await this.props.dispatch(
+        removeFromCollection(accessData, username, id, instance)
+      );
+      console.log(`removed ${item.basic_information.title}`);
+    } catch (error) {
+      console.log('ERROR', error);
+    }
+  };
+
+  addToWantlist = async item => {
+    const { token, tokenSecret, user } = await UserData();
+    const accessData = {
+      token,
+      tokenSecret,
+    };
+    const userMeta = JSON.parse(user);
+    const { username } = userMeta;
+    const { id } = item;
+    try {
+      await this.props.dispatch(saveToWantlist(accessData, username, id));
+      console.log(`Added ${item.basic_information.title}`);
+    } catch (error) {
+      console.log('ERROR', error);
+    }
+  };
+  deleteFromWantlist = async item => {
+    const { token, tokenSecret, user } = await UserData();
+    const accessData = {
+      token,
+      tokenSecret,
+    };
+    const { newWantInstance } = this.props;
+    const userMeta = JSON.parse(user);
+    const { username } = userMeta;
+    const { id, instance_id } = item;
+    const instance = !newWantInstance ? instance_id : newWantInstance;
+    try {
+      await this.props.dispatch(
+        removeFromWantlist(accessData, username, id, instance)
+      );
+      console.log(`removed ${item.basic_information.title}`);
+    } catch (error) {
+      console.log('ERROR', error);
+    }
+  };
+
+  goBack = () => {
+    this.props.navigation.navigate('App');
   };
 
   render() {
@@ -180,6 +282,11 @@ class AlbumDetail extends Component {
                 resizeMode="cover"
                 style={styles.album_gradient}
               >
+                <View style={styles.backTextContainer}>
+                  <TouchableOpacity onPress={this.goBack}>
+                    <Text style={styles.backText}>BACK</Text>
+                  </TouchableOpacity>
+                </View>
                 <View style={styles.infoContainer}>
                   <Image
                     source={{
@@ -294,6 +401,17 @@ const styles = {
     right: 0,
     backgroundColor: '#000',
     flexDirection: 'column',
+  },
+  backTextContainer: {
+    flex: 1,
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    marginTop: 35,
+    marginLeft: 25,
+  },
+  backText: {
+    color: '#fff',
+    fontSize: 18,
   },
   midContainer: {
     flexDirection: 'row',
@@ -541,4 +659,11 @@ const styles = {
   },
 };
 
-export default AlbumDetail;
+const mapStateToProps = state => {
+  return {
+    newInstance: state.UserCollection.newInstance,
+    newWantInstance: state.UserWantlist.newWantInstance,
+  };
+};
+
+export default connect(mapStateToProps)(AlbumDetail);

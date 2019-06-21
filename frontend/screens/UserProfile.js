@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
-
 import { View, AsyncStorage } from 'react-native';
-
 import { Button, Header } from '#common/';
 
 export default class UserProfile extends Component {
   static navigationOptions = {
     header: null,
   };
+
   signOut = async () => {
-    await AsyncStorage.removeItem('oauth_token');
-    await AsyncStorage.removeItem('oauth_secret');
+    await AsyncStorage.removeItem('access_token');
+    await AsyncStorage.removeItem('access_secret');
     await AsyncStorage.removeItem('userMeta');
 
     this.props.navigation.navigate('Auth');

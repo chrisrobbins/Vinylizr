@@ -24,6 +24,9 @@ const DiscogsOauthFlow = createAppContainer(
     },
     {
       initialRouteName: 'AuthLoading',
+      paths: {
+        App: '/App',
+      },
     }
   )
 );

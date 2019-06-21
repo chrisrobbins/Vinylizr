@@ -42,8 +42,6 @@ export default class ReleaseList extends Component {
       records,
     } = this.props.navigation.state.params;
 
-    console.log({ records });
-
     let discogsString = masterRelease.title.split('-');
     const title = discogsString[1];
     const artist = discogsString[0];

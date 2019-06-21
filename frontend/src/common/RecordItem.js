@@ -3,10 +3,8 @@ import { TouchableOpacity, View, Image } from 'react-native';
 import noImage from '/assets/images/n-a.png';
 class RecordItem extends PureComponent {
   render() {
-    const { item, navigation, userMeta } = this.props;
+    const { item, navigation, userMeta, inWantlist, inCollection } = this.props;
     const { cover_image } = item.basic_information;
-
-    console.log({ item });
 
     return (
       <View>
@@ -14,9 +12,9 @@ class RecordItem extends PureComponent {
           key={item.instance_id}
           onPress={() => {
             navigation.navigate('AlbumDetail', {
-              item: item,
-              inCollection: true,
-              inWantlist: false,
+              item,
+              inCollection,
+              inWantlist,
               userData: userMeta,
             });
           }}
@@ -34,12 +32,7 @@ class RecordItem extends PureComponent {
 
 const styles = {
   albumCovers: {
-    height: 124,
-    width: 124,
-    marginLeft: 0.5,
-    marginRight: 0.5,
-    marginTop: 0.5,
-    marginBottom: 0.5,
+    height: 110,
   },
 };
 
