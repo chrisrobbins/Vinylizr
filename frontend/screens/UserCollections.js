@@ -55,6 +55,7 @@ class UserCollections extends Component {
         </View>
         <View style={styles.contentContainer}>
           <SectionGrid
+            itemDimension={90}
             sections={releases}
             style={{ flex: 1 }}
             renderItem={({ item, section, index }) => (
@@ -62,6 +63,7 @@ class UserCollections extends Component {
                 item={item}
                 navigation={navigation}
                 userMeta={userMeta}
+                inCollection={true}
               />
             )}
             renderSectionHeader={({ section }) => (

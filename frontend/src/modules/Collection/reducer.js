@@ -1,13 +1,18 @@
 /**
  *  Import action creator constants
  */
-import { UPDATE_IS_FETCHING, FETCH_USER_COLLECTION } from './constants';
+import {
+  UPDATE_IS_FETCHING,
+  FETCH_USER_COLLECTION,
+  STORE_INSTANCE,
+} from './constants';
 
 /**
  *  Set intial state
  */
 const initialState = {
   releases: [],
+  newInstance: null,
   isFetching: false,
 };
 
@@ -17,10 +22,14 @@ const initialState = {
 function userCollection(state = initialState, action) {
   switch (action.type) {
     case FETCH_USER_COLLECTION:
-      const { payload } = action;
       return {
         ...state,
-        releases: payload,
+        releases: action.payload,
+      };
+    case STORE_INSTANCE:
+      return {
+        ...state,
+        newInstance: action.payload,
       };
     case UPDATE_IS_FETCHING:
       return {

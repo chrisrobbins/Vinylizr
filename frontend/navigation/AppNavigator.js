@@ -33,8 +33,6 @@ const DiscogsOauthFlow = createAppContainer(
 
 const prefix = Expo.Linking.makeUrl('/');
 
-console.log({ prefix });
-
 const Vinylizr = props => (
   <DiscogsOauthFlow uriPrefix={prefix} screenProps={props} />
 );

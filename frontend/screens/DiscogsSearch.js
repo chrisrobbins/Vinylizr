@@ -40,7 +40,7 @@ class DiscogsSearch extends Component {
     const { page } = this.state;
     const apiSearch = this.state.newText;
     const { token, tokenSecret } = await UserData();
-    const url = `${VINYLIZR_API_BASE_URL}/database/search?&q=${apiSearch}&page=${page}&per_page=75`;
+    const url = `${VINYLIZR_API_BASE_URL}/database/search?&q=${apiSearch}&page=${page}&per_page=30&format=vinyl`;
     const accessData = {
       token,
       tokenSecret,
@@ -48,7 +48,6 @@ class DiscogsSearch extends Component {
     this.setState({ loading: true });
     await vinylAxios.post(url, accessData).then(response => {
       const { results } = response.data;
-      console.log('response.data', response.data);
       this.setState({
         albums:
           page === 1 ? Array.from(results) : [...this.state.albums, ...results],
@@ -77,13 +76,11 @@ class DiscogsSearch extends Component {
     );
   };
   handleLoadMore = () => {
-    console.log('load more');
     this.setState(
       {
         page: this.state.page + 1,
       },
       () => {
-        console.log('debounce func');
         this.searchDiscogs();
       }
     );
@@ -205,7 +202,7 @@ class DiscogsSearch extends Component {
               autoFocus={false}
               type="search"
               value={this.state.newText}
-              onKeyPress={debounce(this.searchDiscogs, 230)}
+              onKeyPress={debounce(this.searchDiscogs, 250)}
               onChange={event =>
                 this.setState({ newText: event.nativeEvent.text })
               }

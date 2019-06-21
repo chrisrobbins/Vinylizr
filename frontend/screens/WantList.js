@@ -39,10 +39,6 @@ class UserWantlist extends Component {
     }
   };
 
-  removeFromWantlist = () => {
-    console.log('remove');
-  };
-
   render() {
     const {
       releases,
@@ -58,6 +54,7 @@ class UserWantlist extends Component {
         </View>
         <View style={styles.contentContainer}>
           <SectionGrid
+            itemDimension={90}
             sections={releases}
             style={{ flex: 1 }}
             renderItem={({ item, section, index }) => (
@@ -65,7 +62,7 @@ class UserWantlist extends Component {
                 item={item}
                 navigation={navigation}
                 userMeta={userMeta}
-                removeFromWantlist={this.removeFromWantlist}
+                inWantlist={true}
               />
             )}
             renderSectionHeader={({ section }) => (
