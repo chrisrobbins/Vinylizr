@@ -1,7 +1,6 @@
 const express = require('express');
 var bodyParser = require('body-parser');
 const Discogs = require('disconnect').Client;
-const isEmpty = require('lodash');
 const port = 8081;
 const app = express();
 
@@ -65,12 +64,12 @@ app.post('/collection', function(req, res) {
     token,
     tokenSecret,
   };
-  var dis = new Discogs(accessData).user().collection();
+  const dis = new Discogs(accessData).user().collection();
   dis.getReleases(user, folder, { page: page, per_page: 75 }, function(
     err,
     data
   ) {
-    var vinylData = data.releases.reduce((arrangedData, data) => {
+    let vinylData = data.releases.reduce((arrangedData, data) => {
       // c[0] should be the first letter of an entry
       var record = data.basic_information.artists[0].name[0].toLocaleUpperCase();
 
@@ -80,7 +79,7 @@ app.post('/collection', function(req, res) {
       return arrangedData;
     }, {});
 
-    var collectionSections = Object.entries(vinylData).map(vinyl => {
+    let collectionSections = Object.entries(vinylData).map(vinyl => {
       return {
         title: vinyl[0],
         data: vinyl[1],
@@ -89,7 +88,27 @@ app.post('/collection', function(req, res) {
           .slice(2),
       };
     });
-    res.send(collectionSections);
+    let orderedSections = collectionSections.sort(function(a, b) {
+      if (a.title < b.title) {
+        return -1;
+      }
+      if (a.title > b.title) {
+        return 1;
+      }
+      return 0;
+    });
+
+    res.send(orderedSections);
+  });
+});
+
+app.get('/database/release', function(req, res) {
+  const { release } = req.query;
+
+  let dis = new Discogs().database();
+  dis.getRelease(release, function(err, data) {
+    if (err) throw console.error();
+    res.send(data);
   });
 });
 
@@ -125,7 +144,17 @@ app.post('/wantlist', function(req, res) {
           .slice(2),
       };
     });
-    res.send(wantlistSections);
+    let orderedSections = wantlistSections.sort(function(a, b) {
+      if (a.title < b.title) {
+        return -1;
+      }
+      if (a.title > b.title) {
+        return 1;
+      }
+      return 0;
+    });
+
+    res.send(orderedSections);
   });
 });
 
@@ -146,19 +175,20 @@ app.post('/database/master-releases', function(req, res) {
     data
   ) {
     if (err) {
-      res.send(err);
+      throw err;
     }
     res.send(data);
   });
 });
 
 app.post('/database/search', function(req, res) {
-  const { q, page, per_page } = req.query;
+  const { q, page, per_page, format } = req.query;
   const { token, tokenSecret } = req.body;
   const searchQuery = {
     q,
     page,
     per_page,
+    format,
   };
 
   const accessData = {
@@ -235,7 +265,7 @@ app.post('/wantlist/save', function(req, res) {
     token,
     tokenSecret,
   };
-  var dis = new Discogs(accessData).user().collection();
+  var dis = new Discogs(accessData).user().wantlist();
   dis.addRelease(user, release, function(err, data) {
     if (err) {
       console.log('ERROR', err);
@@ -257,7 +287,7 @@ app.post('/wantlist/remove', function(req, res) {
     token,
     tokenSecret,
   };
-  var dis = new Discogs(accessData).user().collection();
+  var dis = new Discogs(accessData).user().wantlist();
   dis.removeRelease(user, release, function(err, data) {
     if (err) {
       console.log('ERROR', err);
