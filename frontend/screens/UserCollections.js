@@ -64,10 +64,21 @@ class UserCollections extends Component {
                 navigation={navigation}
                 userMeta={userMeta}
                 inCollection={true}
+                routeBack={'UserCollections'}
+                isFetching={this.props.isFetching}
               />
             )}
             renderSectionHeader={({ section }) => (
-              <Text style={{ fontSize: 16, color: '#fff', padding: 10 }}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  color: '#fff',
+                  padding: 10,
+                  fontWeight: 'bold',
+                  marginLeft: 6,
+                  backgroundColor: 'rgba(0,0,0,.7)',
+                }}
+              >
                 {section.title}
               </Text>
             )}

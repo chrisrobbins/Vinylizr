@@ -1,17 +1,13 @@
-import React, { Component } from 'react'
-import { Text, View } from 'react-native'
+import React from 'react';
+import { Text, View } from 'react-native';
 
-class CollectionBadge extends Component {
-
-  render() {
-    return(
-      <View style={styles.container}>
-        <Text style={styles.text}>{this.props.children}</Text>
-      </View>
-
-    )
-  }
-}
+const CollectionBadge = ({ children }) => {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.text}>{children}</Text>
+    </View>
+  );
+};
 
 const styles = {
   container: {
@@ -25,14 +21,11 @@ const styles = {
     backgroundColor: '#005EFF',
     borderRadius: 2,
     marginBottom: 1,
-    alignSelf: 'flex-end'
+    alignSelf: 'flex-end',
   },
   text: {
     color: '#ffffff',
+  },
+};
 
-  }
-}
-
-
-
-export default CollectionBadge
+export default CollectionBadge;

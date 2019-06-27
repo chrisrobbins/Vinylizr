@@ -2,9 +2,9 @@
   "expoServerPort": 19000,
   "expoServerNgrokUrl": "https://ks-5hv.chrisrobbins.frontend.exp.direct",
   "packagerNgrokUrl": "https://packager.ks-5hv.chrisrobbins.frontend.exp.direct",
-  "ngrokPid": 1809,
-  "devToolsPort": 19002,
+  "ngrokPid": 58752,
+  "devToolsPort": 19003,
   "packagerPort": 19001,
-  "packagerPid": 1755,
+  "packagerPid": 58737,
   "webpackServerPort": null
 }

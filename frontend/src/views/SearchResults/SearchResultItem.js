@@ -56,6 +56,7 @@ const SearchResultItem = ({
 const styles = {
   badgeContainer: {
     flexDirection: 'row',
+    marginBottom: 3,
   },
 
   textView: {
@@ -82,7 +83,7 @@ const styles = {
     fontSize: 14,
     color: 'rgba(217,217,217,.6)',
     marginTop: 1,
-    marginBottom: 10,
+    marginBottom: 7,
     marginLeft: 6,
     fontFamily: 'Lato-Regular',
   },
