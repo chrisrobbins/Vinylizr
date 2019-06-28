@@ -1095,10 +1095,10 @@
     resolve-from "^5.0.0"
     slugify "^1.3.4"
 
-"@expo/dev-tools@^0.5.31":
-  version "0.5.31"
-  resolved "https://registry.yarnpkg.com/@expo/dev-tools/-/dev-tools-0.5.31.tgz#037496a8513529bf1d33d9d789b70760401d682c"
-  integrity sha512-F5Tvxyv5nIWzS9PIxtAatT4dx5wDh1MybxErf17ncJ3aHDBx7QjM8UFapFdxcX4WPCWxEoze4H2IQuWIwpSFQg==
+"@expo/dev-tools@^0.5.34":
+  version "0.5.34"
+  resolved "https://registry.yarnpkg.com/@expo/dev-tools/-/dev-tools-0.5.34.tgz#ee97a5cbd55341d616bf4151b166264a14ac72bb"
+  integrity sha512-OJymAv8Li4/kXRcRorkq8LctPlhm07dLBHtHqUwsj8K7dBgjyn6hZiaqHYpZdBFQJ3aZH5LSXOH5ov2wTEDGBw==
   dependencies:
     "@expo/config" "^2.0.3"
     express "4.16.4"
@@ -1256,15 +1256,15 @@
   dependencies:
     cross-spawn "^6.0.5"
 
-"@expo/traveling-fastlane-darwin@1.9.6":
-  version "1.9.6"
-  resolved "https://registry.yarnpkg.com/@expo/traveling-fastlane-darwin/-/traveling-fastlane-darwin-1.9.6.tgz#f17065afd43b89c156b200e41f3898740d0835a9"
-  integrity sha512-MT603eBETkbbeK7CFDwvSNxdC549CudByIbBhrzosNg5zH9n2p/7zV6DSbYMRrFxapCniwHFYWVbaYrPO9gnlw==
+"@expo/traveling-fastlane-darwin@1.9.7":
+  version "1.9.7"
+  resolved "https://registry.yarnpkg.com/@expo/traveling-fastlane-darwin/-/traveling-fastlane-darwin-1.9.7.tgz#ee2210baa4e94bfd74ec9df6768331467bafadc7"
+  integrity sha512-J7oWQO0UDBc5H70L87CmvERRpV+ZH/wUIAwZvwePUGqYC7ucB9iXzxP9j0niE+RAMATFvtm1bRF8XGTTf9WeUA==
 
-"@expo/traveling-fastlane-linux@1.9.6":
-  version "1.9.6"
-  resolved "https://registry.yarnpkg.com/@expo/traveling-fastlane-linux/-/traveling-fastlane-linux-1.9.6.tgz#c1aeaeff4bad3d78fea76c9d6fb66b56849af13c"
-  integrity sha512-zIDY3Ed3/VPLC9Xo9y/0qPJUOTqEV/zIhEjR6eOAeQOl1yoT6EHMhYwdMDG/jQSeqyELtKnswKa8iN64VaPzPA==
+"@expo/traveling-fastlane-linux@1.9.7":
+  version "1.9.7"
+  resolved "https://registry.yarnpkg.com/@expo/traveling-fastlane-linux/-/traveling-fastlane-linux-1.9.7.tgz#a19d16daff739ea997cee4e87fd26dc4391f0f72"
+  integrity sha512-qmO4Y/kaiD66Dk/O006UfdUNcJtCMAl9fjFPOBQHsiD35yL4lMQjxrfJLOxJzd+URugkOcYJyj69ykFy/mbSxw==
 
 "@expo/vector-icons@^10.0.1":
   version "10.0.2"
@@ -1335,10 +1335,10 @@
     pouchdb-collections "^1.0.1"
     tiny-queue "^0.2.1"
 
-"@expo/xdl@^55.0.7":
-  version "55.0.7"
-  resolved "https://registry.yarnpkg.com/@expo/xdl/-/xdl-55.0.7.tgz#863c0af130b038b6657abb5a373784dccff232a8"
-  integrity sha512-wPbBTNaUWEbMTgJWpWAtAomF8i5Y0NKunwCBA/Ogx+gAQTry96VOewXr4zaIYNAqYcPgzD8P1sIAj+tIUeLqhA==
+"@expo/xdl@^55.0.10":
+  version "55.0.10"
+  resolved "https://registry.yarnpkg.com/@expo/xdl/-/xdl-55.0.10.tgz#140396d0d0f001ca21fccf9a1b7d24fdc5005f7a"
+  integrity sha512-PNZ8QjoTxr4YIf4lbIZFhou5WPmGrObWZM/W5t1RtYF46BKKqyvNuKjjCGasFrAKgly9pIrGDU6/yb0E35ffSw==
   dependencies:
     "@expo/bunyan" "3.0.2"
     "@expo/config" "^2.0.3"
@@ -5328,18 +5328,18 @@ expo-camera@~5.0.1:
     lodash "^4.6.0"
     prop-types "^15.6.0"
 
-expo-cli@^2.20.7:
-  version "2.20.7"
-  resolved "https://registry.yarnpkg.com/expo-cli/-/expo-cli-2.20.7.tgz#0254b6b5c31186b11a4d36633d2bee27506e262e"
-  integrity sha512-csqkvRLwudAtFYDogmIwPYJ16wwdrptrjUi5oNv1Wox/32wYR/HAvoxpLC6rLK/J4IwyuwLxzY79Lsi3UDzHHg==
+expo-cli@^2.20.10:
+  version "2.20.10"
+  resolved "https://registry.yarnpkg.com/expo-cli/-/expo-cli-2.20.10.tgz#7e1f678744d51339b15475034fede9d4523f02b9"
+  integrity sha512-lEvQ9cBGhSbU2evx0PvHIQ1wzHzbV9LRy3jfzsbf+XxcvaMHFzRtoSieExoM/fvNqAJg1aAnhkFCCh6tjCKhsw==
   dependencies:
     "@expo/bunyan" "3.0.2"
     "@expo/config" "^2.0.3"
-    "@expo/dev-tools" "^0.5.31"
+    "@expo/dev-tools" "^0.5.34"
     "@expo/json-file" "^8.1.5"
     "@expo/simple-spinner" "1.0.2"
     "@expo/spawn-async" "1.5.0"
-    "@expo/xdl" "^55.0.7"
+    "@expo/xdl" "^55.0.10"
     ansi-regex "^4.1.0"
     axios "0.18.0"
     babel-runtime "6.26.0"
@@ -5378,8 +5378,8 @@ expo-cli@^2.20.7:
     validator "10.5.0"
     wordwrap "1.0.0"
   optionalDependencies:
-    "@expo/traveling-fastlane-darwin" "1.9.6"
-    "@expo/traveling-fastlane-linux" "1.9.6"
+    "@expo/traveling-fastlane-darwin" "1.9.7"
+    "@expo/traveling-fastlane-linux" "1.9.7"
 
 expo-constants@~5.0.1:
   version "5.0.1"

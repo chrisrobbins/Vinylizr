@@ -54,17 +54,18 @@ class DiscogsSearch extends Component {
     const { page } = this.state;
     const apiSearch = this.state.newText;
     const { token, tokenSecret } = await UserData();
-    const url = `${VINYLIZR_API_BASE_URL}/database/search?&q=${apiSearch}&page=${page}&per_page=15&format=vinyl`;
+    const url = `${VINYLIZR_API_BASE_URL}/database/search?&q=${apiSearch}&page=${page}&per_page=10&format=vinyl`;
     const accessData = {
       token,
       tokenSecret,
     };
+
     this.setState({ loading: true });
     await vinylAxios.post(url, accessData).then(response => {
       const { results } = response.data;
       this.setState({
         albums:
-          page === 1 ? Array.from(results) : [...this.state.albums, ...results],
+          page === 1 ? Array.from(results) : [this.state.albums, ...results],
         error: results.error || null,
         loading: false,
         refreshing: false,
@@ -72,9 +73,18 @@ class DiscogsSearch extends Component {
     });
   };
 
+  debounceDiscogsSearch = () => {
+    const { newText } = this.state;
+    this.setState({ albums: [] });
+    if (!newText.length) return;
+    if (newText.length >= 1) {
+      this.searchDiscogs();
+    }
+  };
+
   clearTextInput = () => {
     this.text_input.current.clear();
-    this.setState({ text: '', albums: [] });
+    this.setState({ text: '', albums: [], loading: false });
   };
 
   handleRefresh = () => {
@@ -90,17 +100,24 @@ class DiscogsSearch extends Component {
   };
   handleLoadMore = () => {
     console.log('LOADING MORE BUT NOT TO OFTEN');
-    this.setState({ loading: true });
-    setTimeout(() => {
-      this.setState(
-        {
-          page: this.state.page + 1,
-        },
-        () => {
-          this.searchDiscogs();
-        }
-      );
-    }, 1500);
+    if (!this.state.albums.length) return;
+    if (
+      this.state.newText.length &&
+      this.state.albums.length &&
+      this.state.page !== 1
+    ) {
+      this.setState({ loading: true });
+      setTimeout(() => {
+        this.setState(
+          {
+            page: this.state.page + 1,
+          },
+          () => {
+            this.searchDiscogs();
+          }
+        );
+      }, 1500);
+    }
   };
   renderFooter = () => {
     if (!this.state.loading) return null;
@@ -219,10 +236,11 @@ class DiscogsSearch extends Component {
               autoFocus={true}
               type="search"
               value={this.state.newText}
-              onKeyPress={debounce(this.searchDiscogs, 3000)}
+              onKeyPress={this.debounceDiscogsSearch}
               onChange={event =>
                 this.setState({ newText: event.nativeEvent.text })
               }
+              onSubmitEditing={this.searchDiscogs}
               placeholder="Artist or Album"
               placeholderTextColor="#D9D9D9"
               selectionColor={'#F42E4A'}

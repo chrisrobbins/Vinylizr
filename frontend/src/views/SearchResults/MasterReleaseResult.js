@@ -16,10 +16,10 @@ class MasterReleaseResult extends Component {
     page: 1,
   };
 
-  componentDidMount() {
-    console.log('MASTER PROPS', this.props);
-    this.retrieveMasterReleases();
-  }
+  // componentDidMount() {
+  //   console.log('MASTER PROPS', this.props);
+  //   this.retrieveMasterReleases();
+  // }
 
   componentWillUnmount() {
     this.setState({ versions: [], inCollection: [], inWantlist: [] });
@@ -103,12 +103,7 @@ class MasterReleaseResult extends Component {
               {artist}
             </Text>
             <View style={styles.badgeContainer}>
-              <VersionsBadge>
-                {versions.length >= 15
-                  ? `${versions.length}+`
-                  : versions.length}{' '}
-                VERSIONS
-              </VersionsBadge>
+              <VersionsBadge>MASTER</VersionsBadge>
               {collectedInList.length > 0 && (
                 <CollectionBadge>{collectedInList.length}</CollectionBadge>
               )}

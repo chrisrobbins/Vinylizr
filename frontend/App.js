@@ -41,6 +41,7 @@ class App extends Component {
   saveDisInfoAsyncStore = async () => {
     const accessData = await UserData();
     this.setState({ accessData });
+    this.props.navigation.navigate('UserCollections');
   };
 
   logUserIn = async response => {
