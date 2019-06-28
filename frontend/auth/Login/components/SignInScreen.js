@@ -29,6 +29,7 @@ class SignInScreen extends Component {
   };
 
   componentDidMount() {
+    console.log(this.props);
     const url = AuthSession.getRedirectUrl();
     console.log(url);
     Linking.addEventListener(`${url}`, this._handleOpenURL());
@@ -80,6 +81,7 @@ class SignInScreen extends Component {
       .then(response => {
         this.setState({ accessData: response.data });
         this.props.screenProps.getDiscogsIdentity(response.data);
+        this.props.navigation.navigate('App');
 
         const { token, tokenSecret } = response.data;
 
