@@ -2,11 +2,8 @@ import React, { Component } from 'react';
 import { Text, View, Image, FlatList, Dimensions } from 'react-native';
 const windowSize = Dimensions.get('window');
 import { ReleaseResultItem } from '#views/SearchResults';
-import {
-  VersionsBadge,
-  CollectionBadge,
-  WantlistBadge,
-} from '#common/Badges/VersionsBadge';
+import { VersionsBadge, CollectionBadge, WantlistBadge } from '#common/Badges/';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default class ReleaseList extends Component {
   state = {
@@ -36,12 +33,14 @@ export default class ReleaseList extends Component {
   _keyExtractor = (item, index) => 'M' + index.toString();
 
   render() {
-    const {
-      masterRelease,
-      userData,
-      records,
-    } = this.props.navigation.state.params;
-
+    const { masterRelease, versions } = this.props.navigation.state.params;
+    const releasesInCollection = versions.filter(record => {
+      return record.stats.user.in_collection > 0;
+    });
+    const releasesInWantlist = versions.filter(record => {
+      return record.stats.user.in_wantlist > 0;
+    });
+    console.log({ releasesInCollection });
     let discogsString = masterRelease.title.split('-');
     const title = discogsString[1];
     const artist = discogsString[0];
@@ -49,10 +48,14 @@ export default class ReleaseList extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.imagesContainer}>
-          <Image
-            source={{ uri: masterRelease.thumb }}
-            style={styles.detailThumb}
-          />
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('DiscogsSearch')}
+          >
+            <Image
+              source={{ uri: masterRelease.thumb }}
+              style={styles.detailThumb}
+            />
+          </TouchableOpacity>
           <View style={styles.headerContainer}>
             <Text
               numberOfLines={1}
@@ -63,29 +66,24 @@ export default class ReleaseList extends Component {
             </Text>
             <Text style={styles.detailArtist}>{artist}</Text>
             <View style={styles.badgeContainer}>
-              {/* <VersionsBadge>{records.length} VERSIONS</VersionsBadge> */}
-              {/* {releasesOwned.length <= 0 ? (
-                <Text />
-              ) : (
+              <VersionsBadge>{versions.length} VERSIONS</VersionsBadge>
+              {releasesInCollection.length > 0 && (
                 <CollectionBadge style={styles.badge}>
-                  {releasesOwned.length}
+                  {releasesInCollection.length}
                 </CollectionBadge>
               )}
-              {releasesWanted.length <= 0 ? (
-                <Text />
-              ) : (
+              {releasesInWantlist.length > 0 && (
                 <WantlistBadge style={styles.badge}>
-                  {releasesWanted.length}
+                  {releasesInWantlist.length}
                 </WantlistBadge>
-              )} */}
+              )}
             </View>
           </View>
         </View>
         <FlatList
-          data={records}
+          data={versions}
           renderItem={({ item }) => (
             <ReleaseResultItem
-              userData={userData}
               item={item}
               key={item.id}
               artist={artist}

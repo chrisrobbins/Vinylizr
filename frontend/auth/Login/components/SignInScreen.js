@@ -8,7 +8,6 @@ import {
   Dimensions,
   ImageBackground,
 } from 'react-native';
-import { isEmpty } from 'lodash';
 import { AuthSession } from 'expo';
 import vinylAxios from 'axios';
 import * as Animatable from 'react-native-animatable';
@@ -30,18 +29,16 @@ class SignInScreen extends Component {
   };
 
   componentDidMount() {
+    console.log(this.props);
     const url = AuthSession.getRedirectUrl();
+    console.log(url);
     Linking.addEventListener(`${url}`, this._handleOpenURL());
   }
 
   async componentDidUpdate(prevProps, prevState) {
-    const token = await AsyncStorage.getItem('access_token');
     if (!prevState.verifier.length && this.state.verifier.length) {
       await this.getAccessToken();
     }
-    this.props.navigation.navigate(
-      !token || token === 'undefined' ? 'Auth' : 'App'
-    );
   }
 
   componentWillUnmount() {
@@ -68,11 +65,12 @@ class SignInScreen extends Component {
     });
   };
 
-  _handleOpenURL = () => {
-    const { accessData } = this.state;
-    if (isEmpty(accessData)) {
-      this.props.navigation.push('App');
-    }
+  _handleOpenURL = async () => {
+    const accessToken = await AsyncStorage.getItem('access_token');
+    console.log({ accessToken });
+    this.props.navigation.navigate(
+      !accessToken || accessToken === 'undefined' ? 'Auth' : 'App'
+    );
   };
 
   getAccessToken = () => {
@@ -83,6 +81,7 @@ class SignInScreen extends Component {
       .then(response => {
         this.setState({ accessData: response.data });
         this.props.screenProps.getDiscogsIdentity(response.data);
+        this.props.navigation.navigate('App');
 
         const { token, tokenSecret } = response.data;
 

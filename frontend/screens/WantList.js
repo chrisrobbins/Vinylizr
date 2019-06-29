@@ -43,10 +43,12 @@ class UserWantlist extends Component {
     const {
       releases,
       navigation,
+      isFetching,
       screenProps: {
         user: { userMeta },
       },
     } = this.props;
+    console.log({ isFetching });
     return (
       <View style={styles.mainContainer}>
         <View style={styles.headerContainer}>
@@ -63,10 +65,21 @@ class UserWantlist extends Component {
                 navigation={navigation}
                 userMeta={userMeta}
                 inWantlist={true}
+                routeBack={'UserWantlist'}
+                isFetching={this.props.isFetching}
               />
             )}
             renderSectionHeader={({ section }) => (
-              <Text style={{ fontSize: 16, color: '#fff', padding: 10 }}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  color: '#fff',
+                  padding: 10,
+                  fontWeight: 'bold',
+                  marginLeft: 6,
+                  backgroundColor: 'rgba(0,0,0,.7)',
+                }}
+              >
                 {section.title}
               </Text>
             )}

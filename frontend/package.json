@@ -17,6 +17,7 @@
     "classnames": "^2.2.6",
     "dotenv": "^7.0.0",
     "expo": "^33.0.0",
+    "expo-cli": "^2.20.10",
     "expo-font": "~5.0.1",
     "express-session": "^1.16.1",
     "firebase": "^5.8.5",

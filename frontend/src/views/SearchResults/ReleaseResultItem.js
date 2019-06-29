@@ -1,10 +1,27 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import { CardSection } from '#common/';
-
-const ReleaseResultItem = ({ item: { id, title, artist } }) => {
-  const { textView, titleTextStyle, artistTextStyle } = styles;
-
+import { CollectionBadge, WantlistBadge } from '#common/Badges';
+const ReleaseResultItem = ({
+  artist,
+  item: {
+    id,
+    title,
+    label,
+    country,
+    year,
+    stats: {
+      user: { in_collection, in_wantlist },
+    },
+  },
+}) => {
+  const {
+    textView,
+    titleTextStyle,
+    artistTextStyle,
+    badgeContainer,
+    labelTextStyle,
+  } = styles;
   return (
     <CardSection key={id}>
       <View style={textView}>
@@ -14,52 +31,50 @@ const ReleaseResultItem = ({ item: { id, title, artist } }) => {
         <Text ellipsizeMode={'tail'} numberOfLines={1} style={artistTextStyle}>
           {artist}
         </Text>
-        {/* <View style={styles.badgeContainer} key={id}>
-                <CollectionBadge>1</CollectionBadge>;
-                <WantlistBadge>1</WantlistBadge>;
-              </View> */}
+        <View style={badgeContainer}>
+          <Text key={id} style={labelTextStyle}>
+            {label} - {country || ''} - {year || ''}
+          </Text>
+          {in_collection > 0 && <CollectionBadge>1</CollectionBadge>}
+          {in_wantlist > 0 && <WantlistBadge>1</WantlistBadge>}
+        </View>
       </View>
     </CardSection>
   );
 };
 
 const styles = {
-  container: {
-    flexDirection: 'column',
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(217,217,217,.6)',
-  },
   badgeContainer: {
     flexDirection: 'row',
+    marginBottom: 3,
   },
 
   textView: {
+    flexDirection: 'column',
     justifyContent: 'center',
-    width: 250,
-    height: 125,
-    marginLeft: 15,
+    flex: 1,
+    maxHeight: 86,
   },
   titleTextStyle: {
     fontSize: 18,
     color: '#ffffff',
-    marginLeft: 5,
     fontFamily: 'Lato-Regular',
     lineHeight: 22,
     letterSpacing: 1,
+    marginTop: 10,
   },
   labelTextStyle: {
     fontSize: 16.5,
     fontFamily: 'Lato-Regular',
-    marginLeft: 5,
-    marginTop: 3,
+    marginLeft: 6,
     color: 'rgba(217,217,217,.6)',
   },
   artistTextStyle: {
-    fontSize: 16.5,
+    fontSize: 14,
     color: 'rgba(217,217,217,.6)',
-    marginLeft: 5,
     marginTop: 1,
-    marginBottom: 15,
+    marginBottom: 7,
+    marginLeft: 6,
     fontFamily: 'Lato-Regular',
   },
   imageStyle: {

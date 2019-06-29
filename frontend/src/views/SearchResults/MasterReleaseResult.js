@@ -1,24 +1,31 @@
 import React, { Component } from 'react';
 import { Text, View, Image, TouchableOpacity } from 'react-native';
-import { CardSection } from '#common/';
-import { UserData } from '#src/contexts';
 import vinylAxios from 'axios';
+import { connect } from 'react-redux';
+import { UserData } from '#src/contexts';
+import { VINYLIZR_API_BASE_URL } from '#src/routes';
+import { getMasterReleases } from '#modules/Database/actions';
+import { CardSection } from '#common/';
 import { VersionsBadge, WantlistBadge, CollectionBadge } from '#common/Badges/';
 import noImage from '/assets/images/empty-star.png';
-import { VINYLIZR_API_BASE_URL } from '#src/routes';
 class MasterReleaseResult extends Component {
   state = {
-    records: [],
+    versions: [],
     inCollection: [],
     inWantlist: [],
     page: 1,
   };
 
-  componentDidMount() {
-    this.getMasterReleases();
+  // componentDidMount() {
+  //   console.log('MASTER PROPS', this.props);
+  //   this.retrieveMasterReleases();
+  // }
+
+  componentWillUnmount() {
+    this.setState({ versions: [], inCollection: [], inWantlist: [] });
   }
 
-  getMasterReleases = async () => {
+  retrieveMasterReleases = async () => {
     const {
       item: { master_id },
     } = this.props;
@@ -28,20 +35,25 @@ class MasterReleaseResult extends Component {
       token,
       tokenSecret,
     };
-    const url = `${VINYLIZR_API_BASE_URL}/database/master-releases?master=${master_id}&page=${page}`;
-    vinylAxios.post(url, accessData).then(response => {
-      const { versions } = response.data;
-      this.setState({ records: versions });
-    });
+    const url = `${VINYLIZR_API_BASE_URL}/database/master-releases?master=${master_id}&page=${page}&per_page=15`;
+    const {
+      data: { versions },
+    } = await vinylAxios.post(url, accessData);
+    console.log({ versions });
+    try {
+      this.setState({ versions });
+    } catch (err) {
+      console.log('ERROR', err);
+    }
   };
 
   render() {
     const {
       item: { thumb, title },
     } = this.props;
-    const { records } = this.state;
-    wantsInList = records.filter(record => record.stats.user.in_wantlist > 0);
-    collectedInList = records.filter(
+    const { versions } = this.state;
+    wantsInList = versions.filter(record => record.stats.user.in_wantlist > 0);
+    collectedInList = versions.filter(
       record => record.stats.user.in_collection > 0
     );
     let discogsString = title.split('-');
@@ -60,7 +72,7 @@ class MasterReleaseResult extends Component {
       <TouchableOpacity
         onPress={() => {
           this.props.navigation.navigate('ReleaseList', {
-            records: records,
+            versions,
             masterRelease: this.props.item,
           });
         }}
@@ -91,7 +103,7 @@ class MasterReleaseResult extends Component {
               {artist}
             </Text>
             <View style={styles.badgeContainer}>
-              <VersionsBadge>{records.length} VERSIONS</VersionsBadge>
+              <VersionsBadge>MASTER</VersionsBadge>
               {collectedInList.length > 0 && (
                 <CollectionBadge>{collectedInList.length}</CollectionBadge>
               )}
@@ -153,5 +165,11 @@ const styles = {
     paddingLeft: 20,
   },
 };
+
+// const mapStateToProps = state => {
+//   return {
+//     masterReleases: state.Database.masterReleases,
+//   };
+// };
 
 export default MasterReleaseResult;

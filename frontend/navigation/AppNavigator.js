@@ -5,7 +5,8 @@ import {
   createStackNavigator,
 } from 'react-navigation';
 import createBottomTabNavigator from './MainTabNavigator';
-import AlbumDetail from '#screens/AlbumDetail';
+import AlbumDetail from '#screens/AlbumDetail/';
+import UserCollections from '#screens/UserCollections';
 import MasterReleaseResult from '#views/SearchResults/MasterReleaseResult';
 import SignInScreen from '../auth/Login/components/SignInScreen';
 import ReleaseList from '#screens/ReleaseList';
@@ -18,9 +19,9 @@ const DiscogsOauthFlow = createAppContainer(
       AuthLoading: AuthLoadingScreen,
       App: createBottomTabNavigator,
       AlbumDetail: AlbumDetail,
+      UserCollection: UserCollections,
       Auth: AuthStack,
       ReleaseList,
-      MasterReleaseResult,
     },
     {
       initialRouteName: 'AuthLoading',
