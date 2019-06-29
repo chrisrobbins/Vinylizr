@@ -28,6 +28,7 @@ class DiscogsSearch extends Component {
       text: '',
       newText: '',
       loading: false,
+      loadingMore: false,
       albums: [],
       page: 1,
       error: null,
@@ -36,6 +37,9 @@ class DiscogsSearch extends Component {
       isSwiping: null,
       rightSwiped: false,
       leftSwiped: false,
+      onEndReachedCalledDuringMomentum: true,
+      lastLoadCount: 0,
+      notFinalLoad: null,
     };
     this.text_input = createRef();
   }
@@ -52,20 +56,19 @@ class DiscogsSearch extends Component {
 
   searchDiscogs = async () => {
     const { page } = this.state;
-    const apiSearch = this.state.newText;
+    const { newText } = this.state;
+    if (newText.length) this.setState({ loading: true });
     const { token, tokenSecret } = await UserData();
-    const url = `${VINYLIZR_API_BASE_URL}/database/search?&q=${apiSearch}&page=${page}&per_page=10&format=vinyl`;
+    const url = `${VINYLIZR_API_BASE_URL}/database/search?&q=${newText}&page=${page}&per_page=10&format=vinyl`;
     const accessData = {
       token,
       tokenSecret,
     };
 
-    this.setState({ loading: true });
     await vinylAxios.post(url, accessData).then(response => {
       const { results } = response.data;
       this.setState({
-        albums:
-          page === 1 ? Array.from(results) : [this.state.albums, ...results],
+        albums: page === 1 ? results : [...this.state.albums, ...results],
         error: results.error || null,
         loading: false,
         refreshing: false,
@@ -76,7 +79,7 @@ class DiscogsSearch extends Component {
   debounceDiscogsSearch = () => {
     const { newText } = this.state;
     this.setState({ albums: [] });
-    if (!newText.length) return;
+    if (!newText.length) this.setState({ albums: [] });
     if (newText.length >= 1) {
       this.searchDiscogs();
     }
@@ -98,40 +101,25 @@ class DiscogsSearch extends Component {
       }
     );
   };
+
   handleLoadMore = () => {
-    console.log('LOADING MORE BUT NOT TO OFTEN');
-    if (!this.state.albums.length) return;
-    if (
-      this.state.newText.length &&
-      this.state.albums.length &&
-      this.state.page !== 1
-    ) {
-      this.setState({ loading: true });
-      setTimeout(() => {
-        this.setState(
-          {
-            page: this.state.page + 1,
-          },
-          () => {
-            this.searchDiscogs();
-          }
-        );
-      }, 1500);
-    }
-  };
-  renderFooter = () => {
-    if (!this.state.loading) return null;
-    return (
-      <View
-        style={{
-          paddingVertical: 20,
-          borderTopWidth: 1,
-          borderColor: '#CED0CE',
-        }}
-      >
-        <ActivityIndicator animating size="large" />
-      </View>
+    this.setState(
+      (prevState, nextProps) => ({
+        page: prevState.page + 1,
+        loadingMore: true,
+      }),
+      () => {
+        this.searchDiscogs();
+      }
     );
+  };
+
+  renderFooter = () => {
+    return this.state.loadingMore ? (
+      <View style={{ marginTop: 20, marginBottom: 20, alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#e83628" />
+      </View>
+    ) : null;
   };
 
   renderInputButton = () => {
@@ -218,6 +206,10 @@ class DiscogsSearch extends Component {
     });
   };
 
+  _onMomentumScrollBegin = () =>
+    this.setState({ onEndReachedCalledDuringMomentum: false });
+  // Load more data function
+
   render() {
     const { albums } = this.state;
 
@@ -240,7 +232,7 @@ class DiscogsSearch extends Component {
               onChange={event =>
                 this.setState({ newText: event.nativeEvent.text })
               }
-              onSubmitEditing={this.searchDiscogs}
+              onSubmitEditing={() => this.searchDiscogs()}
               placeholder="Artist or Album"
               placeholderTextColor="#D9D9D9"
               selectionColor={'#F42E4A'}
@@ -255,9 +247,11 @@ class DiscogsSearch extends Component {
             ListFooterComponent={this.renderFooter}
             refreshing={this.state.refreshing}
             onEndReached={this.handleLoadMore}
+            onEndReachedThreshold={0.5}
+            initialNumToRender={10}
+            // onMomentumScrollBegin={() => this._onMomentumScrollBegin()}
             style={styles.renderAlbums}
             scrollEnabled={!this.state.isSwiping}
-            style={styles.renderAlbums}
           />
         </View>
       </SearchSuccessModal>
@@ -269,6 +263,7 @@ const styles = {
     flex: 1,
     marginTop: -3,
     backgroundColor: '#000',
+    paddingBottom: 30,
   },
   inputContainer: {
     justifyContent: 'flex-end',
