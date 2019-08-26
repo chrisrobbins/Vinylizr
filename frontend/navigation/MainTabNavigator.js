@@ -18,6 +18,7 @@ import {
   SearchFocused,
   SearchRested,
 } from './TabBarIcons';
+
 const Collection = createStackNavigator({
   UserCollections,
 });

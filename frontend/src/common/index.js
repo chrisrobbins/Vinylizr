@@ -8,4 +8,3 @@ export * from './Spinner';
 export * from './ClearText';
 export * from './DetailButton';
 export * from './RecordItem';
-export * from './SectionFlatList';

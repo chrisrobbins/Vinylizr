@@ -11,11 +11,11 @@ import {
 import { AuthSession } from 'expo';
 import vinylAxios from 'axios';
 import * as Animatable from 'react-native-animatable';
-const windowSize = Dimensions.get('window');
 import { Button } from '#common/';
-
-const backgroundImg = require('#assets/images/vinyl-record-player.png');
-const power = require('#assets/images/power.png');
+const windowSize = Dimensions.get('window');
+import backgroundImg from '/assets/images/vinyl-record-player.png';
+import power from '/assets/images/power.png';
+import { VINYLIZR_API_BASE_URL } from '#src/routes';
 
 class SignInScreen extends Component {
   static navigationOptions = {
@@ -29,12 +29,13 @@ class SignInScreen extends Component {
   };
 
   componentDidMount() {
+    console.log(this.props);
     const url = AuthSession.getRedirectUrl();
+    console.log(url);
     Linking.addEventListener(`${url}`, this._handleOpenURL());
   }
 
   async componentDidUpdate(prevProps, prevState) {
-    const token = AsyncStorage.getItem('access_token');
     if (!prevState.verifier.length && this.state.verifier.length) {
       await this.getAccessToken();
     }
@@ -47,8 +48,7 @@ class SignInScreen extends Component {
   }
 
   _handlePressAsync = () => {
-    const proxyUrl = 'http://localhost:3000/authorize';
-
+    const proxyUrl = `${VINYLIZR_API_BASE_URL}/authorize`;
     vinylAxios.get(proxyUrl).then(res => {
       this.setState({ authData: res.data });
       this.asyncGetData(res.data.authorizeUrl);
@@ -65,21 +65,23 @@ class SignInScreen extends Component {
     });
   };
 
-  _handleOpenURL = () => {
-    if (this.state.accessData.token) {
-      this.props.navigation.push('App');
-    }
+  _handleOpenURL = async () => {
+    const accessToken = await AsyncStorage.getItem('access_token');
+    console.log({ accessToken });
+    this.props.navigation.navigate(
+      !accessToken || accessToken === 'undefined' ? 'Auth' : 'App'
+    );
   };
 
   getAccessToken = () => {
     const { verifier, authData } = this.state;
-    const proxyUrl = 'http://localhost:3000/callback';
-    const url = `${proxyUrl}?oauth_verifier=${verifier}`;
+    const url = `${VINYLIZR_API_BASE_URL}/callback?oauth_verifier=${verifier}`;
     vinylAxios
       .post(url, authData)
       .then(response => {
         this.setState({ accessData: response.data });
         this.props.screenProps.getDiscogsIdentity(response.data);
+        this.props.navigation.navigate('App');
 
         const { token, tokenSecret } = response.data;
 

@@ -1,15 +1,13 @@
-import React, { Component } from 'react'
-import { Text, View } from 'react-native'
+import React, { Component } from 'react';
+import { Text, View } from 'react-native';
 
 class WantlistBadge extends Component {
-
   render() {
-    return(
+    return (
       <View style={styles.container}>
         <Text style={styles.text}>{this.props.children}</Text>
       </View>
-
-    )
+    );
   }
 }
 
@@ -25,14 +23,11 @@ const styles = {
     backgroundColor: '#D400FF',
     borderRadius: 2,
     marginBottom: 1,
-    alignSelf: 'flex-end'
+    alignSelf: 'flex-end',
   },
   text: {
     color: '#ffffff',
+  },
+};
 
-  }
-}
-
-
-
-export default WantlistBadge
+export default WantlistBadge;

@@ -1,150 +1,114 @@
+// SECTION LIST COMPONENT
 import React, { Component } from 'react';
-import { View, Image, FlatList, TouchableOpacity } from 'react-native';
-import { Header } from '#common/';
-import axios from 'axios';
-import { IDENTITY_CONFIG, USER_WANTLIST_URL } from '#src/routes';
-
-class Wantlist extends Component {
+import { View, Text, AsyncStorage } from 'react-native';
+import { connect } from 'react-redux';
+import { SectionGrid } from 'react-native-super-grid';
+import { getReleases } from '#modules/Wantlist/actions';
+import { Header, RecordItem } from '#common/';
+class UserWantlist extends Component {
   static navigationOptions = {
     header: null,
   };
-  state = { records: [], refreshing: false };
-
-  getUserWantlist = () => {
-    const {
-      user: { username },
-      accessToken,
-      oauthSecret,
-    } = this.props.screenProps.user;
-    const url = USER_WANTLIST_URL(username);
-    const config = IDENTITY_CONFIG(accessToken, oauthSecret);
-    axios
-      .get(url, config)
-      .then(response => {
-        this.setState({ records: response.data.wants, refreshing: false });
-      })
-
-      .catch(error => {
-        if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
-          console.log(error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message);
-        }
-        console.log(error.config);
-      });
+  state = {
+    refreshing: false,
+    page: 1,
+    isLoading: false,
   };
 
-  handleRefresh = () => {
-    this.setState(
-      {
-        page: 1,
-        seed: this.state.seed + 1,
-        refreshing: true,
-      },
-      () => {
-        this.getUserWantlist();
-      }
-    );
-  };
-  handleLoadMore = () => {
-    this.setState(
-      {
-        page: this.state.page + 1,
-      },
-      () => {
-        this.getUserWantlist();
-      }
-    );
-  };
-  renderFooter = () => {
-    if (!this.state.loading) return null;
-    return (
-      <View
-        style={{
-          paddingVertical: 20,
-          borderTopWidth: 1,
-          borderColor: '#CED0CE',
-        }}
-      >
-        <ActivityIndicator animating size="large" />
-      </View>
-    );
-  };
+  componentDidMount() {
+    this.getUserWantlist();
+  }
 
-  _keyExtractor = (item, index) => item.id + index;
+  getUserWantlist = async release => {
+    const token = await AsyncStorage.getItem('access_token');
+    const tokenSecret = await AsyncStorage.getItem('access_secret');
+    const user = await AsyncStorage.getItem('userMeta');
+    const userMeta = JSON.parse(user);
+    const { username } = userMeta;
+    const { page } = this.state;
+    const accessData = {
+      token,
+      tokenSecret,
+    };
+    try {
+      await this.props.dispatch(
+        getReleases(accessData, username, release, page)
+      );
+    } catch (error) {
+      console.log('ERROR', error);
+    }
+  };
 
   render() {
-    const { records, userData } = this.state;
+    const {
+      releases,
+      navigation,
+      isFetching,
+      screenProps: {
+        user: { userMeta },
+      },
+    } = this.props;
+    console.log({ isFetching });
     return (
       <View style={styles.mainContainer}>
         <View style={styles.headerContainer}>
           <Header headerText={'Wantlist'} />
         </View>
         <View style={styles.contentContainer}>
-          <FlatList
-            data={records}
-            renderItem={({ item, index }) => (
-              <TouchableOpacity
-                key={item.instance_id}
-                onPress={() => {
-                  this.props.navigation.navigate('AlbumDetail', {
-                    item: item,
-                    inWantlist: true,
-                  });
+          <SectionGrid
+            itemDimension={90}
+            sections={releases}
+            style={{ flex: 1 }}
+            renderItem={({ item, section, index }) => (
+              <RecordItem
+                item={item}
+                navigation={navigation}
+                userMeta={userMeta}
+                inWantlist={true}
+                routeBack={'UserWantlist'}
+                isFetching={this.props.isFetching}
+              />
+            )}
+            renderSectionHeader={({ section }) => (
+              <Text
+                style={{
+                  fontSize: 16,
+                  color: '#fff',
+                  padding: 10,
+                  fontWeight: 'bold',
+                  marginLeft: 6,
+                  backgroundColor: 'rgba(0,0,0,.7)',
                 }}
               >
-                <Image
-                  style={styles.albumCovers}
-                  source={{ uri: item.basic_information.thumb }}
-                />
-              </TouchableOpacity>
+                {section.title}
+              </Text>
             )}
-            keyExtractor={this._keyExtractor}
-            ListFooterComponent={this.renderFooter}
-            refreshing={this.state.refreshing}
-            onRefresh={this.handleRefresh}
-            onEndReachedThreshold={40}
-            style={styles.textContainer}
-            contentContainerStyle={styles.contentContainerStyle}
-            numColumns={3}
           />
         </View>
       </View>
     );
   }
 }
+
 const styles = {
   textContainer: {
     paddingBottom: 50,
   },
+
   contentContainer: {
     flex: 1,
     backgroundColor: '#000',
   },
-  contentContainerStyle: {
-    flexDirection: 'column',
-  },
   mainContainer: {
     flex: 1,
   },
-  albumCovers: {
-    height: 124,
-    width: 124,
-    marginLeft: 0.5,
-    marginRight: 0.5,
-    marginTop: 0.5,
-    marginBottom: 0.5,
-  },
 };
 
-export default Wantlist;
+mapStateToProps = state => {
+  return {
+    releases: state.UserWantlist.releases,
+    isFetching: state.UserWantlist.isFetching,
+  };
+};
+
+export default connect(mapStateToProps)(UserWantlist);

@@ -1,129 +1,87 @@
+// SECTION LIST COMPONENT
 import React, { Component } from 'react';
-import {
-  View,
-  SectionList,
-  ActivityIndicator,
-  Text,
-  AsyncStorage,
-} from 'react-native';
-import { Header, SectionFlatList } from '#common/';
-import vinylAxios from 'axios';
+import { View, Text } from 'react-native';
+import { connect } from 'react-redux';
+import { UserData } from '#src/contexts';
+import { SectionGrid } from 'react-native-super-grid';
+import { getReleases } from '#modules/Collection/actions';
+import { Header, RecordItem } from '#common/';
+
 class UserCollections extends Component {
   static navigationOptions = {
     header: null,
   };
-  state = { records: [], refreshing: false, userData: {}, page: 1 };
+  state = {
+    refreshing: false,
+    page: 1,
+    isLoading: false,
+  };
 
-  async componentDidMount() {
-    await this.getUserCollection();
+  componentDidMount() {
+    this.getUserCollection();
   }
 
   getUserCollection = async () => {
-    const token = await AsyncStorage.getItem('access_token');
-    const tokenSecret = await AsyncStorage.getItem('access_token');
-    const user = await AsyncStorage.getItem('userMeta');
+    const { token, tokenSecret, user } = await UserData();
     const userMeta = JSON.parse(user);
     const { username } = userMeta;
+    const { page } = this.state;
     const folder = 0;
     const accessData = {
       token,
       tokenSecret,
     };
-
-    const url = `http://localhost:3000/collection?folder=${folder}&user=${username}`;
-    vinylAxios
-      .post(url, accessData)
-      .then(response => {
-        const { releases } = response.data;
-        const vinylData = releases.reduce((arrangedData, data) => {
-          // c[0] should be the first letter of an entry
-          let record = data.basic_information.artists[0].name[0].toLocaleUpperCase();
-
-          // either push to an existing dict entry or create one
-          if (arrangedData[record]) arrangedData[record].push(data);
-          else arrangedData[record] = [data];
-
-          return arrangedData;
-        }, {});
-
-        const collectionSections = Object.entries(vinylData).map(vinyl => {
-          return {
-            title: vinyl[0],
-            data: vinyl[1],
-          };
-        });
-        this.setState({ records: collectionSections });
-      })
-      .catch(err => console.log('ERROR', err));
+    try {
+      await this.props.dispatch(
+        getReleases(accessData, username, folder, page)
+      );
+    } catch (error) {
+      console.log('ERROR', error);
+    }
   };
-
-  handleRefresh = () => {
-    this.setState(
-      {
-        page: 1,
-        seed: this.state.seed + 1,
-        refreshing: true,
-      },
-      () => {
-        this.getUserCollection();
-      }
-    );
-  };
-  handleLoadMore = () => {
-    this.setState(
-      {
-        page: this.state.page + 1,
-      },
-      () => {
-        this.getUserCollection();
-      }
-    );
-  };
-  renderFooter = () => {
-    if (!this.state.loading) return null;
-    return (
-      <View
-        style={{
-          paddingVertical: 20,
-          borderTopWidth: 1,
-          borderColor: '#CED0CE',
-        }}
-      >
-        <ActivityIndicator animating size="large" />
-      </View>
-    );
-  };
-
-  _keyExtractor = (item, index) => index;
-  _sectionKeyExtractor = (section, index) => index;
 
   render() {
-    const { records } = this.state;
-
+    const {
+      releases,
+      navigation,
+      screenProps: {
+        user: { userMeta },
+      },
+    } = this.props;
     return (
       <View style={styles.mainContainer}>
         <View style={styles.headerContainer}>
           <Header headerText={'Collection'} />
         </View>
         <View style={styles.contentContainer}>
-          <SectionList
-            sections={records}
-            windowSize={15}
-            renderItem={({ section }) => (
-              <SectionFlatList
-                {...this.props}
-                section={section}
-                keyExtractor={this._keyExtractor}
+          <SectionGrid
+            itemDimension={90}
+            sections={releases}
+            style={{ flex: 1 }}
+            renderItem={({ item, section, index }) => (
+              <RecordItem
+                item={item}
+                navigation={navigation}
+                userMeta={userMeta}
+                inCollection={true}
+                routeBack={'UserCollections'}
+                isFetching={this.props.isFetching}
               />
             )}
-            renderSectionHeader={({ section: { title } }) => (
-              <Text style={{ fontWeight: 'bold', color: '#fff' }}>{title}</Text>
+            renderSectionHeader={({ section }) => (
+              <Text
+                style={{
+                  fontSize: 16,
+                  color: '#fff',
+                  padding: 10,
+                  fontWeight: 'bold',
+                  marginLeft: 6,
+                  backgroundColor: 'rgba(0,0,0,.7)',
+                }}
+              >
+                {section.title}
+              </Text>
             )}
-            keyExtractor={this._sectionKeyExtractor}
-            refreshing={this.state.refreshing}
-            onRefresh={this.handleRefresh}
-            onEndReached={this.handleLoadMore}
-            onEndReachedThreshold={40}
           />
         </View>
       </View>
@@ -135,18 +93,21 @@ const styles = {
   textContainer: {
     paddingBottom: 50,
   },
+
   contentContainer: {
     flex: 1,
     backgroundColor: '#000',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-  },
-  contentContainerStyle: {
-    flexDirection: 'column',
   },
   mainContainer: {
     flex: 1,
   },
 };
 
-export default UserCollections;
+mapStateToProps = state => {
+  return {
+    releases: state.UserCollection.releases,
+    isFetching: state.UserCollection.isFetching,
+  };
+};
+
+export default connect(mapStateToProps)(UserCollections);

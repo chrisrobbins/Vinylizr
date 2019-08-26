@@ -1,64 +1,64 @@
 import React, { Component } from 'react';
-import { Text, View, Image, AsyncStorage } from 'react-native';
-import { CardSection } from '#common/CardSection';
-import axios from 'axios';
-import VersionsBadge from '#common/Badges/VersionsBadge';
-
+import { Text, View, Image, TouchableOpacity } from 'react-native';
+import vinylAxios from 'axios';
+import { connect } from 'react-redux';
+import { UserData } from '#src/contexts';
+import { VINYLIZR_API_BASE_URL } from '#src/routes';
+import { getMasterReleases } from '#modules/Database/actions';
+import { CardSection } from '#common/';
+import { VersionsBadge, WantlistBadge, CollectionBadge } from '#common/Badges/';
+import noImage from '/assets/images/empty-star.png';
 class MasterReleaseResult extends Component {
-  constructor(props) {
-    super(props);
+  state = {
+    versions: [],
+    inCollection: [],
+    inWantlist: [],
+    page: 1,
+  };
 
-    this.state = {
-      records: [],
-      page: 1,
-    };
+  // componentDidMount() {
+  //   console.log('MASTER PROPS', this.props);
+  //   this.retrieveMasterReleases();
+  // }
+
+  componentWillUnmount() {
+    this.setState({ versions: [], inCollection: [], inWantlist: [] });
   }
 
-  componentWillMount() {
-    this.getMasterReleases();
-  }
-
-  getMasterReleases = () => {
-    const { userData, item } = this.props;
+  retrieveMasterReleases = async () => {
+    const {
+      item: { master_id },
+    } = this.props;
     const { page } = this.state;
-    value = AsyncStorage.multiGet(['oauth_token', 'oauth_secret']).then(
-      values => {
-        const user_token = values[0][1];
-        const user_secret = values[1][1];
-        const master_id = item.id;
-
-        axios({
-          method: 'GET',
-          url: `https://api.discogs.com/masters/${master_id}/versions?format=vinyl&sort=year&sort_order=asc&page=${page}&per_page=30`,
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: `OAuth oauth_consumer_key="jbUTpFhLTiyyHgLRoBgq",oauth_nonce="${Date.now()}",oauth_token="${user_token}",oauth_signature="LSQDaLpplgcCGlkzujkHyUkxImNlWVoI&${user_secret}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now()}"`,
-            'User-Agent':
-              'Mozilla/5.0 (Macintosh Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
-          },
-        })
-          .then(response => {
-            this.setState({ records: response.data.versions });
-          })
-
-          .catch(error => {
-            console.log(error.config);
-          });
-      }
-    );
+    const { token, tokenSecret } = await UserData();
+    const accessData = {
+      token,
+      tokenSecret,
+    };
+    const url = `${VINYLIZR_API_BASE_URL}/database/master-releases?master=${master_id}&page=${page}&per_page=15`;
+    const {
+      data: { versions },
+    } = await vinylAxios.post(url, accessData);
+    console.log({ versions });
+    try {
+      this.setState({ versions });
+    } catch (err) {
+      console.log('ERROR', err);
+    }
   };
 
   render() {
-    const { item } = this.props;
-
-    const { records } = this.state;
-
-    let discogsRecord = item.thumb;
-    let discogsString = item.title.split('-');
-    const title = discogsString[1];
+    const {
+      item: { thumb, title },
+    } = this.props;
+    const { versions } = this.state;
+    wantsInList = versions.filter(record => record.stats.user.in_wantlist > 0);
+    collectedInList = versions.filter(
+      record => record.stats.user.in_collection > 0
+    );
+    let discogsString = title.split('-');
+    const recordTitle = discogsString[1];
     const artist = discogsString[0];
-    const label = item.label;
-
     const {
       imageView,
       textView,
@@ -69,16 +69,21 @@ class MasterReleaseResult extends Component {
     } = styles;
 
     return (
-      <View style={container}>
+      <TouchableOpacity
+        onPress={() => {
+          this.props.navigation.navigate('ReleaseList', {
+            versions,
+            masterRelease: this.props.item,
+          });
+        }}
+        style={container}
+      >
         <CardSection>
           <View style={imageView}>
-            {!discogsRecord ? (
-              <Image
-                style={imageStyle}
-                source={require('../../../assets/images/n-a.png')}
-              />
+            {!thumb ? (
+              <Image style={imageStyle} source={noImage} />
             ) : (
-              <Image style={imageStyle} source={{ uri: discogsRecord }} />
+              <Image style={imageStyle} source={{ uri: thumb }} />
             )}
           </View>
 
@@ -88,7 +93,7 @@ class MasterReleaseResult extends Component {
               numberOfLines={1}
               style={titleTextStyle}
             >
-              {title}
+              {recordTitle}
             </Text>
             <Text
               ellipsizeMode={'tail'}
@@ -98,13 +103,17 @@ class MasterReleaseResult extends Component {
               {artist}
             </Text>
             <View style={styles.badgeContainer}>
-              <VersionsBadge style={styles.VersBad}>
-                {records.length} VERSIONS
-              </VersionsBadge>
+              <VersionsBadge>MASTER</VersionsBadge>
+              {collectedInList.length > 0 && (
+                <CollectionBadge>{collectedInList.length}</CollectionBadge>
+              )}
+              {wantsInList.length > 0 && (
+                <WantlistBadge>{wantsInList.length}</WantlistBadge>
+              )}
             </View>
           </View>
         </CardSection>
-      </View>
+      </TouchableOpacity>
     );
   }
 }
@@ -117,8 +126,10 @@ const styles = {
     borderBottomColor: 'rgba(217,217,217,.6)',
   },
   badgeContainer: {
-    width: 90,
+    flexDirection: 'row',
     marginLeft: 10,
+    alignItems: 'center',
+    paddingBottom: 10,
   },
   textView: {
     justifyContent: 'center',
@@ -143,18 +154,6 @@ const styles = {
     justifyContent: 'center',
     paddingRight: 20,
   },
-  // collectionSavedTextStyle: {
-  //   color: '#0967EE',
-  //   marginLeft: 12,
-  //   marginTop: 9,
-  //   fontSize: 10
-  // },
-  // wantlistSavedTextStyle: {
-  //   color: '#D400FF',
-  //   marginLeft: 12,
-  //   marginTop: 9,
-  //   fontSize: 10
-  // },
   imageStyle: {
     height: 85,
     width: 85,
@@ -165,18 +164,12 @@ const styles = {
     justifyContent: 'center',
     paddingLeft: 20,
   },
-  contentText: {
-    paddingTop: 15,
-    paddingRight: 15,
-    paddingBottom: 15,
-    paddingLeft: 15,
-    color: '#fff',
-  },
-  searchModal: {
-    justifyContent: 'center',
-    height: 90,
-    width: 90,
-  },
 };
+
+// const mapStateToProps = state => {
+//   return {
+//     masterReleases: state.Database.masterReleases,
+//   };
+// };
 
 export default MasterReleaseResult;

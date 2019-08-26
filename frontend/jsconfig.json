@@ -2,8 +2,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "*": ["types/*"],
       "#src/*": ["./src/*"],
-      "#assets/*": ["./src/assets/*"],
       "#views/*": ["./src/views/*"],
       "#configs/*": ["./src/configs/*"],
       "#contexts": ["./src/contexts"],

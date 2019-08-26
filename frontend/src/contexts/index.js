@@ -1,1 +1,2 @@
-export { UserContext, UserProvider, withUser } from "./contexts";
+import { UserData } from './userData';
+export { UserData };

@@ -4,10 +4,14 @@ if (__DEV__) {
 
 import React, { Component } from 'react';
 import { AsyncStorage } from 'react-native';
+import { Provider } from 'react-redux';
 import vinylAxios from 'axios';
+import { UserData } from '#src/contexts';
+import store from './src/store';
 import * as Font from 'expo-font';
 import Vinylizr from './src/App/RenderVinylizr';
-import { isEmpty } from 'rxjs/operator/isEmpty';
+import { isEmpty } from 'lodash';
+import { VINYLIZR_API_BASE_URL } from './src/routes';
 
 // disable yellow box warnings b/c they're fucking annoying
 console.disableYellowBox = true;
@@ -35,12 +39,7 @@ class App extends Component {
   }
 
   saveDisInfoAsyncStore = async () => {
-    const accessData = await AsyncStorage.multiGet([
-      'access_token',
-      'access_secret',
-      'userMeta',
-    ]);
-
+    const accessData = await UserData();
     this.setState({ accessData });
   };
 
@@ -51,7 +50,7 @@ class App extends Component {
   };
 
   getDiscogsIdentity = accessData => {
-    const url = 'http://localhost:3000/identity';
+    const url = `${VINYLIZR_API_BASE_URL}/identity`;
     vinylAxios.post(url, accessData).then(response => {
       this.logUserIn(response);
     });
@@ -59,13 +58,13 @@ class App extends Component {
 
   render() {
     return (
-      <>
+      <Provider store={store}>
         <Vinylizr
           user={this.state}
           login={this.logUserIn}
           getDiscogsIdentity={this.getDiscogsIdentity}
         />
-      </>
+      </Provider>
     );
   }
 }
