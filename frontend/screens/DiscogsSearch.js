@@ -37,15 +37,12 @@ class DiscogsSearch extends Component {
       isSwiping: null,
       rightSwiped: false,
       leftSwiped: false,
-      onEndReachedCalledDuringMomentum: true,
-      lastLoadCount: 0,
-      notFinalLoad: null,
     };
     this.text_input = createRef();
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.newText.length && !this.state.newText.length) {
+    if (prevState.newText.length === 1 && this.state.newText.length === 0) {
       this.clearTextInput();
     }
   }
@@ -55,39 +52,43 @@ class DiscogsSearch extends Component {
   }
 
   searchDiscogs = async () => {
-    const { page } = this.state;
-    const { newText } = this.state;
+    const { page, newText } = this.state;
     if (newText.length) this.setState({ loading: true });
     const { token, tokenSecret } = await UserData();
-    const url = `${VINYLIZR_API_BASE_URL}/database/search?&q=${newText}&page=${page}&per_page=10&format=vinyl`;
+    const url = `${VINYLIZR_API_BASE_URL}/database/search?q=${newText}&?artist=${newText}&?page=${page}&?per_page=5`;
     const accessData = {
       token,
       tokenSecret,
     };
 
-    await vinylAxios.post(url, accessData).then(response => {
-      const { results } = response.data;
-      this.setState({
-        albums: page === 1 ? results : [...this.state.albums, ...results],
-        error: results.error || null,
-        loading: false,
-        refreshing: false,
-      });
-    });
+    try {
+      const { data: { results }} = await vinylAxios.post(url, accessData)
+        
+        this.setState({
+          albums: page === 1 ? results : [...this.state.albums, ...results],
+          error: results.error || null,
+          loading: false,
+          loadingMore: false,
+          refreshing: false,
+        });
+
+    } catch(error) {
+      console.log({ error });
+    }
   };
 
   debounceDiscogsSearch = () => {
     const { newText } = this.state;
     this.setState({ albums: [] });
-    if (!newText.length) this.setState({ albums: [] });
-    if (newText.length >= 1) {
+    if (!newText.length) return null;
+    if (newText.length >= 1 && newText.length % 2 === 0) {
       this.searchDiscogs();
     }
   };
 
   clearTextInput = () => {
     this.text_input.current.clear();
-    this.setState({ text: '', albums: [], loading: false });
+    this.setState({ text: '', albums: [], loading: false, loadingMore: false });
   };
 
   handleRefresh = () => {
@@ -116,8 +117,8 @@ class DiscogsSearch extends Component {
 
   renderFooter = () => {
     return this.state.loadingMore ? (
-      <View style={{ marginTop: 20, marginBottom: 20, alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#e83628" />
+      <View style={{ marginTop: 30, marginBottom: 30, alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
       </View>
     ) : null;
   };
@@ -153,6 +154,7 @@ class DiscogsSearch extends Component {
       />
     );
   };
+
   addToCollection = async item => {
     const { token, tokenSecret, user } = await UserData();
     const accessData = {
@@ -211,7 +213,9 @@ class DiscogsSearch extends Component {
   // Load more data function
 
   render() {
-    const { albums } = this.state;
+    const { albums, page } = this.state;
+
+    console.log({ page })
 
     return (
       <SearchSuccessModal
@@ -232,7 +236,7 @@ class DiscogsSearch extends Component {
               onChange={event =>
                 this.setState({ newText: event.nativeEvent.text })
               }
-              onSubmitEditing={() => this.searchDiscogs()}
+              onSubmitEditing={this.searchDiscogs}
               placeholder="Artist or Album"
               placeholderTextColor="#D9D9D9"
               selectionColor={'#F42E4A'}
