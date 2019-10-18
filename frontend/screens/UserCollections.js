@@ -1,93 +1,102 @@
 // SECTION LIST COMPONENT
-import React, { Component } from 'react';
+import React from 'react';
+import { useQuery } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
 import { View, Text } from 'react-native';
-import { connect } from 'react-redux';
-import { UserData } from '#src/contexts';
 import { SectionGrid } from 'react-native-super-grid';
-import { getReleases } from '#modules/Collection/actions';
-import { Header, RecordItem } from '#common/';
+import { Header, RecordItem, Spinner } from '#common/';
 
-class UserCollections extends Component {
-  static navigationOptions = {
-    header: null,
-  };
-  state = {
-    refreshing: false,
-    page: 1,
-    isLoading: false,
-  };
-
-  componentDidMount() {
-    this.getUserCollection();
-  }
-
-  getUserCollection = async () => {
-    const { token, tokenSecret, user } = await UserData();
-    const userMeta = JSON.parse(user);
-    const { username } = userMeta;
-    const { page } = this.state;
-    const folder = 0;
-    const accessData = {
-      token,
-      tokenSecret,
-    };
-    try {
-      await this.props.dispatch(
-        getReleases(accessData, username, folder, page)
-      );
-    } catch (error) {
-      console.log('ERROR', error);
+export const GET_COLLECTION = gql`
+  query sections(
+    $username: String!
+    $token: String!
+    $tokenSecret: String!
+    $page: String
+    $folder: String
+  ) {
+    sections(
+      username: $username
+      token: $token
+      tokenSecret: $tokenSecret
+      page: $page
+      folder: $folder
+    ) {
+      title
+      data {
+        basic_information {
+          cover_image
+        }
+      }
     }
-  };
+  }
+`;
 
-  render() {
-    const {
-      releases,
-      navigation,
-      screenProps: {
-        user: { userMeta },
-      },
-    } = this.props;
+export default function UserCollections(props) {
+  const [page, setPage] = React.useState('1');
+  const {
+    accessData: { token = '', tokenSecret = '' },
+    userMeta = {},
+  } = props.screenProps.user;
+  const { username = '' } = userMeta;
+
+  const { navigation, isFetching } = props;
+  const { loading, error, data } = useQuery(GET_COLLECTION, {
+    variables: { token, tokenSecret, username, folder: '1', page },
+  });
+  if (loading) {
+    return <Spinner />;
+  }
+  if (error) {
+    console.error('COLLECTION QUERY ERROR', error);
     return (
-      <View style={styles.mainContainer}>
-        <View style={styles.headerContainer}>
-          <Header headerText={'Collection'} />
-        </View>
-        <View style={styles.contentContainer}>
-          <SectionGrid
-            itemDimension={90}
-            sections={releases}
-            style={{ flex: 1 }}
-            renderItem={({ item, section, index }) => (
-              <RecordItem
-                item={item}
-                navigation={navigation}
-                userMeta={userMeta}
-                inCollection={true}
-                routeBack={'UserCollections'}
-                isFetching={this.props.isFetching}
-              />
-            )}
-            renderSectionHeader={({ section }) => (
-              <Text
-                style={{
-                  fontSize: 16,
-                  color: '#fff',
-                  padding: 10,
-                  fontWeight: 'bold',
-                  marginLeft: 6,
-                  backgroundColor: 'rgba(0,0,0,.7)',
-                }}
-              >
-                {section.title}
-              </Text>
-            )}
-          />
-        </View>
+      <View>
+        <Text>{error.message}</Text>
       </View>
     );
   }
+  return (
+    <View style={styles.mainContainer}>
+      <View style={styles.headerContainer}>
+        <Header headerText={'Collection'} />
+      </View>
+      <View style={styles.contentContainer}>
+        <SectionGrid
+          itemDimension={90}
+          sections={data.sections}
+          style={{ flex: 1 }}
+          renderItem={({ item, section, index }) => (
+            <RecordItem
+              item={item}
+              navigation={navigation}
+              userMeta={userMeta}
+              inCollection={true}
+              routeBack={'UserCollections'}
+              isFetching={loading}
+            />
+          )}
+          renderSectionHeader={({ section }) => (
+            <Text
+              style={{
+                fontSize: 16,
+                color: '#fff',
+                padding: 10,
+                fontWeight: 'bold',
+                marginLeft: 6,
+                backgroundColor: 'rgba(0,0,0,.7)',
+              }}
+            >
+              {section.title}
+            </Text>
+          )}
+        />
+      </View>
+    </View>
+  );
 }
+
+UserCollections.navigationOptions = {
+  header: null,
+};
 
 const styles = {
   textContainer: {
@@ -102,12 +111,3 @@ const styles = {
     flex: 1,
   },
 };
-
-mapStateToProps = state => {
-  return {
-    releases: state.UserCollection.releases,
-    isFetching: state.UserCollection.isFetching,
-  };
-};
-
-export default connect(mapStateToProps)(UserCollections);

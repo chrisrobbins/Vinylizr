@@ -62,17 +62,18 @@ class DiscogsSearch extends Component {
     };
 
     try {
-      const { data: { results }} = await vinylAxios.post(url, accessData)
-        
-        this.setState({
-          albums: page === 1 ? results : [...this.state.albums, ...results],
-          error: results.error || null,
-          loading: false,
-          loadingMore: false,
-          refreshing: false,
-        });
+      const {
+        data: { results },
+      } = await vinylAxios.post(url, accessData);
 
-    } catch(error) {
+      this.setState({
+        albums: page === 1 ? results : [...this.state.albums, ...results],
+        error: results.error || null,
+        loading: false,
+        loadingMore: false,
+        refreshing: false,
+      });
+    } catch (error) {
       console.log({ error });
     }
   };
@@ -214,8 +215,6 @@ class DiscogsSearch extends Component {
 
   render() {
     const { albums, page } = this.state;
-
-    console.log({ page })
 
     return (
       <SearchSuccessModal

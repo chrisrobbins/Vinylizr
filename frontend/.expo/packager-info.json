@@ -1,10 +1,10 @@
 {
   "expoServerPort": 19000,
-  "expoServerNgrokUrl": "https://ks-5hv.chrisrobbins.frontend.exp.direct",
-  "packagerNgrokUrl": "https://packager.ks-5hv.chrisrobbins.frontend.exp.direct",
-  "ngrokPid": 16357,
+  "expoServerNgrokUrl": "https://2h-8n8.chrisrobbins.frontend.exp.direct",
+  "packagerNgrokUrl": "https://packager.2h-8n8.chrisrobbins.frontend.exp.direct",
+  "ngrokPid": 31623,
   "devToolsPort": 19002,
   "packagerPort": 19001,
-  "packagerPid": 16345,
+  "packagerPid": 31613,
   "webpackServerPort": null
 }

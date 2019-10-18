@@ -1,12 +1,12 @@
-import React from "react";
-import { TextInput, View } from "react-native";
+import React from 'react';
+import { TextInput, View } from 'react-native';
 
 const SearchInput = ({
   value,
   onChangeText,
   placeholder,
   secureTextEntry,
-  onChange
+  onChange,
 }) => {
   const { inputStyle, containerStyle } = styles;
 
@@ -21,7 +21,7 @@ const SearchInput = ({
         onChangeText={onChangeText}
         onChange={onChange}
         secureTextEntry={secureTextEntry}
-        selectionColor={"#F42E4A"}
+        selectionColor={'#F42E4A'}
       />
     </View>
   );
@@ -29,26 +29,26 @@ const SearchInput = ({
 
 const styles = {
   inputStyle: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 18,
     lineHeight: 23,
     flex: 1,
-    backgroundColor: "#000",
-    justifyContent: "flex-start",
+    backgroundColor: '#000',
+    justifyContent: 'flex-start',
     height: 40,
     paddingLeft: 7,
     paddingRight: 7,
     paddingBottom: 30,
-    marginBottom: 0
+    marginBottom: 0,
   },
   containerStyle: {
-    flexDirection: "column",
-    alignItems: "center",
+    flexDirection: 'column',
+    alignItems: 'center',
     marginTop: 25,
     borderBottomWidth: 1,
-    borderBottomColor: "#ffffff",
-    marginBottom: 0
-  }
+    borderBottomColor: '#ffffff',
+    marginBottom: 0,
+  },
 };
 
-export { SearchInput };
+export default SearchInput;

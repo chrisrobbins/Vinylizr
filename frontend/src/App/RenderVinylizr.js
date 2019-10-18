@@ -1,17 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { View, StatusBar } from 'react-native';
 import AppNavigator from '../../navigation/AppNavigator';
 
-class RenderVinylizr extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <StatusBar barStyle="light-content" />
-        <AppNavigator {...this.props} />
-      </View>
-    );
-  }
-}
+const RenderVinylizr = props => {
+  return (
+    <View style={styles.container}>
+      <StatusBar barStyle="light-content" />
+      <AppNavigator {...props} />
+    </View>
+  );
+};
 
 const styles = {
   container: {

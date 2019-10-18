@@ -29,9 +29,7 @@ class SignInScreen extends Component {
   };
 
   componentDidMount() {
-    console.log(this.props);
     const url = AuthSession.getRedirectUrl();
-    console.log(url);
     Linking.addEventListener(`${url}`, this._handleOpenURL());
   }
 
@@ -67,7 +65,6 @@ class SignInScreen extends Component {
 
   _handleOpenURL = async () => {
     const accessToken = await AsyncStorage.getItem('access_token');
-    console.log({ accessToken });
     this.props.navigation.navigate(
       !accessToken || accessToken === 'undefined' ? 'Auth' : 'App'
     );
