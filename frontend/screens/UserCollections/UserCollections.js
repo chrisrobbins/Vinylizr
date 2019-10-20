@@ -1,35 +1,10 @@
 // SECTION LIST COMPONENT
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
 import { View, Text } from 'react-native';
 import { SectionGrid } from 'react-native-super-grid';
-import { Header, RecordItem, Spinner } from '#common/';
-
-export const GET_COLLECTION = gql`
-  query sections(
-    $username: String!
-    $token: String!
-    $tokenSecret: String!
-    $page: String
-    $folder: String
-  ) {
-    sections(
-      username: $username
-      token: $token
-      tokenSecret: $tokenSecret
-      page: $page
-      folder: $folder
-    ) {
-      title
-      data {
-        basic_information {
-          cover_image
-        }
-      }
-    }
-  }
-`;
+import { Header, RecordItem, Spinner } from '#common';
+import { GET_COLLECTION } from './resolvers';
 
 export default function UserCollections(props) {
   const [page, setPage] = React.useState('1');
@@ -62,7 +37,7 @@ export default function UserCollections(props) {
       <View style={styles.contentContainer}>
         <SectionGrid
           itemDimension={90}
-          sections={data.sections}
+          sections={data.collection}
           style={{ flex: 1 }}
           renderItem={({ item, section, index }) => (
             <RecordItem

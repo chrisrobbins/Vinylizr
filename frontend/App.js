@@ -28,6 +28,7 @@ const client = new ApolloClient({
     },
   }),
 });
+
 // disable yellow box warnings b/c they're fucking annoying
 console.disableYellowBox = true;
 
@@ -38,20 +39,19 @@ export default class App extends Component {
     accessData: {},
   };
 
-  async componentDidMount() {
-    await this.localizeAsyncStorageData();
+  componentDidMount() {
     Font.loadAsync({
       Lato: require('./assets/fonts/Lato-Black.ttf'),
       'Lato-Regular': require('./assets/fonts/Lato-Regular.ttf'),
       'Lato-Bold': require('./assets/fonts/Lato-Bold.ttf'),
       'Lato-Light': require('./assets/fonts/Lato-Light.ttf'),
     });
+    this.localizeAsyncStorageData();
   }
 
   localizeAsyncStorageData = async () => {
     const { user, tokenSecret, token } = await UserData();
     const userMeta = JSON.parse(user);
-    console.log('APP ENTRY', user, tokenSecret, token);
     this.setState({ userMeta, accessData: { token, tokenSecret } });
   };
 

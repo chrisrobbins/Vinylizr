@@ -12,8 +12,6 @@ const RecordItem = ({
   routeBack,
   item,
 }) => {
-  console.log('RECORD ITEM', item.basic_information.cover_image);
-
   const displayRecord = () => {
     switch (isFetching) {
       case false:

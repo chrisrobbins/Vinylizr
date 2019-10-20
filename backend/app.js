@@ -21,9 +21,7 @@ app.get('/authorize', function(req, res) {
     process.env.CONSUMERSECRET,
     'https://auth.expo.io/@chrisrobbins/Vinylizr',
     function(err, requestData) {
-      if (err) {
-        res.send(err);
-      }
+      if (err) res.send(err);
       res.send(requestData);
     }
   );
@@ -33,28 +31,12 @@ app.post('/callback', function(req, res) {
   const { oauth_verifier } = req.query;
   const oAuth = new Discogs(req.body).oauth();
   oAuth.getAccessToken(oauth_verifier, function(err, accessData) {
-    if (err) return res.send(err);
+    if (err) res.send(err);
     res.send(accessData);
   });
 });
 
 app.post('/identity', function(req, res) {
-  const accessData = {
-    level: 2,
-    method: 'oauth',
-    consumerKey: process.env.CONSUMERKEY,
-    consumerSecret: process.env.CONSUMERSECRET,
-    token: req.body.token,
-    tokenSecret: req.body.tokenSecret,
-  };
-  var dis = new Discogs(accessData);
-  dis.getIdentity(function(err, data) {
-    res.send(data);
-  });
-});
-
-app.post('/collection', function(req, res) {
-  const { user, folder, page } = req.query;
   const { token, tokenSecret } = req.body;
   const accessData = {
     level: 2,
@@ -64,42 +46,73 @@ app.post('/collection', function(req, res) {
     token,
     tokenSecret,
   };
-  const dis = new Discogs(accessData).user().collection();
-  dis.getReleases(user, folder, { page: page, per_page: 75 }, function(
-    err,
-    data
-  ) {
-    let vinylData = data.releases.reduce((arrangedData, data) => {
-      // c[0] should be the first letter of an entry
-      var record = data.basic_information.artists[0].name[0].toLocaleUpperCase();
-
-      // either push to an existing dict entry or create one
-      if (arrangedData[record]) arrangedData[record].push(data);
-      else arrangedData[record] = [data];
-      return arrangedData;
-    }, {});
-
-    let collectionSections = Object.entries(vinylData).map(vinyl => {
-      return {
-        title: vinyl[0],
-        data: vinyl[1],
-        sectionId: Math.random()
-          .toString(36)
-          .slice(2),
-      };
-    });
-    let orderedSections = collectionSections.sort(function(a, b) {
-      if (a.title < b.title) {
-        return -1;
-      }
-      if (a.title > b.title) {
-        return 1;
-      }
-      return 0;
-    });
-
-    res.send(orderedSections);
+  var dis = new Discogs(accessData);
+  dis.getIdentity(function(err, data) {
+    if (err) res.send('Identity missing', err);
+    res.send(data);
   });
+});
+
+app.post('/collection', function(req, res) {
+  console.log({ req });
+  const { user, folder, page } = req.query;
+  const { token, tokenSecret } = req.body;
+  console.log({ user, token, tokenSecret, folder, page });
+  const accessData = {
+    level: 2,
+    method: 'oauth',
+    consumerKey: process.env.CONSUMERKEY,
+    consumerSecret: process.env.CONSUMERSECRET,
+    token,
+    tokenSecret,
+  };
+  const dis = user && new Discogs(accessData).user().collection();
+  user &&
+    dis.getReleases(user, folder, { page: page, per_page: 75 }, function(
+      err,
+      data
+    ) {
+      let vinylData =
+        data &&
+        data.releases &&
+        data.releases.reduce((arrangedData, data) => {
+          // c[0] should be the first letter of an entry
+          var record = data.basic_information.artists[0].name[0].toLocaleUpperCase();
+
+          console.log({ vinylData });
+
+          if (!vinylData) return;
+
+          // either push to an existing dict entry or create one
+          if (arrangedData[record]) arrangedData[record].push(data);
+          else arrangedData[record] = [data];
+          return arrangedData;
+        }, {});
+
+      let collectionSections =
+        vinylData &&
+        Object.entries(vinylData).map(vinyl => {
+          return {
+            title: vinyl[0],
+            data: vinyl[1],
+            sectionId: Math.random()
+              .toString(36)
+              .slice(2),
+          };
+        });
+      let orderedSections =
+        collectionSections &&
+        collectionSections.sort(function(a, b) {
+          if (a.title < b.title) {
+            return -1;
+          }
+          if (a.title > b.title) {
+            return 1;
+          }
+          return 0;
+        });
+      res.send(orderedSections);
+    });
 });
 
 app.get('/database/release', function(req, res) {

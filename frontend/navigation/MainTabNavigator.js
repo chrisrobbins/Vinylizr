@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
 
 import {
-  WantList,
+  Wantlist,
   UserProfile,
   DiscogsSearch,
   UserCollections,
@@ -38,7 +38,7 @@ Collection.navigationOptions = {
 };
 
 const UserWantlist = createStackNavigator({
-  WantList,
+  Wantlist,
 });
 
 UserWantlist.navigationOptions = {
