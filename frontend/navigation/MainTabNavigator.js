@@ -1,13 +1,15 @@
 import React from 'react';
-import {
-  createStackNavigator,
-  createBottomTabNavigator,
-} from 'react-navigation';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
 
-import UserCollections from '#screens/UserCollections';
-import WantList from '#screens/WantList';
-import UserProfile from '#screens/UserProfile';
-import DiscogsSearch from '#screens/DiscogsSearch';
+import { createStackNavigator } from 'react-navigation-stack';
+
+import {
+  Wantlist,
+  UserProfile,
+  DiscogsSearch,
+  UserCollections,
+} from '#screens';
+
 import {
   CollectionFocused,
   CollectionRested,
@@ -36,7 +38,7 @@ Collection.navigationOptions = {
 };
 
 const UserWantlist = createStackNavigator({
-  WantList,
+  Wantlist,
 });
 
 UserWantlist.navigationOptions = {

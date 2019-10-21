@@ -1,17 +1,15 @@
-import React from 'react'
-import { Text, TouchableOpacity } from 'react-native'
+import React from 'react';
+import { Text, TouchableOpacity } from 'react-native';
 
 const Button = ({ onPress, children }) => {
-  const { buttonStyle, textStyle } = styles
+  const { buttonStyle, textStyle } = styles;
 
   return (
     <TouchableOpacity onPress={onPress} style={buttonStyle}>
-      <Text style={textStyle}>
-        {children}
-      </Text>
+      <Text style={textStyle}>{children}</Text>
     </TouchableOpacity>
-  )
-}
+  );
+};
 
 const styles = {
   textStyle: {
@@ -20,16 +18,15 @@ const styles = {
     fontSize: 16,
     fontWeight: '600',
     paddingTop: 10,
-    paddingBottom: 10
+    paddingBottom: 10,
   },
   buttonStyle: {
     alignSelf: 'stretch',
     backgroundColor: '#F42E4A',
     borderRadius: 7,
     height: 44,
-    width: 295
+    width: 295,
+  },
+};
 
-  }
-}
-
-export { Button }
+export default Button;

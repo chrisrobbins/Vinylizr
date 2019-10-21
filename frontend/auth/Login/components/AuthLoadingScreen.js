@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { ActivityIndicator, AsyncStorage, StatusBar, View } from 'react-native';
 
-class AuthLoadingScreen extends React.Component {
+class AuthLoadingScreen extends Component {
   constructor(props) {
     super(props);
     this._bootstrapAsync();

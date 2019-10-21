@@ -7,7 +7,7 @@ export const UserData = async () => {
 
   const user = await AsyncStorage.getItem('userMeta');
 
-  const userContext = await { token, tokenSecret, user };
+  const userContext = { token, tokenSecret, user };
 
   return userContext;
 };

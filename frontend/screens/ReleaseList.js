@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
-import { Text, View, Image, FlatList, Dimensions } from 'react-native';
+import {
+  Text,
+  View,
+  Image,
+  FlatList,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 const windowSize = Dimensions.get('window');
 import { ReleaseResultItem } from '#views/SearchResults';
 import { VersionsBadge, CollectionBadge, WantlistBadge } from '#common/Badges/';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default class ReleaseList extends Component {
   state = {
@@ -40,7 +46,6 @@ export default class ReleaseList extends Component {
     const releasesInWantlist = versions.filter(record => {
       return record.stats.user.in_wantlist > 0;
     });
-    console.log({ releasesInCollection });
     let discogsString = masterRelease.title.split('-');
     const title = discogsString[1];
     const artist = discogsString[0];
