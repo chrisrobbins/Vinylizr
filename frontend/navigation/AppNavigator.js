@@ -1,16 +1,10 @@
 import React from 'react';
-import {
-  createAppContainer,
-  createSwitchNavigator,
-  createStackNavigator,
-} from 'react-navigation';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+import * as Expo from 'expo';
 import createBottomTabNavigator from './MainTabNavigator';
-import AlbumDetail from '#screens/AlbumDetail/';
-import UserCollections from '#screens/UserCollections';
-import MasterReleaseResult from '#views/SearchResults/MasterReleaseResult';
-import SignInScreen from '../auth/Login/components/SignInScreen';
-import ReleaseList from '#screens/ReleaseList';
-import AuthLoadingScreen from '../auth/Login/components/AuthLoadingScreen';
+import { AlbumDetail, ReleaseList, UserCollections } from '#screens';
+import { AuthLoadingScreen, SignInScreen } from '../auth/Login/components';
 const AuthStack = createStackNavigator({ SignIn: SignInScreen });
 
 const DiscogsOauthFlow = createAppContainer(
@@ -18,8 +12,8 @@ const DiscogsOauthFlow = createAppContainer(
     {
       AuthLoading: AuthLoadingScreen,
       App: createBottomTabNavigator,
-      AlbumDetail: AlbumDetail,
-      UserCollection: UserCollections,
+      AlbumDetail,
+      UserCollections,
       Auth: AuthStack,
       ReleaseList,
     },

@@ -28,4 +28,4 @@ const styles = {
   },
 };
 
-export { ClearText };
+export default ClearText;
