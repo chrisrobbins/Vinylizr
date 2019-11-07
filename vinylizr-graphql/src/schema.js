@@ -17,6 +17,33 @@ const typeDefs = gql`
       folder: String
     ): [CollectionSections]!
   }
+  type Mutation {
+    addToCollection(
+      username: String!
+      tokenSecret: String!
+      token: String!
+      folder: String
+      release: String!
+    ): CollectionResponse!
+    removeFromCollection(
+      username: String!
+      token: String!
+      tokenSecret: String!
+      release: String!
+      folder: String!
+      instance: String!
+    ): RemoveReleaseResponse!
+  }
+  type CollectionResponse {
+    success: Boolean
+    message: String
+    instance_id: String
+    resource_url: String
+  }
+  type RemoveReleaseResponse {
+    success: Boolean
+    message: String
+  }
   type Release {
     pagination: Pagination
     id: ID!

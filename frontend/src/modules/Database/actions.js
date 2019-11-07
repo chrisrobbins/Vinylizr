@@ -29,7 +29,6 @@ async function fetchMasterReleases(master_id, page) {
   const {
     data: { versions },
   } = await vinylAxios.post(url, accessData);
-  console.log({ versions });
   return versions;
 }
 

@@ -21,7 +21,7 @@ app.get('/authorize', function(req, res) {
     process.env.CONSUMERSECRET,
     'https://auth.expo.io/@chrisrobbins/Vinylizr',
     function(err, requestData) {
-      if (err) res.send(err);
+      if (err) console.error(err);
       res.send(requestData);
     }
   );
@@ -31,7 +31,7 @@ app.post('/callback', function(req, res) {
   const { oauth_verifier } = req.query;
   const oAuth = new Discogs(req.body).oauth();
   oAuth.getAccessToken(oauth_verifier, function(err, accessData) {
-    if (err) res.send(err);
+    if (err) console.error(err);
     res.send(accessData);
   });
 });
@@ -54,10 +54,8 @@ app.post('/identity', function(req, res) {
 });
 
 app.post('/collection', function(req, res) {
-  console.log({ req });
   const { user, folder, page } = req.query;
   const { token, tokenSecret } = req.body;
-  console.log({ user, token, tokenSecret, folder, page });
   const accessData = {
     level: 2,
     method: 'oauth',
@@ -68,20 +66,19 @@ app.post('/collection', function(req, res) {
   };
   const dis = user && new Discogs(accessData).user().collection();
   user &&
-    dis.getReleases(user, folder, { page: page, per_page: 75 }, function(
+    dis.getReleases(user, folder, { page: page, per_page: 175 }, function(
       err,
       data
     ) {
+      if (err) {
+        return console.error('error from initial collecton retrieval', err);
+      }
       let vinylData =
         data &&
         data.releases &&
         data.releases.reduce((arrangedData, data) => {
           // c[0] should be the first letter of an entry
           var record = data.basic_information.artists[0].name[0].toLocaleUpperCase();
-
-          console.log({ vinylData });
-
-          if (!vinylData) return;
 
           // either push to an existing dict entry or create one
           if (arrangedData[record]) arrangedData[record].push(data);
@@ -183,7 +180,7 @@ app.post('/database/master-releases', function(req, res) {
     tokenSecret,
   };
   var dis = new Discogs(accessData).database();
-  dis.getMasterVersions(master, { page: page, per_page: 75 }, function(
+  dis.getMasterVersions(master, { page: page, per_page: '900' }, function(
     err,
     data
   ) {
@@ -234,10 +231,11 @@ app.post('/collection/save', function(req, res) {
     token,
     tokenSecret,
   };
+  if (!release) return;
   var dis = new Discogs(accessData).user().collection();
   dis.addRelease(user, folder, release, function(err, data) {
     if (err) {
-      console.log('ERROR', err);
+      console.error('ERROR', err);
       throw err;
     }
     res.send(data);
@@ -256,10 +254,12 @@ app.post('/collection/remove', function(req, res) {
     token,
     tokenSecret,
   };
+  if (!user || !instance || !release)
+    return console.error('NO USER OR INSTANCE OR RELEASE');
   var dis = new Discogs(accessData).user().collection();
   dis.removeRelease(user, folder, release, instance, function(err, data) {
     if (err) {
-      console.log('ERROR', err);
+      console.error('ERROR', err);
       throw err;
     }
     res.send(data);
@@ -281,7 +281,7 @@ app.post('/wantlist/save', function(req, res) {
   var dis = new Discogs(accessData).user().wantlist();
   dis.addRelease(user, release, function(err, data) {
     if (err) {
-      console.log('ERROR', err);
+      console.error('ERROR', err);
       throw err;
     }
     res.send(data);
@@ -303,7 +303,7 @@ app.post('/wantlist/remove', function(req, res) {
   var dis = new Discogs(accessData).user().wantlist();
   dis.removeRelease(user, release, function(err, data) {
     if (err) {
-      console.log('ERROR', err);
+      console.error('ERROR', err);
       throw err;
     }
     res.send(data);

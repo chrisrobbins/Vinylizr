@@ -44,7 +44,7 @@ export default function UserWantlist(props) {
               item={item}
               navigation={navigation}
               userMeta={userMeta}
-              inCollection={true}
+              inWantlist={true}
               routeBack={'App'}
               isFetching={loading}
             />

@@ -45,12 +45,15 @@ class SignInScreen extends Component {
     Linking.removeEventListener(`${url}`, this._handleOpenURL());
   }
 
-  _handlePressAsync = () => {
+  _handlePressAsync = async () => {
     const proxyUrl = `${VINYLIZR_API_BASE_URL}/authorize`;
-    vinylAxios.get(proxyUrl).then(res => {
-      this.setState({ authData: res.data });
-      this.asyncGetData(res.data.authorizeUrl);
-    });
+    try {
+      const response = await vinylAxios.get(proxyUrl);
+      this.setState({ authData: response.data });
+      this.asyncGetData(response.data.authorizeUrl);
+    } catch (err) {
+      console.error('THIS ISNT WORKING FOR SINGING IN', err);
+    }
   };
 
   asyncGetData = async url => {
