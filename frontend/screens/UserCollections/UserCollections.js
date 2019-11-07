@@ -95,30 +95,3 @@ const styles = {
     flex: 1,
   },
 };
-
-// const Object {
-//   "__typename": "CollectionSections",
-//   "data": Array [
-//     Object {
-//       "__typename": "Release",
-//       "basic_information": Object {
-//         "__typename": "BasicInfo",
-//         "artists": Array [
-//           Object {
-//             "__typename": "Artist",
-//             "name": "Blues Traveler",
-//           },
-//         ],
-//         "cover_image": "https://img.discogs.com/stGAe4tPZ-hgOLLihHX9WnkWjmY=/fit-in/468x719/filters:strip_icc():format(jpeg):mode_rgb():quality(90)/discogs-images/R-1044464-1372807318-7569.jpeg.jpg",
-//         "id": "1044464",
-//         "labels": Array [
-//           Object {
-//             "__typename": "Label",
-//             "name": "A&M Records",
-//           },
-//         ],
-//         "title": "Four",
-//         "year": 1994,
-//       },
-//       "id": "1044464",
-//     },
