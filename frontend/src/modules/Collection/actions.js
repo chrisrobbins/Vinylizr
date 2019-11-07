@@ -58,7 +58,7 @@ export function getReleases(accessData, username, folder, page) {
 }
 
 async function savingCollection(accessData, username, release_id) {
-  const url = `${VINYLIZR_API_BASE_URL}/collection/save?user=${username}&folder=1&release=${release_id}`;
+  const url = `${VINYLIZR_API_BASE_URL}/collection/save?user=${username}&folder=${'1'}&release=${release_id}`;
   const result = await vinylAxios.post(url, accessData);
   return result;
 }
@@ -84,7 +84,7 @@ async function removingCollection(
   release_id,
   instance_id
 ) {
-  const url = `${VINYLIZR_API_BASE_URL}/collection/remove?user=${username}&folder=1&release=${release_id}&instance=${instance_id}`;
+  const url = `${VINYLIZR_API_BASE_URL}/collection/remove?user=${username}&folder=${'1'}&release=${release_id}&instance=${instance_id}`;
   await vinylAxios.post(url, accessData);
 }
 

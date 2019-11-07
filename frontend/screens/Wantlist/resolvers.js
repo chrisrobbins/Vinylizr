@@ -18,6 +18,7 @@ export const GET_WANTLIST = gql`
       title
       data {
         basic_information {
+          id
           title
           year
           cover_image

@@ -13,16 +13,24 @@ export default function UserCollections(props) {
     userMeta = {},
   } = props.screenProps.user;
   const { username = '' } = userMeta;
-
+  const folder = '1';
   const { navigation, isFetching } = props;
   const { loading, error, data } = useQuery(GET_COLLECTION, {
-    variables: { token, tokenSecret, username, folder: '1', page },
+    variables: { username, token, tokenSecret, page, folder },
   });
   if (loading) {
     return <Spinner />;
   }
   if (error) {
     console.error('COLLECTION QUERY ERROR', error);
+    return (
+      <View>
+        <Text>{error.message}</Text>
+      </View>
+    );
+  }
+  if (!data || !data.collection) {
+    console.error('NO DATA');
     return (
       <View>
         <Text>{error.message}</Text>
@@ -43,6 +51,7 @@ export default function UserCollections(props) {
             <RecordItem
               item={item}
               navigation={navigation}
+              releaseId={item.basic_information.id}
               userMeta={userMeta}
               inCollection={true}
               routeBack={'UserCollections'}
@@ -86,3 +95,30 @@ const styles = {
     flex: 1,
   },
 };
+
+// const Object {
+//   "__typename": "CollectionSections",
+//   "data": Array [
+//     Object {
+//       "__typename": "Release",
+//       "basic_information": Object {
+//         "__typename": "BasicInfo",
+//         "artists": Array [
+//           Object {
+//             "__typename": "Artist",
+//             "name": "Blues Traveler",
+//           },
+//         ],
+//         "cover_image": "https://img.discogs.com/stGAe4tPZ-hgOLLihHX9WnkWjmY=/fit-in/468x719/filters:strip_icc():format(jpeg):mode_rgb():quality(90)/discogs-images/R-1044464-1372807318-7569.jpeg.jpg",
+//         "id": "1044464",
+//         "labels": Array [
+//           Object {
+//             "__typename": "Label",
+//             "name": "A&M Records",
+//           },
+//         ],
+//         "title": "Four",
+//         "year": 1994,
+//       },
+//       "id": "1044464",
+//     },
