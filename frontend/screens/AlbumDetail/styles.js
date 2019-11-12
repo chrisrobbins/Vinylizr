@@ -267,4 +267,7 @@ export const styles = {
     marginRight: 17,
     marginBottom: 10,
   },
+  spinContain: {
+    width: 165,
+  },
 };
