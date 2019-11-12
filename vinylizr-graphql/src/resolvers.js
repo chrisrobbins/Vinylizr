@@ -13,8 +13,7 @@ module.exports = {
           folder,
           page
         );
-        if (!response) console.log('GRAPH QL ERROR C');
-        return response || [];
+        return response;
       } catch (error) {
         return error;
       }
@@ -37,6 +36,25 @@ module.exports = {
         return error;
       }
     },
+    discogsSearch: async (
+      _,
+      { q, page, per_page, format, token, tokenSecret },
+      { dataSources }
+    ) => {
+      try {
+        const response = await dataSources.discogsSearchAPI.databaseSearch(
+          token,
+          tokenSecret,
+          query,
+          format,
+          page,
+          per_page
+        );
+        return response;
+      } catch (err) {
+        return error;
+      }
+    },
   },
   Mutation: {
     addToCollection: async (
@@ -52,7 +70,6 @@ module.exports = {
           release,
           folder
         );
-        console.log({ response });
         return response;
       } catch (error) {
         return error;
@@ -63,7 +80,6 @@ module.exports = {
       { username, token, tokenSecret, release, folder, instance },
       { dataSources }
     ) => {
-      console.log('DELETE INSTNANCE', username, instance, release);
       try {
         const response = await dataSources.collectionAPI.removeReleaseFromCollection(
           username,
@@ -73,7 +89,6 @@ module.exports = {
           folder,
           instance
         );
-        console.log({ response });
         return response;
       } catch (error) {
         return error;

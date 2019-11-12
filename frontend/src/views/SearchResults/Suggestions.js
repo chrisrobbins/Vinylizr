@@ -1,7 +1,6 @@
 import React from 'react';
 import { FlatList, Text } from 'react-native';
 const Suggestions = ({ results }) => {
-  console.log({ results });
   const _keyExtractor = item => item.id.toString();
   return (
     <FlatList

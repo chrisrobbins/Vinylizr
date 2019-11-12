@@ -24,7 +24,6 @@ class CollectionAPI extends RESTDataSource {
   }
 
   async addReleaseToCollection(token, tokenSecret, username, release, folder) {
-    console.log({ token, tokenSecret, username, release, folder });
     const accessData = { token, tokenSecret };
     try {
       const response = await this.post(

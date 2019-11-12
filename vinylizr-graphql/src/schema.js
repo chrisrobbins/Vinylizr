@@ -16,6 +16,13 @@ const typeDefs = gql`
       page: String
       folder: String
     ): [CollectionSections]!
+    discogsSearch(
+      token: String!
+      tokenSecret: String!
+      query: String!
+      page: String
+      per_page: String
+    ): [SearchResponse]!
   }
   type Mutation {
     addToCollection(
@@ -99,6 +106,29 @@ const typeDefs = gql`
   type PaginatePrevNextUrls {
     next: String
     last: String
+  }
+  type SearchResponse {
+    pagination: Pagination
+    results: [SearchResults]!
+  }
+  type Community {
+    want: Int
+    have: Int
+  }
+  type SearchResults {
+    thumb: String
+    title: String
+    country: String
+    format: [String]
+    uri: String
+    community: Community
+    label: [String]
+    catno: String
+    year: String
+    genre: [String]
+    resource_url: String
+    type: String
+    id: ID
   }
 `;
 

@@ -17,7 +17,6 @@ class MasterReleaseResult extends Component {
   };
 
   // componentDidMount() {
-  //   console.log('MASTER PROPS', this.props);
   //   this.retrieveMasterReleases();
   // }
 
@@ -39,7 +38,6 @@ class MasterReleaseResult extends Component {
     const {
       data: { versions },
     } = await vinylAxios.post(url, accessData);
-    console.log({ versions });
     try {
       this.setState({ versions });
     } catch (err) {

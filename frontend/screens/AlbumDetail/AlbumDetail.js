@@ -59,7 +59,6 @@ const AlbumDetail = ({ navigation, screenProps }) => {
     { loading: removeCollectionLoading },
   ] = useMutation(REMOVE_FROM_COLLECTION);
 
-  if (addCollectionLoading || removeCollectionLoading) return <Spinner />;
   const addCollect = () => {
     addToCollection({
       variables: {
@@ -84,6 +83,28 @@ const AlbumDetail = ({ navigation, screenProps }) => {
       },
     });
     setInCollection(false);
+  };
+  const CollectionButton = () => {
+    if (removeCollectionLoading || addCollectionLoading) {
+      return (
+        <View style={styles.spinContain}>
+          <Spinner size="small" />
+        </View>
+      );
+    }
+    return (
+      <DetailButton
+        btnStyle={
+          inCollection
+            ? styles.detailCollectionTrue
+            : styles.detailCollectionBtnFalse
+        }
+        txtStyle={styles.btnCollText}
+        onPress={toggleInCollection}
+      >
+        {inCollection ? 'In Collection' : 'Add to Collection'}
+      </DetailButton>
+    );
   };
   const toggleInCollection = !inCollection ? addCollect : removeCollect;
 
@@ -135,17 +156,7 @@ const AlbumDetail = ({ navigation, screenProps }) => {
                 </View>
               </View>
               <View style={styles.btnContainer}>
-                <DetailButton
-                  btnStyle={
-                    inCollection
-                      ? styles.detailCollectionTrue
-                      : styles.detailCollectionBtnFalse
-                  }
-                  txtStyle={styles.btnCollText}
-                  onPress={toggleInCollection}
-                >
-                  {inCollection ? 'In Collection' : 'Add to Collection'}
-                </DetailButton>
+                <CollectionButton />
                 <DetailButton
                   btnStyle={
                     inWantlist

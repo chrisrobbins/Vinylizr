@@ -15,10 +15,10 @@ export default function UserCollections(props) {
   const { username = '' } = userMeta;
   const folder = '1';
   const { navigation, isFetching } = props;
-  const { loading, error, data } = useQuery(GET_COLLECTION, {
+  const { loading: collectionLoading, error, data } = useQuery(GET_COLLECTION, {
     variables: { username, token, tokenSecret, page, folder },
   });
-  if (loading) {
+  if (collectionLoading) {
     return <Spinner />;
   }
   if (error) {
@@ -44,7 +44,8 @@ export default function UserCollections(props) {
       </View>
       <View style={styles.contentContainer}>
         <SectionGrid
-          itemDimension={90}
+          itemDimension={110}
+          spacing={2}
           sections={data.collection}
           style={{ flex: 1 }}
           renderItem={({ item, section, index }) => (
@@ -55,7 +56,7 @@ export default function UserCollections(props) {
               userMeta={userMeta}
               inCollection={true}
               routeBack={'UserCollections'}
-              isFetching={loading}
+              isFetching={collectionLoading}
             />
           )}
           renderSectionHeader={({ section }) => (
