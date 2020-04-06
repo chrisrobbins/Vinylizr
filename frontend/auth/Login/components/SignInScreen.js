@@ -8,14 +8,14 @@ import {
   Dimensions,
   ImageBackground,
 } from 'react-native';
-import { AuthSession } from 'expo';
+import * as AuthSession from 'expo-auth-session';
 import vinylAxios from 'axios';
 import * as Animatable from 'react-native-animatable';
 import { Button } from '#common/';
 const windowSize = Dimensions.get('window');
 import backgroundImg from '/assets/images/vinyl-record-player.png';
 import power from '/assets/images/power.png';
-import { VINYLIZR_API_BASE_URL } from '#src/routes';
+import { VINYLIZR_API_BASE_URL, EXPO_APP_URL } from '#src/routes';
 
 class SignInScreen extends Component {
   static navigationOptions = {
@@ -29,26 +29,24 @@ class SignInScreen extends Component {
   };
 
   componentDidMount() {
-    const url = AuthSession.getRedirectUrl();
-    Linking.addEventListener(`${url}`, this._handleOpenURL());
+    Linking.addEventListener(EXPO_APP_URL, this._handleOpenURL());
   }
 
   async componentDidUpdate(prevProps, prevState) {
-    if (!prevState.verifier.length && this.state.verifier.length) {
+    if (!prevState.verifier && this.state.verifier) {
       await this.getAccessToken();
     }
   }
 
   componentWillUnmount() {
-    const url = AuthSession.getRedirectUrl();
-
-    Linking.removeEventListener(`${url}`, this._handleOpenURL());
+    Linking.removeEventListener(EXPO_APP_URL, this._handleOpenURL());
   }
 
   _handlePressAsync = async () => {
     const proxyUrl = `${VINYLIZR_API_BASE_URL}/authorize`;
     try {
       const response = await vinylAxios.get(proxyUrl);
+
       this.setState({ authData: response.data });
       this.asyncGetData(response.data.authorizeUrl);
     } catch (err) {
@@ -56,14 +54,17 @@ class SignInScreen extends Component {
     }
   };
 
-  asyncGetData = async url => {
-    const oauthReturnObj = await AuthSession.startAsync({
-      authUrl: url,
-    });
-
-    this.setState({
-      verifier: oauthReturnObj.params.oauth_verifier,
-    });
+  asyncGetData = async (url) => {
+    try {
+      const oauthReturnObj = await AuthSession.startAsync({
+        authUrl: url,
+      });
+      this.setState({
+        verifier: oauthReturnObj.params.oauth_verifier,
+      });
+    } catch (err) {
+      console.log({ err });
+    }
   };
 
   _handleOpenURL = async () => {
@@ -78,7 +79,7 @@ class SignInScreen extends Component {
     const url = `${VINYLIZR_API_BASE_URL}/callback?oauth_verifier=${verifier}`;
     vinylAxios
       .post(url, authData)
-      .then(response => {
+      .then((response) => {
         this.setState({ accessData: response.data });
         this.props.screenProps.getDiscogsIdentity(response.data);
         this.props.navigation.navigate('App');
@@ -90,7 +91,7 @@ class SignInScreen extends Component {
           ['access_secret', tokenSecret],
         ]);
       })
-      .catch(error => {
+      .catch((error) => {
         if (error.response) {
           console.error(error.response || error.message);
         }

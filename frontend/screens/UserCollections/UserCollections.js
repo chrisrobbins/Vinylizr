@@ -6,15 +6,16 @@ import { SectionGrid } from 'react-native-super-grid';
 import { Header, RecordItem, Spinner } from '#common';
 import { GET_COLLECTION } from './resolvers';
 
-export default function UserCollections(props) {
-  const [page, setPage] = React.useState('1');
-  const {
+export default function UserCollections({
+  screenProps: {
     accessData: { token = '', tokenSecret = '' },
-    userMeta = {},
-  } = props.screenProps.user;
-  const { username = '' } = userMeta;
+    username = '',
+  },
+  navigation,
+}) {
+  const [page, setPage] = React.useState('1');
+
   const folder = '1';
-  const { navigation, isFetching } = props;
   const { loading: collectionLoading, error, data } = useQuery(GET_COLLECTION, {
     variables: { username, token, tokenSecret, page, folder },
   });
@@ -23,11 +24,6 @@ export default function UserCollections(props) {
   }
   if (error) {
     console.error('COLLECTION QUERY ERROR', error);
-    return (
-      <View>
-        <Text>{error.message}</Text>
-      </View>
-    );
   }
   if (!data || !data.collection) {
     console.error('NO DATA');
@@ -53,7 +49,7 @@ export default function UserCollections(props) {
               item={item}
               navigation={navigation}
               releaseId={item.basic_information.id}
-              userMeta={userMeta}
+              username={username}
               inCollection={true}
               routeBack={'UserCollections'}
               isFetching={collectionLoading}

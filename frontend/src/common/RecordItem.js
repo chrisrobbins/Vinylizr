@@ -6,7 +6,7 @@ import noImage from '/assets/images/n-a.png';
 const RecordItem = ({
   isFetching,
   navigation,
-  userMeta,
+  username,
   inWantlist,
   inCollection,
   routeBack,
@@ -23,7 +23,7 @@ const RecordItem = ({
                 item,
                 inCollection,
                 inWantlist,
-                userData: userMeta,
+                username: username,
                 routeBack,
                 releaseId: item.basic_information.id,
               });

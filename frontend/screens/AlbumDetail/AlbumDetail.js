@@ -38,8 +38,8 @@ const AlbumDetail = ({ navigation, screenProps }) => {
   const [numForSale, setNumForSale] = useState('');
   const {
     accessData: { token, tokenSecret },
-    userMeta: { username },
-  } = screenProps.user;
+    username,
+  } = screenProps;
 
   const returnToPreviousScreen = () => {
     navigation.navigate(goBack);
@@ -184,7 +184,7 @@ const AlbumDetail = ({ navigation, screenProps }) => {
               <Stars
                 half={false}
                 rating={3}
-                update={val => changeRating(val)}
+                update={(val) => changeRating(val)}
                 spacing={4}
                 starSize={30}
                 count={5}

@@ -10,9 +10,8 @@ export default function UserWantlist(props) {
   const [page, setPage] = React.useState('1');
   const {
     accessData: { token = '', tokenSecret = '' },
-    userMeta = {},
-  } = props.screenProps.user;
-  const { username = '' } = userMeta;
+    userMeta: { username = '' },
+  } = props.screenProps;
 
   const { navigation, isFetching } = props;
   const { loading, error, data } = useQuery(GET_WANTLIST, {

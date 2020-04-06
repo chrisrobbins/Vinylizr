@@ -51,40 +51,49 @@ export default class App extends Component {
 
   localizeAsyncStorageData = async () => {
     const { user, tokenSecret, token } = await UserData();
-    const userMeta = JSON.parse(user);
-    this.setState({ userMeta, accessData: { token, tokenSecret } });
+    console.log({ user });
+
+    this.setState({ userMeta: { user }, accessData: { token, tokenSecret } });
   };
 
   componentDidUpdate(prevProps, prevState) {
     if (isEmpty(prevState.accessData) && !isEmpty(this.state.accessData)) {
-      this.saveDisInfoAsyncStore();
+      this.localizeAsyncStorageData();
     }
   }
 
-  saveDisInfoAsyncStore = async () => {
-    const accessData = await UserData();
-    this.setState({ accessData });
-  };
+  logUserIn = async (response) => {
+    console.log('LOG USER RESPONSE', response);
 
-  logUserIn = async response => {
     this.setState({ userMeta: response.data, loggedIn: true });
     const userMeta = JSON.stringify(response.data);
     AsyncStorage.setItem('userMeta', userMeta);
   };
 
-  getDiscogsIdentity = accessData => {
+  getDiscogsIdentity = async (accessData) => {
     const url = `${VINYLIZR_API_BASE_URL}/identity`;
-    vinylAxios.post(url, accessData).then(response => {
-      this.logUserIn(response);
-    });
+    try {
+      const DiscIdentity = await vinylAxios.post(url, accessData);
+      console.log({ DiscIdentity });
+
+      this.logUserIn(DiscIdentity);
+    } catch (err) {
+      console.log({ err });
+    }
   };
 
   render() {
+    const {
+      accessData,
+      userMeta: { user = {} },
+    } = this.state;
+
     return (
       <ApolloProvider client={client}>
         <Provider store={store}>
           <Vinylizr
-            user={this.state}
+            accessData={accessData}
+            username={user.username}
             login={this.logUserIn}
             getDiscogsIdentity={this.getDiscogsIdentity}
           />

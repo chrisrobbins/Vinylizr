@@ -46,7 +46,7 @@ class DiscogsSearch extends Component {
 
   searchDiscogs = async (newText, page) => {
     this.setState({ loading: true });
-    const { token, tokenSecret } = this.props.screenProps.user.accessData;
+    const { token, tokenSecret } = this.props.screenProps.accessData;
     const url = `${VINYLIZR_API_BASE_URL}/database/search?q=${newText}&artist=${newText}&format=vinyl&page=${page}&per_page=15`;
     const accessData = {
       token,
@@ -64,7 +64,7 @@ class DiscogsSearch extends Component {
     });
   };
 
-  onChangeHandler = async e => {
+  onChangeHandler = async (e) => {
     this.searchDiscogs(e.nativeEvent.text, this.page);
     this.setState({ newText: e.nativeEvent.text });
   };
@@ -140,7 +140,7 @@ class DiscogsSearch extends Component {
     );
   };
 
-  addToCollection = async item => {
+  addToCollection = async (item) => {
     const { token, tokenSecret, user } = await UserData();
     const accessData = {
       token,
@@ -157,7 +157,7 @@ class DiscogsSearch extends Component {
     }
   };
 
-  addToWantlist = async item => {
+  addToWantlist = async (item) => {
     const { token, tokenSecret, user } = await UserData();
     const accessData = {
       token,
@@ -211,7 +211,7 @@ class DiscogsSearch extends Component {
               autoFocus={true}
               type="search"
               value={this.state.newText}
-              onChange={e => this.onChangeHandler(e)}
+              onChange={(e) => this.onChangeHandler(e)}
               placeholder="Artist or Album"
               placeholderTextColor="#D9D9D9"
               selectionColor={'#F42E4A'}
@@ -220,7 +220,7 @@ class DiscogsSearch extends Component {
           <View style={styles.inputContainer}>{this.renderInputButton()}</View>
           <FlatList
             data={albums}
-            ref={ref => (this.swipeableList = ref)}
+            ref={(ref) => (this.swipeableList = ref)}
             renderItem={this.renderSearchResults}
             keyExtractor={this._keyExtractor}
             ListFooterComponent={this.renderFooter}

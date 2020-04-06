@@ -1,37 +1,32 @@
-// DISCOGS CONSUMER KEY AND SECRET
 export const CONSUMER_KEY = 'jbUTpFhLTiyyHgLRoBgq';
+
 export const CONSUMER_SECRET = 'LSQDaLpplgcCGlkzujkHyUkxImNlWVoI';
-// DISCOGS API BASE URL
+
 export const DISCOGS_BASE_URL = 'https://discogs.com';
+
 export const DISCOGS_API_BASE_URL = 'https://api.discogs.com';
+
 // export const VINYLIZR_API_BASE_URL =
 //   'http://vinylizr.us-east-2.elasticbeanstalk.com';
 export const VINYLIZR_API_BASE_URL = 'http://localhost:8081';
 
-// DISCOGS OAUTH REQUEST URL
+export const EXPO_APP_URL = 'https://auth.expo.io/@chrisrobbins/Vinylizr';
+
 export const DISCOGS_REQUEST_TOKEN_URL = `${DISCOGS_API_BASE_URL}/oauth/request_token`;
 
-// DISCOGS ACCESS TOKEN URL
 export const DISCOGS_ACCESS_TOKEN_URL = `${DISCOGS_API_BASE_URL}/oauth/access_token`;
 
-// DISCOGS AUTH URL
-export const DISCOGS_AUTH_URL = token =>
+export const DISCOGS_AUTH_URL = (token) =>
   `${DISCOGS_BASE_URL}/oauth/authorize?oauth_token=${token}`;
 
-// DISCOGS USER IDENTITY ENDPOINT
 export const IDENTITY_URL = `${DISCOGS_API_BASE_URL}/oauth/identity`;
 
-// DISCOGS USER COLLECTION ENPOINT
 export const USER_COLLECTION_URL = (username, page) =>
   `${DISCOGS_API_BASE_URL}/users/${username}/collection/folders/0/releases?page=1&per_page=75`;
 
-// DISCOGS WANTLIST ENDPOINT
-export const USER_WANTLIST_URL = username =>
+export const USER_WANTLIST_URL = (username) =>
   `${DISCOGS_API_BASE_URL}/users/${username}/wants`;
 
-// DISCOGS URL CONFIGS
-
-// IDENTITY CONFIG
 export const IDENTITY_CONFIG = (token, secret) => {
   return {
     headers: {
@@ -54,7 +49,7 @@ export const ACCESS_TOKEN_CONFIG = (token, verifier) => {
   };
 };
 
-export const REQUEST_TOKEN_CONFIG = redirectUrl => {
+export const REQUEST_TOKEN_CONFIG = (redirectUrl) => {
   return {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
